@@ -397,69 +397,85 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
   
 \end{definition}
 
-Fig.~\ref{fig:ComparisonMorning} and Fig.~\ref{fig:ComparisonEvening} show
-Standard and Focal $G^*$ computations for both morning and eventing datasets
-with weight matrix $W$ of size 3, 5, 7, 9, 15 and 31. In this figures, when 
-computing Focal
-$G^*$, the focal matrix $F$ has a constant size of $61{\times}61$ cells. 
-Example weight matrix $W$ and focal matrix $F$ are depicted in 
-Fig.~\ref{fig:ExampleMatrices}.
-
+\section{Results}
+\subsection{Heatmap}
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
-    \caption{Morning}
-    \includegraphics[width=\linewidth]{images/hotspot-eval-gstar-1}
-    \label{fig:EvalMorning}
+    \caption{FocalRelation}
+    \includegraphics[width=\linewidth]{images/FocalRealationUp}
+    \label{fig:FocalRelation}
   \end{subfigure}
   \hspace{1em}
   \begin{subfigure}{\linewidth}
-    \caption{Eveninig}
-    \includegraphics[width=\linewidth]{images/hotspot-eval-gstar-2}
-    \label{fig:EvalEvening}
+    \caption{WeightRealtion}
+    \includegraphics[width=\linewidth]{images/WeightRelationUp}
+    \label{fig:WeightRealtion}
   \end{subfigure}
-  \caption{Evaluation results - Standard vs Focal $G^*$}
-  \label{fig:EvalResults}
+  \caption{Heatmap of Relation between size of weight matrix $W$ and focal matrix $F$}
+  \label{fig:RealtionUp}
 \end{figure}
-
-%We used square weight matrices of nrow=ncol= 3, 5, 7, \ldots, 41.
-%
-%- We experimented with different sizes of matrix $F$.
-%- The most stable results were achieved when $all(dim(F) == dim(W))$.
-
-To evaluate the stability of our proposed Focal $G^*$, we compare it to two 
-baselines:
-\begin{itemize}
-  \item Standard $G^*$, which uses the same weight matrix $W$ as our focal 
-  version.
-  \item Standard $G^*$, which uses square weight matrix with all cells set to 1.
-\end{itemize}
-
-The evaluation results are plotted in Fig.~\ref{fig:EvalResults}, each point in
-the graph represents the $SoH^\uparrow$ metric (Eq.\ref{eq:SoH-up}) between two
-$G^*$ generated using weight matrices of size $i$ and $i+2$. The focal matrix F
-has a fixed size of $41{\times}41$
-
-\begin{displaymath}
-SoH^\uparrow( G^*(R, W_i, st), G^*(R, W_{i+2}, st) )
-\end{displaymath}
 
 \begin{figure}[htp]
-  \centering
-  \begin{subfigure}{.45\columnwidth}
-    \centering
-    \caption{Weight matrix $W$}
-    \includegraphics[width=9em]{images/hotspot-weight-matrix-1}
+  \begin{subfigure}{\linewidth}
+    \caption{FocalRelation}
+    \includegraphics[width=\linewidth]{images/FocalRealationDown}
+    \label{fig:FocalRelation}
   \end{subfigure}
-  \begin{subfigure}{.45\columnwidth}
-    \centering
-    \caption{Focal matrix $F$}
-    \includegraphics[width=9em]{images/hotspot-eval-gstar-focus-matrix-1}
+  \hspace{1em}
+  \begin{subfigure}{\linewidth}
+    \caption{WeightRealtion}
+    \includegraphics[width=\linewidth]{images/WeightRelationDown}
+    \label{fig:WeightRealtion}
   \end{subfigure}
-  \caption{Example matrices $W$ and $F$}
-  \label{fig:ExampleMatrices}
+  \caption{Heatmap of Relation between size of weight matrix $W$ and focal matrix $F$}
+  \label{fig:RealtionDown}
+\end{figure}
+\subsection{Clumping}
+
+\subsection{Zoom}
+
+Blueline is Focal $G^*$. Redline is $G^*$
+
+\begin{figure}[htp]
+  \begin{subfigure}{\linewidth}
+    \caption{Upward}
+    \includegraphics[width=\linewidth]{images/SoHZoomUp}
+    \label{fig:UpwardZoom}
+  \end{subfigure}
+  \hspace{1em}
+  \begin{subfigure}{\linewidth}
+    \caption{Downward}
+    \includegraphics[width=\linewidth]{images/SoHZoomDown}
+    \label{fig:DownwardZoom}
+  \end{subfigure}
+  \caption{TODO}
+  \label{fig:Zoom}
 \end{figure}
 
+
+\subsection{Blur}
+
+\begin{figure}[htp]
+  \begin{subfigure}{\linewidth}
+    \caption{Upward}
+    \includegraphics[width=\linewidth]{images/SoHUpBlur}
+    \label{fig:UpwardBlur}
+  \end{subfigure}
+  \hspace{1em}
+  \begin{subfigure}{\linewidth}
+    \caption{Downward}
+    \includegraphics[width=\linewidth]{images/SoHDownBlur}
+    \label{fig:DownwardBlur}
+  \end{subfigure}
+  \caption{TODO}
+  \label{fig:Blur}
+\end{figure}
+
+
 \subsection{Results and Discussion}
+
+
+
 
 The results for the hot spot analysis are found in
 Fig.~\ref{fig:ComparisonMorning} and Fig.~\ref{fig:ComparisonEvening} for a
