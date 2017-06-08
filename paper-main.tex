@@ -49,24 +49,13 @@
   
 \maketitle              % typeset the title of the contribution
 
+
+
 \begin{abstract}
-  The Urban Heat Island (UHI) effect describes the difference in temperature
-  between cities and their surrounding areas. However, temperature differences
-  within city limits, so-called Intra Urban Heat Islands (IUHI), affect human
-  health as well as the energy demands in local areas. In order to anticipate
-  and mitigate the resulting impacts of heat trough urban planing, a method to
-  reliably detect these local areas is needed. Existing methods from the
-  geo-statistical field can identify those areas. But these statistics can be
-  unstable in their detection of hot spots, in particular for temperature hot
-  spots, depending on their parametrization. In this paper, we propose a
-  modification of the well known Getis-Ord ($G^*$) statistic, called the
-  \emph{Focal $G^*$} statistic. This modification replaces the computation of
-  the global mean and standard deviation with their focal counterparts. We
-  define the stability of our approach by introducing a stability metric called
-  \emph{Stability of Hot spot} (SoH), which requires that hot spots have to be
-  in similar areas regardless of the chosen weight matrix. The results are
-  evaluated on real world temperature data for the city of Karlsruhe.
+Hotspot analysis is an essential in geo-statistics. It supports decision making by detecting points as well as areas of interest in comparison to their neighbourhood. But these methods are dependent on different parameters, ranging from the resolution of the study area to the size of their neighbourhood. This dependence can lead to instabilities of the detected hotspots, where the results can highly vary between different parameters. A decision maker can therefore not be sure of the validity of analysis. In this study, we examine the impact of key parameter on the stability of the hotspots, namely the size of the neighbourhood (blurr), the resolution (zoom) and the size of the study area, as well as the influence of the ratio between those parameter. We compute the hotspots with the well known Getis-Ord ($G^*$) statistic as well as an modification, the \emph{Focal $G^*$} statistic. The stability of the hotspot analysis is measured with the recently introduced \emph{stability of hotspots} (SoH) metric and by visual analysis. We evaluate the results on real world data with the well-known yellow cab taxi data set from New York, Manhattan. It can be shown that 
+   
 \end{abstract}
+
 
 \section{Introduction}
 
