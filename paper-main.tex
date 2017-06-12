@@ -12,19 +12,31 @@
 \usepackage[british]{babel}
 
 % ==========================================
-% Support for \FOCAL{R}{M}{op} (by Viliam)
+% Custom commands (by Viliam)
 % ==========================================
-\newcommand{\FOCALMMODE}[3]{
-  #1{\stackrel{\mathtt{#3}}{\circ}}#2
-}
-\newcommand{\FOCAL}[3]{
+\newcommand{\FOCAL}[3]{ % usage: \FOCAL{R}{M}{op}
   \ifmmode
-  \FOCALMMODE{#1}{#2}{#3}
+    #1{\stackrel{\mathtt{#3}}{\circ}}#2
   \else
-  \begin{math}\FOCALMMODE{#1}{#2}{#3}\end{math}%
+    \begin{math}\FOCAL{#1}{#2}{#3}\end{math}
+  \fi
+}
+\newcommand{\SOHUP}{
+  \ifmmode
+    SoH^\uparrow
+  \else
+  \begin{math}\SOHUP\end{math}
+  \fi
+}
+\newcommand{\SOHDOWN}{
+  \ifmmode
+    SoH^\downarrow
+  \else
+  \begin{math}\SOHDOWN\end{math}
   \fi
 }
 % ==========================================
+
 
 \begin{document}
 
@@ -251,41 +263,54 @@ hot spots found.
 \section{Stability of Hot Spot Analysis}
 \label{sec:Metric}
 
-Existing methods to determine hot spots are dependent on the parametrization of
-the weight matrix as well as on the size of the study area.
+Existing methods for determining hot spots are dependent on the parametrization
+of the weight matrix as well as on the size of the study area. Intuitively,
+increasing the size of a weight matrix has a "blurring" effect on the raster
+(Fig.~\ref{def:TODO}a) whereas decreasing the size can be seen as a form of
+"sharpening" (Fig.~\ref{def:TODO}b).
 
-Consider the real-world example depicted in Fig.~\ref{fig:TempMaps}. The
-temperature map of a morning thermal flight dataset (Fig.~\ref{fig:TempMaps:a})
-has been processed using $G^*$.
+%TODO: add image showing and blurring/sharpening effects
 
-\begin{figure}[htp]
-  \begin{subfigure}{1\linewidth}
-    \caption{Morning temperatures}
-    \includegraphics[width=\linewidth]{images/hotspot-rawtemp-1}
-    \label{fig:TempMaps:a}
-  \end{subfigure}
-  
-  \caption{
-    Karlsruhe city center.
-    Selected area of $2.4{\times}1.4\,km$.
-    Pixel size $5{\times}5\,m$.
-  }
-  \label{fig:TempMaps}
-\end{figure}
-
-% Bild besteht aus orginal, weight matrix a und weight matrix b
-As we can see, hot spots are oftentimes disappearing or appearing unrelated to
-previously found hot spots. While these computations indeed show hot spots and
-the results are correct, they lack stability.
+%As we can see, hot spots are oftentimes disappearing or appearing unrelated to
+%previously found hot spots. While these computations indeed show hot spots and
+%the results are correct, they lack stability.
 
 For a data analyst, when exploring the data interactively by choosing different
-filter sizes (in form matrices), it is important that the hot spot's position
-and size changes in a predictable manner. This intuition is the basis for our
-stability metric.
+filter sizes (weight matrices) or point aggregation strategies (pixel sizes), it
+is important that the position and size of a hotspot changes in a predictable
+manner. We formalize the intuition in our stability metric.
+
+%
+%Consider the real-world example depicted in Fig.~\ref{fig:TempMaps}.
+%%TODO: thermal flight -> NY taxi
+%The temperature map of a morning thermal flight dataset 
+%(Fig.~\ref{fig:TempMaps:a}) has been processed using $G^*$.
+%
+%%TODO: thermal flight -> NY taxi
+%%TODO: need two images - G* and FocalG*
+%\begin{figure}[htp]
+%  \begin{subfigure}{1\linewidth}
+%    \caption{Morning temperatures}
+%    \includegraphics[width=\linewidth]{images/hotspot-rawtemp-1}
+%    \label{fig:TempMaps:a}
+%  \end{subfigure}
+%  
+%  \caption{
+%    Karlsruhe city center.
+%    Selected area of $2.4{\times}1.4\,km$.
+%    Pixel size $5{\times}5\,m$.
+%  }
+%  \label{fig:TempMaps}
+%\end{figure}
+
 
 We define a hot spot found in comparably more coarse resolutions as
-\emph{parent} (larger weight matrix) and in finer resolutions as \emph{child}
-(smaller weight matrix). To be stable, one assumes that every parent has at
+\emph{parent} (larger weight matrix or larger pixel size) and in finer
+resolutions as \emph{child} (smaller weight matrix or smaller pixel size).
+
+That is 
+
+To be stable, one assumes that every parent has at
 least one child and that each child has one parent. For a perfectly stable
 interaction, it can be easily seen that the connection between parent and child
 is a injective function and between child and parent a surjective function. To
@@ -293,18 +318,21 @@ measure the closeness of connection, we propose a metric called the
 \emph{Stability of Hot spot} (SoH). It measures the deviation from a perfectly
 stable transformation of resolutions.
 
-%TODO: what about the other direction?
+
+
 In its downward property (from parent to child, injective) it is defined as:
 \begin{equation}
-\label{eq:SoH-down}
-SoH^\downarrow = \frac{ParentsWithChildNodes}{Parents} = \frac{|Parents \cap 
-Children|}{|Parents|}
+  \label{eq:SoH-down}
+  \SOHDOWN
+    = \frac{ParentsWithChildNodes}{Parents}
+    = \frac{|Parents \cap Children|}{|Parents|}
 \end{equation}
 And for its upward property (from child to parent, surjective):
 \begin{equation}
-\label{eq:SoH-up}
-SoH^\uparrow = \frac{ChildrenWithParent}{Children} = 1 - \frac{|Children - 
-Parents|}{|Children|}
+  \label{eq:SoH-up}
+  \SOHUP
+    = \frac{ChildrenWithParent}{Children}
+    = 1 - \frac{|Children - Parents|}{|Children|}
 \end{equation}
 where $ParentsWithChildNodes$ is the number of parents that have at least one 
 \emph{child}, $Parents$ is the total number of \emph{parent}, 
@@ -337,9 +365,8 @@ computations and to avoid special handling of NA values.
 
 \subsection{Method}
 
-In the following text, we use the notation \FOCAL{R}{M}{op} to denote
-a focal operation $op$ applied on a raster $R$ with a focal window determined 
-by a
+In the following text, we use the notation \FOCAL{R}{M}{op} to denote a focal
+operation $op$ applied on a raster $R$ with a focal window determined by a
 matrix $M$. This is rougly eqivalent to a command \verb|focal(x=R, w=M, fun=op)|
 from package \emph{raster} in the R programming language \cite{cran:raster}.
 
@@ -349,31 +376,31 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
   The function $G^*$ can be expressed as a raster operation:
   
   \begin{displaymath}
-  G^*(R, W, st) =
-  \frac{
-    \FOCAL{R}{W}{sum} - M*\sum_{w \in W}{w}
-  }{
-  S \sqrt{
+    G^*(R, W, st) =
     \frac{
-      N*\sum_{w \in W}{w^2} - (\sum_{w \in W}{w})^2
+      \FOCAL{R}{W}{sum} - M*\sum_{w \in W}{w}
     }{
-    N - 1
-  }
-}
-}
-\end{displaymath}
-\noindent where:
-\begin{itemize}
-  
-  \item $R$ is the input raster.
-  
-  \item $W$ is a weight matrix of values between 0 and 1.
-  
-  \item $st = (N, M, S)$ is a parametrization specific to a particular version
-  of the $G^*$ function. (Def.\vref{def:StdGetisOrdVersion} and
-  \vref{def:FocalGetisOrdVersion}).
-  
-\end{itemize}
+      S \sqrt{
+        \frac{
+          N*\sum_{w \in W}{w^2} - (\sum_{w \in W}{w})^2
+        }{
+          N - 1
+        }
+      }
+    }
+  \end{displaymath}
+  \noindent where:
+  \begin{itemize}
+    
+    \item $R$ is the input raster.
+    
+    \item $W$ is a weight matrix of values between 0 and 1.
+    
+    \item $st = (N, M, S)$ is a parametrization specific to a particular version
+    of the $G^*$ function. (Def.\vref{def:StdGetisOrdVersion} and
+    \vref{def:FocalGetisOrdVersion}).
+    
+  \end{itemize}
 \end{definition}
 
 \begin{definition}[Standard $G^*$ parametrization]
@@ -431,6 +458,52 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
   \label{fig:RealtionUp}
 \end{figure}
 
+\section{Evaluation}
+
+- To evaluate, we compare G* with FocalG* on the same dataset.
+- We use NY taxi dropoffs
+- a single evaluation run is defined in Def.~\ref{def:EvalRun}.
+- In an ideal case, we could produce a 3D-plot:
+  - x-axis would be growing pixel sizes 100..1000 by 100 (aka zoom-out)
+  - y-axis would be growing weight matrix sizes (e.g. 5..41 by 2)
+  - z-axis would be performance of G* vs FocalG* x and y coordinates
+  - we could also repeat the computation for multiple datasets to obtain 
+  multiple samples and to compute error bars.
+- due to paper size limit, we choose projection in which matrix size is set to 
+constant 7x7 pixels and the only variable is the pixel size. This way, we 
+produce a 2D plot. We also generate just a single sample.
+
+\begin{definition}[Evaluation Run]
+  \label{def:EvalRun}
+  We define a single evaluation run as a tuple:
+  \begin{displaymath}
+    E = (V, m, p, w)
+  \end{displaymath}
+  \noindent where:
+  \begin{itemize}
+  
+    \item $V$ is the input dataset of points, representing the taxi dropoffs in 
+    our case.
+    
+    \item $m$ is the metric used, in our case either \SOHUP or \SOHDOWN.
+    
+    \item $p$ represents the pixel size for aggregating points from $V$, 
+    e.g. $100 \times 100$ meters.
+    
+    \item $w$ represents the size of a weight matrix.
+    In our case, we chose a weight matrix depicted in 
+    Figure~\ref{fig:ExampleMatrices}(a) for both the G* and FocalG* cases.
+  \end{itemize}
+\end{definition}
+
+%Fig.~\ref{fig:ComparisonMorning} and Fig.~\ref{fig:ComparisonEvening} show
+%Standard and Focal $G^*$ computations for both morning and eventing datasets
+%with weight matrix $W$ of size 3, 5, 7, 9, 15 and 31. In this figures, when 
+%computing Focal
+%$G^*$, the focal matrix $F$ has a constant size of $61{\times}61$ cells. 
+%Example weight matrix $W$ and focal matrix $F$ are depicted in 
+%Fig.~\ref{fig:ExampleMatrices}.
+
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
     \caption{FocalRelation}
@@ -470,6 +543,15 @@ Blueline is Focal $G^*$. Redline is $G^*$
 
 
 \subsection{Blur}
+
+The evaluation results are plotted in Fig.~\ref{fig:EvalResults}, each point in
+the graph represents the \SOHUP metric (Eq.\ref{eq:SoH-up}) between two
+$G^*$ generated using weight matrices of size $i$ and $i+2$. The focal matrix F
+has a fixed size of $41{\times}41$
+
+\begin{displaymath}
+\SOHUP( G^*(R, W_i, st), G^*(R, W_{i+2}, st) )
+\end{displaymath}
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
