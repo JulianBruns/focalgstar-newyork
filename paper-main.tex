@@ -98,99 +98,24 @@ the resolution.
 
 \section{Introduction}
 
-For urban city planers, the detection of Intra Urban Heat Islands (IUHI) is of
-high interest as high temperatures impact energy
-consumption~\cite{Hassid.2001.Electricity_UHI} as well as human
-health~\cite{Ye.2012}. The effect that the temperatures between an urban area
-and its surroundings differ, called the Urban Heat Island effect
-\cite{Oke1982energetic}, has long been the subject of research. Most historical
-studies conducted had to rely on few, fixed weather stations, low
-spatio-temporal resolution of satellites or small-scale mobile measurements by
-car, preventing the modelling of finer-grained temperature differences within an
-urban area itself. With the advent of inexpensive mobile sensors, higher
-spatio-temporal resolution of satellites and volunteered geographic
-informations, to name just a small selection, it is now feasible to focus on the
-temperature differences in a city as the subject of interest.
-
-Hot spot analysis is a tool which is suited to detect such areas. In the context
-of IUHI we can detect those areas where the temperature is significantly
-different from the mean temperature of our study area. This enables us to
-identify points of interest without the need to pre-process the data.
-
-Although existing methods are independent of concrete values, their results are
-highly dependent on the size of the study area and their parametrization such as
-the weight matrix in the case of the Getis-Ord statistic. This dependency can
-lead to unstable hot spots, where the identified hot spots only appear in one 
-specific combination of parameter. The generalization of insights gained from
-unstable hot spots is suboptimal. A city planer who has to rely on those
-insights will most likely prioritize the wrong area to invest his limited
-resources. Given the increasing importance to detect extreme local temperatures
-in cites, see e.g. \cite{Hansen.2010, GRL:GRL22143, department2014world}, means
-to reliably detect and mitigate the effect of temperature extremes in a
-proactive fashion are needed.
-
-To solve this problem, we first propose a metric to measure the stability of a
-hot spot analysis regarding its parametrization of the weight matrix called the
-\emph{Stability of Hot spot} (SoH). This metric measures whether a hot spot
-found for a given weight matrix is carried over to the found hot spots with a
-different weight matrix. This enables us to quantify the stability of any hot
-spot analysis. Based on our reasoning behind the instability of existing hot
-spot analyses, we propose a modification of the well known Getis-Ord statistic
-($G^*$): the \emph{Focal Getis-Ord} statistic (Focal $G^*$). Instead of the
-global mean and variance used by $G^*$, it only uses the mean and variance of a
-predefined region around each point. This region is a subset of the whole study
-area. By doing this, the instability is contained within a smaller region and
-thereby independent of the parametrization of the weight matrix. We test our
-stability metric as well as this modified approach on data given by two
-temperature snapshots of the city of Karlsruhe taken in 2008.
+\begin{itemize}
+\item hot spot analysis is important
+\item similar to cluster analysis
+\item is important to identify interesting areas 
+\item typical problem is the correct detection method and parametrization
+\item inital work of bruns and viliam 2017 show the instability and present simple metric and stable  method
+\item here, we build upon that work and examine in more detail the impact of the different parameter with the standard $G^*$ and focal $G^*$, in particular the size of the study area (focal matrix), the detail of the resolution (zoom) and the size of the neighbourhood (weight matrix)
+\item in particular, we compare the stability for all possible combinations and isolate the effect of single parameter by clever aggregation
+\item We test on well-known taxi data set for easy comparison and so that in can be easily replicated
+\end{itemize}
 
 \section{Related Work}
 
-\subsection{Urban Heat Island}
+\begin{itemize}
+\item goal Here: some cluster analysis
+\item typical clustering apporaches -> phd symposium as examples
+\end{itemize}
 
-The scientific interest in the phenomena of UHI is well established. One of the
-earliest known overviews of the scientific literature of the city climates is
-given by Albert Kratzer 1937~\cite{dieckmann1938stadtklima}. At that time
-already, relations between temperature, humidity, human heat fluxes and air
-pollution are investigated.
-
-A more recent overview comes from Arnfied~\cite{Arnfield.2003}. The focus here
-lies on the development in the field of climatology between 1980 and 2003. In
-particular, the rise of simulations and modelling is lauded, but, to quote
-Arnfield, ``simple methods are still needed to estimate UHI intensity within
-urban areas''~\cite{Arnfield.2003}.
-
-Schwarz~et~al.~\cite{Schwarz.2011} compare 11 different Surface Urban Heat
-Island (SUHI) indicators on a dataset of 263 European cities with monthly mean
-temperatures. They show that the selection of indicators is important for the
-detection of UHI due to possible instabilities of each indicator.
-
-A more recent development is the focus on IUHI. The definition for IUHI comes
-from Martin et al.~\cite{Martin.2015}. By defining thresholds with respect to
-spatial reference, these enable the detection of hot spots in a city, which
-Martin et al. call surface intra-UHI. This boils down to five steps, i.e.
-essentially a comparison of absolute deviation from the mean temperature given a
-survey area. The results can then be used to detect areas of interest in a city
-and potentially trigger alerts for a much finer spatial granularity.
-
-While the proposition to examine urban micro-climates can be traced back as far
-as 1937~\cite{dieckmann1938stadtklima}, we have found only few works in this
-field. Schwarz et al.~\cite{Schwarz.2012} state that the reduction of an UHI to
-a single value for a whole city is questionable regarding its explanatory power.
-But also that there is currently no other way to quantify the differences
-amongst cities.
-
-The difficulties presented by comparing the UHI values between different cities
-are the topic of Stewart and Oke~\cite{Stewart2012}. They propose the use of
-local climate zones (LCZ) to standardise the methodology and terminology.
-
-Another area where urbanizations affects the temperature distribution are
-subsurface temperatures. Menberg et al.~\cite{Menberg.2013} look into the
-distribution of the temperatures below the surface -- the subsurface
-temperature. They find local hot spots of heat with deviations of up to
-+20\textdegree{K} in some areas related to local heat sources.
-
-\subsection{Hot Spot Analysis}
 
 The goal of an analysis of temperatures in a city is to find the most
 interesting, significant areas: Hot spots~\cite{Martin.2015}. This goal is
