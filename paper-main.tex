@@ -206,21 +206,21 @@ all.
 
 \subsection{Dataset}
 
-% extent
-The two datasets (morning and evening flights) depicted in
-Fig.~\ref{fig:ComparisonMorning} and Fig.~\ref{fig:ComparisonEvening} were
-obtained from a thermal flight over the city of Karlsruhe on 26.09.2008 at
-6:30--7:45 and 20:00--21:30. The flights were executed by the
-Nachbarschaftsverband
-Karlsruhe\footnote{http://www.nachbarschaftsverband-karlsruhe.de/}. A single
-pixel in the raster represents an area of approximately $5{\times}5m$. The whole
-dataset of size $35{\times}25\,km$ was cropped into the inner city area of
-$2.4{\times}1.4\,km$. % temp range
-The temperatures in our dataset range from -1.7°C to 18.3°C.
-% missing values = NAs
-Missing values in the dataset were interpolated using a focal median function
-with a square matrix of 11x11 pixels, mainly for speeding up further
-computations and to avoid special handling of NA values.
+Our results are based on the cab taxi data set from New York, Manhattan \cite{TODO}. 
+We used only the dataset of January 2016. From that
+dataset we used the $pickup_longitude$ and $pickup_latitude$ column. 
+The borders of the raster are between (40.699607, -74.020265) and (40.769239, -73.948286). 
+Zoom size 1 means we aggregate every point, which was in range of 100x100*0.000001 into one pixel. 
+In zoom size N we aggregated NxN pixel from zoom size 1 into a new pixel.
+%
+For our measurements we specified the following data series:
+\begin{itemize}
+ \item The weight matrix W is from 3 to 43 with a stepsize of 4.
+ \item The focal matrix F is from  17 to 125 with a stepsize of 12.
+ \item The zoom level is from 1 to 5 with a stepsize of 1.
+\end{itemize}
+Therefore we calculate around 10*10*5=500 results for each fixed x.
+The following conditions must hold F>W, F<Raster.cols und F<Raster.rows.
 
 
 \subsection{Method}
@@ -301,6 +301,8 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
 \end{definition}
 
 \section{Results}
+
+
 \subsection{Heatmap}
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
@@ -432,49 +434,43 @@ has a fixed size of $41{\times}41$
 
 \subsection{Results and Discussion}
 
-
-
-
-The results for the hot spot analysis are found in
-Fig.~\ref{fig:ComparisonMorning} and Fig.~\ref{fig:ComparisonEvening} for a
-comparison of $G^*$ and the Focal $G^*$ statistic. It can easily be seen that
-both versions produce similar results, but the focal versions produces a more
-differentiated picture for larger weight matrices. Small differences on a
-global scale are more pronounced on a regional scale and result in smaller and
-finer areas for hot spots. This enables the detection of additional hot spots
-and interesting areas which are most easily observable for the weight matrix of
-size $7{\times}7$ in the evening (Fig.~\ref{fig:ComparisonEvening}). This
-enables the detection of significant deviations from the surrounding area. 
-In contrast the Standard $G^*$ statistic shows larger areas as important.
-Therefore, depending on the need of a planner, the Focal $G^*$ statistic
-is more helpful to identify individual areas of interest whereas the standard
-$G^*$ statistic gives a more broad overview. For the identification of IUHI this
-is quite important. As a city planer wishes to detect critical areas, it is
-important to detect not only general hot areas, but also those points where the
-most extreme differences in a local context exist. Finding those areas can help 
-identify the underlying reasons or plan individual solutions.
-
-Based on these images one can also see that the hot spots found by the Focal
-$G^*$ statistic seem to be more stable. We compare their stability using only
-the $ SoH^\uparrow$ for lack of space. A plot of the results can be found in
-Fig.~\ref{fig:EvalResults}. Fig.~\ref{fig:EvalResults} compares the $
-SoH^\uparrow$ between each increasing size of the weight matrix W. At a first
-glance, one can see that the typical implementation with a square weight matrix
-is the most unstable hot spot analysis, regardless of time of day. This is to be
-expected as the binary weights increase the dependence on the weight matrix. The
-use of a decreasing weight matrix perform better. As the more outlying data
-points get less weight, this reduces the dependence on the weight matrix and
-leads therefore to more stable results. Our proposed Focal $G^*$ statistic
-achieves the most stable results in almost all cases. Only data points in a
-restricted region around the area of interest may influence the significance
-result. Through this restriction high values at key points gains more weight
-regardless of the weight matrix and are therefore more independent of the weight
-matrix. This increases the stability. The decrease in stability for the largest
-weight matrices is most likely a result of the parametrization of the focal
-matrix. With increasing size of the weight matrix in relation to the focal
-matrix the value of each pixel is approaching to the mean of the area of the
-weight matrix. As can be easily seen from Def.~\ref{def:GenericGetisOrdFunc}
-then the value for every pixel would be zero.
+% Focal size  
+%	Increase of focal size leads to better results in the upward property
+% 	Standard deviation decrease with higher focal size 
+%	No standard deviation af F 17x17 because of missing clusters
+%	The downward property reaches its maximum at 65x65
+%
+%	Conclusion: F should be around 65x65 or higher
+In figure ~\ref{TODO Up} you can see that an increase of the focal size leads to better results for $SoH^{\uparrow}$. 
+The standard deviation decreases also with a higher focal size. Only 
+at focal size F of 17x17 there is no standard deviation. At focal size F 17x17 the standard deviation is 
+missing, because the weight size W must be smaller than F. When F and W have similar
+size, there are no clusters. (TODO assumtion for SOH, if no clusters we asume Up/Down = 0)
+$SoH^{\downarrow}$ in figure ~\ref{TODO Down} reaches its maximum for focal size F 65x65 in the regarded area.
+%
+% Weight size
+%	Increase of weight leads to increase of downward property
+%	Small break downs for G* for upward and downward property
+%	For the upward property Focal G* is better than G*
+%
+%	Conclusion: Higher weight size leads to better results. There are parametrisations of Focal G* which are better than G*
+In figure ~\ref{TODO wDown} one can see that an increase of the weight size leads to better results.
+Focal $G^*$ is not allways better than $G^*$ which would be a perfect result we hoped for. But it seems 
+that $G*$ has at 23 and 39 some parametrisation which leads to small break downs. 
+The standard deviation is in this area higher than in the other points.
+In figure ~\ref{TODO wUp} the break downs are also visible.
+The high standard deviation indicates that it is possible to use this parametrisation for better results
+The $SoH^{\uparrow}$ in ~\ref{TODO wUp} is mostly better than $G^*$ which was our conclusion in \ref{TODO last paper}.
+%
+% Zoom
+%	G* alwas better than Focal G* for upward and downward property
+%	Focal G* has different focal sizes because zoom is compared
+%	At zoom level 4 G* increase much more than Focal G*
+%
+%	Conclusion: G* is better than Focal G* in the zoom dimension, but the focal size is fixed. The zoom dimension has the least 
+%	influence on the value
+The last variation we examined was the zoom level. One can see that $G^*$ is always better than Focal $G^*$.
+The target area of Focal $G^*$ increases if you zoom out. 
 
 \section{Conclusions and Future Work} \label{sec:Conclusion}
 
