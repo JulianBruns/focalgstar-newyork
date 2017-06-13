@@ -64,7 +64,7 @@
 
 
 \begin{abstract}
-Hotspot analysis is essential for geo-statistics.
+Hot spot analysis is essential for geo-statistics.
 It supports decision making by detecting points
 as well as areas of interest in comparison to their
 neighbourhood. However, these methods are dependent
@@ -97,7 +97,7 @@ the resolution.
 
 
 \section{Introduction}
-The goal of hotspot analysis is the detection and identification of interesting areas. It achieves this goal by computing statistically significant deviations from the mean value of a given study area. This allows a decision maker to easily identify those areas of interest and allows further focus in sub-sequential data analysis or the decision focus. Typical applications range from crime detection over identification of disease outbreaks to urban heat islands. In such applications, scarce resources are then often applied in only those identified hot spots or used as the basis for the allocation. The general approach is an unsupervised learning method similar to a cluster analysis. 
+The goal of hotspot analysis is the detection and identification of interesting areas. It achieves this goal by computing statistically significant deviations from the mean value of a given study area. This allows a decision maker to easily identify those areas of interest and allows further focus in sub-sequential data analysis or the decision focus. Typical applications range from crime detection over identification of disease outbreaks to urban heat islands. In such applications, scarce resources are then often applied in only those identified hotspots or used as the basis for the allocation. The general approach is an unsupervised learning method similar to a cluster analysis. 
 
 But, similar to a cluster analysis, there does exist a high dependency of the identified hotspots on the detection method and in particular the parametrization of this method. The identified areas as well as their shape can vary highly. This volatility can lead to a decrease in trust in the result or in suboptimal allocations of scarce resources. Therefore it is necessary to measure and evaluate the stability of a hotspot analysis as well as the different parametrizations. 
 In our initial work (Hier Bruns and VIliam 2017), we introduced a method to measure the stability of hotspots, the \emph{stability of hotspots} metric (SoH) and showed its use on the basis of temperature data .   
@@ -107,80 +107,18 @@ We evaluate on the well-known taxi data set to show the applicability on real wo
 
 \section{Related Work}
 
+\subsection{Quality of Clustering}
+The problem of assessing the quality in unsupervised learning is well known. In the case of the k-mean algorithm, the quality of the clustering is mostly dependent on the value of the \emph{k} and a miss-specification can lead to highly irregular clusters. In a simple 2D clustering, they can be easily recognized by visual analysis, but in higher dimensionality, this is impossible. One method, to measure the quality of such a clustering is the compactness of the clusters, see e.g. Song 2010 (http://ieeexplore.ieee.org/document/5558958/?part=1). This enables the comparison between different clusters. Another possibility is the Silhouette Coefficient by Kaufman et Rousseeuw 1990. This metric measures the similarity of objects in a cluster in comparison to other clusters. For density based clustering, e.g. for DBSCAN, OPTICS (Ankerst et al 1999) gives a simple method to tune the essential parameter for this clustering. This is only a small overview of methods to influence and measure the quality of different clustering methods. But it shows that this problem is not easily solved and dependent on the chosen algorithm. To our knowledge, there does not exist a method to overall measure the stability of a clustering.
 
-\begin{itemize}
-\item goal Here: some cluster analysis
-\item typical clustering apporaches -> phd symposium as examples (possible to cite =) )
-\end{itemize}
-
-
-The goal of an analysis of temperatures in a city is to find the most
-interesting, significant areas: Hot spots~\cite{Martin.2015}. This goal is
-similar to the hot spot analysis in the field of geo-statistics. One of the most
-fundamental approach is Moran´s I~\cite{MoranI}. There it is tested whether or
+\subsection{Hot Spot Analysis}
+The goal of hotspot analysis is the detection of interesting areas as well as patterns in spatial information. One of the most fundamental approach is Moran´s I~\cite{MoranI}. There it is tested whether or
 not a spatial dependency exists. This gives the information on global
 dependencies in a data set. Upon this hypothesis test several geo-statistical
 tests are based. The most well known are the Getis-Ord statistic~\cite{Ord.1995}
 and LISA~\cite{Anselin.1995}. In both cases the general, the global statistic of
 Moran´s I is applied in a local context. The goal is to detect not only global
-values, but instead to focus on local hot spots and to measure the significance
-of those local areas.
-
-The local Getis-Ord statistic~\cite{Ord.1995} is defined as follow:
-\begin{definition}[Getis-Ord $G^*_i$ statistic] \label{def:Gstar}
-  Assuming a study area with $n$ measurements, let $X = [x_1, \ldots,
-  x_n]$ be all values measured in this area. Let $w_{i,j}$ be a spatial weight
-  between two points $i$ and $j$ for all $i,j \in \{ 1, \ldots, n\}$. The 
-  Getis-Ord $G^*_i$ statistic is given as:
-  \begin{equation} \label{eq:Gstar}
-  G^*_i = \frac{
-    \sum_{j=1}^{n}w_{i,j}x_j - \bar{X}\sum_{j=1}^{n}w_{i,j}
-  }{
-  S \sqrt{
-    \frac{
-      n \sum_{j=1}^{n}w_{i,j}^2 - (\sum_{j=1}^{n}w_{i,j})^2
-    }{n-1}
-  }
-}
-\end{equation}
-where:
-\begin{itemize}
-  \item $\bar{X}$ is the mean of all measurements,
-  \item $S$ is the standard deviation of all measurements.
-\end{itemize}
-\end{definition}
-
-As it is known, this statistic creates a z-score, which denotes the significance
-of an area in relation to its surrounding areas.
-
-LISA is quite similar, as it is the local statistic for Moran's
-I~\cite{Anselin.1995}, but the z-score has a different meaning. Apart from
-$G^*_i$, LISA does not distinguish between cold spots and hot spots as it
-assigns high z-score to most similar areas.
-
-Two other well known method are the kernel density estimation~\cite{KDE_Hotspot}
-and kriging~\cite{Kriging_Hotspot}. These do not provide significance levels.
-Instead, they estimate the values for each location based on the rest of the
-study area and a threshold value \cite{Thakali2015}. Therefore, results for
-different areas are not comparable, especially in the case of differing
-temperature distributions. Kriging was developed for the estimation of ore
-deposits~\cite{krige1951statistical}, but today, applications for geo-temporal
-forecasts with this approach can be found, e.g. for the city of
-Zurich.~\footnote{https://r-video-tutorial.blogspot.de/2015/08/spatio-temporal-kriging-in-r.html}
-
-All of the aforementioned methods use weights between pairs of points, usually
-based on their geographical distance. However, in real applications, the points
-are aggregated into rasters and the weights are represented as a weight matrix.
-This allows for expressing the algorithms in terms of map algebra operations, a
-term first coined by Dana~Tomlin~\cite{Tomlin1990} and computed in a distributed
-fashion (e.g. using Geotrellis framework running on
-Apache~Spark~\cite{github:Geotrellis}).
-
-In this work, we focus on the Getis-Ord statistic applied to rasters of land
-surface temperature. This enables us to transform the formula for the $G^*$
-statistic into a computationally more efficient form. We then propose a
-modification of the standard $G^*$ statistics, to increase the stability of the
-hot spots found.
+values, but instead to focus on local hotspots and to measure the significance
+of those local areas. A more in depth overview of methods to identify and visualize spatial patterns and areas of interest can be found in Shekhar et al (2011). 
 
 \section{Stability of Hot Spot Analysis}
 \label{sec:Metric}
@@ -199,7 +137,7 @@ increasing the size of a weight matrix has a "blurring" effect on the raster
 
 For a data analyst, when exploring the data interactively by choosing different
 filter sizes (weight matrices) or point aggregation strategies (pixel sizes), it
-is important that the position and size of a hotspot changes in a predictable
+is important that the position and size of a hot spot changes in a predictable
 manner. We formalize the intuition in our stability metric.
 
 %
