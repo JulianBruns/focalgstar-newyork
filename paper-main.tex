@@ -90,7 +90,7 @@ and compare the results to intuitive visual analysis.
 We evaluate the results on real world data with the well-known
 yellow cab taxi data set from New York, Manhattan.
 Our results indicate a negative impact on the stability with
-an increase of the size of the neighbourhood as well as
+a reduction of the size of the neighbourhood as well as
 a reduction of the size of the study area, regardless of
 the resolution.
 \end{abstract}
@@ -206,7 +206,7 @@ all.
 
 \subsection{Dataset}
 
-Our results are based on the cab taxi data set from New York, Manhattan \cite{TODO}. 
+Our results are based on the cab taxi dataset from New York, Manhattan \cite{TODO}. 
 We used only the dataset of January 2016. From that
 dataset we used the $pickup\_longitude$ and $pickup\_latitude$ column. 
 The borders of the raster are between (40.699607, -74.020265) and (40.769239, -73.948286). 
@@ -219,7 +219,7 @@ For our measurements we specified the following data series:
  \item The focal matrix F is from  17 to 125 with a stepsize of 12.
  \item The zoom level is from 1 to 5 with a stepsize of 1.
 \end{itemize}
-Therefore we calculate around 10*10*5=500 results for each fixed x.
+Therefore we calculate around $10 \cdot 10 \cdot 5=500$ results for each fixed x.
 The following conditions must hold F>W, F<Raster.cols und F<Raster.rows.
 
 
@@ -300,9 +300,6 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
   
 \end{definition}
 
-\section{Results}
-
-
 
 
 \section{Evaluation}
@@ -352,55 +349,6 @@ produce a 2D plot. We also generate just a single sample.
 %Fig.~\ref{fig:ExampleMatrices}.
 
 
-\subsection{Clumping}
-
-\subsection{Zoom}
-
-Blueline is Focal $G^*$. Redline is $G^*$
-
-\begin{figure}[htp]
-  \begin{subfigure}{\linewidth}
-    \caption{Upward}
-    \includegraphics[width=\linewidth]{images/SoHZoomUp}
-    \label{fig:UpwardZoom}
-  \end{subfigure}
-  \hspace{1em}
-  \begin{subfigure}{\linewidth}
-    \caption{Downward}
-    \includegraphics[width=\linewidth]{images/SoHZoomDown}
-    \label{fig:DownwardZoom}
-  \end{subfigure}
-  \caption{TODO}
-  \label{fig:Zoom}
-\end{figure}
-
-
-\subsection{Blur}
-
-The evaluation results are plotted in Fig.~\ref{fig:EvalResults}, each point in
-the graph represents the \SOHUP metric (Eq.\ref{eq:SoH-up}) between two
-$G^*$ generated using weight matrices of size $i$ and $i+2$. The focal matrix F
-has a fixed size of $41{\times}41$
-
-\begin{displaymath}
-\SOHUP( G^*(R, W_i, st), G^*(R, W_{i+2}, st) )
-\end{displaymath}
-
-\begin{figure}[htp]
-  \begin{subfigure}{\linewidth}
-    \caption{Upward}
-    \includegraphics[width=\linewidth]{images/SoHUpBlur}
-    \label{fig:UpwardBlur}
-  \end{subfigure}
-  \hspace{1em}
-  \begin{subfigure}{\linewidth}
-    \caption{Downward}
-    \includegraphics[width=\linewidth]{images/SoHDownBlur}
-    \label{fig:DownwardBlur}
-  \end{subfigure}
-  \caption{TODO}
-  \label{fig:Blur}
-\end{figure}
 
 
 \subsection{Results and Discussion}
@@ -492,6 +440,68 @@ The target area of Focal $G^*$ increases with every zoom step.
   \label{fig:SoHZoom}
 \end{figure}
 
+\subsection{Clumping}
+
+\subsection{Zoom}
+
+TODO settings and images
+The zoom level is a slice plane through our three dimensional space. 
+TODO define parent child
+The results can be found in figure ~\ref{fig:Zoom}.
+For the upward property, $G^*$ is always better than Focal $G^*$, compared to the results from figure
+\ref{fig:SoHZoom}. Focal $G^*$ reaches the same result as $G^*$ at zoom level 5 .
+For the downward property, Focal $G^*$ leads to better results at zoom level 5.
+
+\begin{figure}[htp]
+  \begin{subfigure}{\linewidth}
+    \caption{Upward for zoom}
+    \includegraphics[width=\linewidth]{images/SoHZoomUp}
+    \label{fig:UpwardZoom}
+  \end{subfigure}
+  \hspace{1em}
+  \begin{subfigure}{\linewidth}
+    \caption{Downward for zoom}
+    \includegraphics[width=\linewidth]{images/SoHZoomDown}
+    \label{fig:DownwardZoom}
+  \end{subfigure}
+  \caption{SoH zoom}
+  \label{fig:Zoom}
+\end{figure}
+
+
+\subsection{Blur}
+
+The evaluation results are plotted in Fig.~\ref{fig:Blur}, each point in
+the graph represents the \SOHUP metric (Eq.\ref{eq:SoH-up}) between two
+$G^*$ generated using weight matrices of size $i$ and $i+2$. The focal matrix F
+has a fixed size of $41{\times}41$
+
+\begin{displaymath}
+\SOHUP( G^*(R, W_i, st), G^*(R, W_{i+2}, st) )
+\end{displaymath}
+
+
+The slice plane of the weight dimension is consistent with figure ~\ref{fig:SoHWeight}.
+Higher weight leads in general to better results for Focal $G^*$. $G^*$ doesn't fit to the mean of our whiskerplot.
+
+
+\begin{figure}[htp]
+  \begin{subfigure}{\linewidth}
+    \caption{Upward for blur}
+    \includegraphics[width=\linewidth]{images/SoHUpBlur}
+    \label{fig:UpwardBlur}
+  \end{subfigure}
+  \hspace{1em}
+  \begin{subfigure}{\linewidth}
+    \caption{Downward for blur}
+    \includegraphics[width=\linewidth]{images/SoHDownBlur}
+    \label{fig:DownwardBlur}
+  \end{subfigure}
+  \caption{SoH blur}
+  \label{fig:Blur}
+\end{figure}
+
+
 \section{Conclusions and Future Work} \label{sec:Conclusion}
 In this work, we compared the Getis-Ord statistic with Focal Getis-Ord statisitic on a different dataset.
 We examined further parameters and evaluated that $G^*$ and Focal $G^*$ performe better if the weight
@@ -504,8 +514,12 @@ We assume that if Focal $G^*$ has a different Focal size for a different zoom le
 scope of this work.
 
 With this work we made a step further to the optimal parametrisation for $G^*$ and Focal $G^*$.
-All our results are based on the SoH. Further work should validate or improve this metric and compare if
-Focal $G^*$ can have better results than $G^*$ in all dimension with fixed weight and focal size.
+Our results indicate that the parametrisation for $G^*$ and Focal $G^*$ besides what is defined as parent and child has a huge impact on the
+stability of hotspots. Wrong parametrisation can lead to good results, the mean reaches for \SOHUP in the weight dimension around 0.6.
+It can also lead to bad result, \SOHUP in the zoom dimension reaches nearly zero. Therefore we shown that it is important to have a metric
+for the stability of hotspots. Also we presented indication which parametrisation should be avoided and which parametrisations are promising.
+All our results are based on the SoH. Further work should validate or improve this metric.
+
 
 
 
