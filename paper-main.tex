@@ -208,7 +208,7 @@ all.
 
 Our results are based on the cab taxi data set from New York, Manhattan \cite{TODO}. 
 We used only the dataset of January 2016. From that
-dataset we used the $pickup_longitude$ and $pickup_latitude$ column. 
+dataset we used the $pickup\_longitude$ and $pickup\_latitude$ column. 
 The borders of the raster are between (40.699607, -74.020265) and (40.769239, -73.948286). 
 Zoom size 1 means we aggregate every point, which was in range of 100x100*0.000001 into one pixel. 
 In zoom size N we aggregated NxN pixel from zoom size 1 into a new pixel.
@@ -303,22 +303,7 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
 \section{Results}
 
 
-\subsection{Heatmap}
-\begin{figure}[htp]
-  \begin{subfigure}{\linewidth}
-    \caption{FocalRelation}
-    \includegraphics[width=\linewidth]{images/FocalRealationUp}
-    \label{fig:FocalRelation}
-  \end{subfigure}
-  \hspace{1em}
-  \begin{subfigure}{\linewidth}
-    \caption{WeightRealtion}
-    \includegraphics[width=\linewidth]{images/WeightRelationUp}
-    \label{fig:WeightRealtion}
-  \end{subfigure}
-  \caption{Heatmap of Relation between size of weight matrix $W$ and focal matrix $F$}
-  \label{fig:RealtionUp}
-\end{figure}
+
 
 \section{Evaluation}
 
@@ -366,21 +351,7 @@ produce a 2D plot. We also generate just a single sample.
 %Example weight matrix $W$ and focal matrix $F$ are depicted in 
 %Fig.~\ref{fig:ExampleMatrices}.
 
-\begin{figure}[htp]
-  \begin{subfigure}{\linewidth}
-    \caption{FocalRelation}
-    \includegraphics[width=\linewidth]{images/FocalRealationDown}
-    \label{fig:FocalRelation}
-  \end{subfigure}
-  \hspace{1em}
-  \begin{subfigure}{\linewidth}
-    \caption{WeightRealtion}
-    \includegraphics[width=\linewidth]{images/WeightRelationDown}
-    \label{fig:WeightRealtion}
-  \end{subfigure}
-  \caption{Heatmap of Relation between size of weight matrix $W$ and focal matrix $F$}
-  \label{fig:RealtionDown}
-\end{figure}
+
 \subsection{Clumping}
 
 \subsection{Zoom}
@@ -441,12 +412,29 @@ has a fixed size of $41{\times}41$
 %	The downward property reaches its maximum at 65x65
 %
 %	Conclusion: F should be around 65x65 or higher
-In figure ~\ref{TODO Up} you can see that an increase of the focal size leads to better results for $SoH^{\uparrow}$. 
+In figure ~\ref{fig:fUp} you can see that an increase of the focal size leads to better results for $SoH^{\uparrow}$. 
 The standard deviation decreases also with a higher focal size. Only 
 at focal size F of 17x17 there is no standard deviation. At focal size F 17x17 the standard deviation is 
 missing, because the weight size W must be smaller than F. When F and W have similar
 size, there are no clusters. (TODO assumtion for SOH, if no clusters we asume Up/Down = 0)
-$SoH^{\downarrow}$ in figure ~\ref{TODO Down} reaches its maximum for focal size F 65x65 in the regarded area.
+$SoH^{\downarrow}$ in figure ~\ref{fig:fDown} reaches its maximum for focal size F 65x65 in the regarded area.
+
+\begin{figure}[htp]
+  \begin{subfigure}{\linewidth}
+    \caption{SoH up for focal size}
+    \includegraphics[width=\linewidth]{images/whiskerPlot/fUp}
+    \label{fig:fUp}
+  \end{subfigure}
+  \hspace{1em}
+  \begin{subfigure}{\linewidth}
+    \caption{SoH down for focal size}
+    \includegraphics[width=\linewidth]{images/whiskerPlot/fDown}
+    \label{fig:fDown}
+  \end{subfigure}
+  \caption{SoH for focal size}
+  \label{fig:SoHFocal}
+\end{figure}
+
 %
 % Weight size
 %	Increase of weight leads to increase of downward property
@@ -454,13 +442,29 @@ $SoH^{\downarrow}$ in figure ~\ref{TODO Down} reaches its maximum for focal size
 %	For the upward property Focal G* is better than G*
 %
 %	Conclusion: Higher weight size leads to better results. There are parametrisations of Focal G* which are better than G*
-In figure ~\ref{TODO wDown} one can see that an increase of the weight size leads to better results.
+In figure ~\ref{fig:wDown} one can see that an increase of the weight size leads to better results.
 Focal $G^*$ is not allways better than $G^*$ which would be a perfect result we hoped for. But it seems 
 that $G*$ has at 23 and 39 some parametrisation which leads to small break downs. 
 The standard deviation is in this area higher than in the other points.
-In figure ~\ref{TODO wUp} the break downs are also visible.
+In figure ~\ref{fig:wUp} the break downs are also visible.
 The high standard deviation indicates that it is possible to use this parametrisation for better results
-The $SoH^{\uparrow}$ in ~\ref{TODO wUp} is mostly better than $G^*$ which was our conclusion in \ref{TODO last paper}.
+The $SoH^{\uparrow}$ in ~\ref{fig:wUp} is mostly better than $G^*$ which was our conclusion in \ref{TODO last paper}.
+
+\begin{figure}[htp]
+  \begin{subfigure}{\linewidth}
+    \caption{SoH up for weight size}
+    \includegraphics[width=\linewidth]{images/whiskerPlot/wUp}
+    \label{fig:wUp}
+  \end{subfigure}
+  \hspace{1em}
+  \begin{subfigure}{\linewidth}
+    \caption{SoH down for weight size}
+    \includegraphics[width=\linewidth]{images/whiskerPlot/wDown}
+    \label{fig:wDown}
+  \end{subfigure}
+  \caption{SoH for weight size}
+  \label{fig:SoHWeight}
+\end{figure}
 %
 % Zoom
 %	G* alwas better than Focal G* for upward and downward property
@@ -469,48 +473,42 @@ The $SoH^{\uparrow}$ in ~\ref{TODO wUp} is mostly better than $G^*$ which was ou
 %
 %	Conclusion: G* is better than Focal G* in the zoom dimension, but the focal size is fixed. The zoom dimension has the least 
 %	influence on the value
-The last variation we examined was the zoom level. One can see that $G^*$ is always better than Focal $G^*$.
-The target area of Focal $G^*$ increases if you zoom out. 
+The last variation we examined was the zoom level. The results can seen in figure ~\ref{fig:SoHZoom}. One can see that $G^*$ is always better than Focal $G^*$.
+The target area of Focal $G^*$ increases with every zoom step. 
+
+\begin{figure}[htp]
+  \begin{subfigure}{\linewidth}
+    \caption{SoH up for focal size}
+    \includegraphics[width=\linewidth]{images/whiskerPlot/zUp}
+    \label{fig:zUp}
+  \end{subfigure}
+  \hspace{1em}
+  \begin{subfigure}{\linewidth}
+    \caption{SoH down for focal size}
+    \includegraphics[width=\linewidth]{images/whiskerPlot/zDown}
+    \label{fig:zDown}
+  \end{subfigure}
+  \caption{SoH for focal size}
+  \label{fig:SoHZoom}
+\end{figure}
 
 \section{Conclusions and Future Work} \label{sec:Conclusion}
+In this work, we compared the Getis-Ord statistic with Focal Getis-Ord statisitic on a different dataset.
+We examined further parameters and evaluated that $G^*$ and Focal $G^*$ performe better if the weight
+is higher.
+Our results indicate a high Focal range for the upward property and a maximum of 65x65 for the downward property.
+Therefore F should be not less than 65x65. 
+If we calculate the SoH for the zoom level, Getis-Ord leads to better results. In general the zoom level 
+has the least influence if $G^*$ or Focal $G^*$ performe better.
+We assume that if Focal $G^*$ has a different Focal size for a different zoom level, it performes better, but this is beyond the
+scope of this work.
 
-In this work, we generalized the Getis-Ord statistic to deal with the problem of
-stability inherent in hot spot analysis. We identified possible underlying
-reasons for this instability: The weight matrix as well as the size of the study
-area. We developed a modified approach that deals with those two factors. The
-result is a modified $G^*$ statistic called the \emph{Focal $G^*$ statistic}. It
-reduces the study area used for comparison into regions and achieves through
-this an increase in stability. To determine the effectiveness of our approach,
-we propose a stability metric for hot spots called \emph{SoH}. To our knowledge
-no such metric existed before this work. The SoH computes the ratio of
-dependence of hot spots for different parametrizations of weight matrices. It
-enables to express the stability between each parametrization using single value
-restricted between zero and one. Based on this number one can decide which
-parametrization to use and researchers can compare the stability of their
-methods for unsupervised hot spot analyses. In particular, for temperature
-values one wishes to detect those areas which have high differences regardless
-of a particular parametrization. If a hot spot only appears for one
-parametrization, the information gained for general use is quite small and can
-even lead to an inefficient allocation of resources.
+With this work we made a step further to the optimal parametrisation for $G^*$ and Focal $G^*$.
+All our results are based on the SoH. Further work should validate or improve this metric and compare if
+Focal $G^*$ can have better results than $G^*$ in all dimension with fixed weight and focal size.
 
-This research has several restrictions which have to be taken into account.
-First, we only tested the $SoH^\uparrow$ metric. While we assume, based on our
-graphical analysis, that the  $SoH^\downarrow$ stability should be similar, we
-have no hard results. The results themselves are tested on two events in time
-for a fixed area of the city of Karlsruhe. We have not tested it on smaller or
-larger study areas, but we assume that the stability of the Focal $G^*$ would
-stay the same whereas the stability of the $G^*$ statistic would increase with a
-smaller study area and decrease with a larger study area. This follows the
-reasoning that the impact of a singular point increases with a decrease of the
-study area. To test this dependency is an interesting task for future work. The
-last restriction is the fixed size in this work of the focal matrix for the
-Focal $G^*$ approach. We only tested one size in this work, but it is highly
-probable that the size of the focal matrix has an impact on the stability as
-could be seen in Fig.~\ref{fig:EvalResults}. While an overall trend can be seen
-in this work when the size of the weight matrix W and the focal matrix F are
-almost identical, the exact ratio is beyond the scope of this work. The optimal
-ratio as well as when the stability suffers from a too similar size are
-interesting question for future work.
+
+
 
 \section{Acknowledgements}
 This work is part of the research project BigGIS (reference number: 01IS14012)
