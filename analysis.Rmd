@@ -296,14 +296,14 @@ zoom_soh %>% dplyr::select(Zoom, "Focal G*" = UpFocalGstar) -> y2
 
 plot(y1, type = "n", ylim = c(0,1),
      ylab = expression(SoH[up]),
-     xlab = "Zoom level",
-     main = "Variable zoom: G* vs Focal G*")
+     xlab = "Zoom level")
 
-lines(y1, col = "red")
-lines(y2, col = "blue")
-legend(1,1, c("G*", "Focal G*"), fill = c("red", "blue"))
+lines(y1, col = "blue", lw = 2)
+lines(y2, col = "red", lw = 2)
+legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
 mtext("CI: FMsize and WMsize", line = -1, adj = .98)
 ```
+
 ```{r zoom-sohdown, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 zoom_soh <- read_csv("data/zoom_soh.csv")
 
@@ -312,12 +312,11 @@ zoom_soh %>% dplyr::select(Zoom, "Focal G*" = DownZoomFocalGstar) -> y2
 
 plot(y1, type = "n", ylim = c(0,1),
      ylab = expression(SoH[down]),
-     xlab = "Zoom level",
-     main = "Variable zoom: G* vs Focal G*")
+     xlab = "Zoom level")
 
-lines(y1, col = "red")
-lines(y2, col = "blue")
-legend(1,1, c("G*", "Focal G*"), fill = c("red", "blue"))
+lines(y1, col = "blue", lw = 2)
+lines(y2, col = "red", lw = 2)
+legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
 mtext("CI: FMsize and WMsize", line = -1, adj = .98)
 ```
 
