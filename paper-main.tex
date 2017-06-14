@@ -210,7 +210,7 @@ Our results are based on the cab taxi dataset from New York, Manhattan \cite{TOD
 We used only the dataset of January 2016. From that
 dataset we used the $pickup\_longitude$ and $pickup\_latitude$ column. 
 The borders of the raster are between (40.699607, -74.020265) and (40.769239, -73.948286). 
-Zoom size 1 means we aggregate every point, which was in range of 100x100*0.000001 into one pixel. 
+Zoom size 1 means we aggregate every point, which was in range of $100x100 \cdot 0.000001$ into one pixel. 
 In zoom size N we aggregated NxN pixel from zoom size 1 into a new pixel.
 %
 For our measurements we specified the following data series:
@@ -348,10 +348,17 @@ produce a 2D plot. We also generate just a single sample.
 %Example weight matrix $W$ and focal matrix $F$ are depicted in 
 %Fig.~\ref{fig:ExampleMatrices}.
 
+\section{Methode}
+
+The weight size W, focal size F and the zoom level are the 3 parameters we vary.
+Therefore we have a 3 dimensional space. The SoH is defined for every tuple of points.
+We choose to fix one dimension and used the other dimension as our sample group. 
+Out of the sample group we calculate the mean and the standard deviation. 
+In our graph we show the mean and the standard deviation from the mean. 
+We define as a child the previous image out of the fixed dimension.
 
 
-
-\subsection{Results and Discussion}
+\section{Results and Discussion}
 
 % Focal size  
 %	Increase of focal size leads to better results in the upward property
@@ -360,12 +367,22 @@ produce a 2D plot. We also generate just a single sample.
 %	The downward property reaches its maximum at 65x65
 %
 %	Conclusion: F should be around 65x65 or higher
-In figure ~\ref{fig:fUp} you can see that an increase of the focal size leads to better results for $SoH^{\uparrow}$. 
-The standard deviation decreases also with a higher focal size. Only 
-at focal size F of 17x17 there is no standard deviation. At focal size F 17x17 the standard deviation is 
-missing, because the weight size W must be smaller than F. When F and W have similar
-size, there are no clusters. (TODO assumtion for SOH, if no clusters we asume Up/Down = 0)
-$SoH^{\downarrow}$ in figure ~\ref{fig:fDown} reaches its maximum for focal size F 65x65 in the regarded area.
+
+First we fixed the focal size F as our x-axis. Therefore we have no $G^*$ to compare against Focal $G^*$ because $G^*$ has a fixed study area.
+To evaluate this dimension is essential because if it is not known how big the study area needs to be. Based on these results we want to fix the focal size F
+so that in most cases focal $G^*$ is better than $G^*$.
+In figure ~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shwon for $G^*$ and Focal $G^*$.
+Higher values mean that the found hot spots are more stable. The \SOHUP in figure ~\ref{fig:fUp} growth with an increase of the focal size.
+It can see that an increase of the focal size leads to better results for \SOHUP. 
+With a higher focal size you can see that the dotted line which represent the standard deviation is getting smaller.
+Therefore the standard deviation decreases with a higher focal size. Only 
+at focal size F of 17x17 there is no standard deviation. Which is presented with the absent of the dotted line.
+At focal size F 17x17 the standard deviation is missing, because the weight size W must be smaller than F. 
+And for focal size F the values for W which are caluclated are only 3,7,11.
+When F and W have similar size, there are no clusters. Because the values have no much variation. (TODO assumtion for SOH, if no clusters we asume Up/Down = 0)
+\SOHDOWN can also be calculated with the same images. 
+\SOHDOWN in figure ~\ref{fig:fDown} reaches its maximum for focal size F 65x65 in the regarded area. The standard deviation is not decreasing with an increase of the 
+focal size. Also the standard deviation is missing for the first point. 
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
@@ -390,13 +407,19 @@ $SoH^{\downarrow}$ in figure ~\ref{fig:fDown} reaches its maximum for focal size
 %	For the upward property Focal G* is better than G*
 %
 %	Conclusion: Higher weight size leads to better results. There are parametrisations of Focal G* which are better than G*
-In figure ~\ref{fig:wDown} one can see that an increase of the weight size leads to better results.
-Focal $G^*$ is not allways better than $G^*$ which would be a perfect result we hoped for. But it seems 
-that $G*$ has at 23 and 39 some parametrisation which leads to small break downs. 
+Next we fixed the weight dimension as our x-axis. The values are increasing with an increase of the weight size W. 
+Higher values means the results are more stable.
+In figure ~\ref{fig:wUp} one can see that an increase of the weight size leads to better results forh the \SOHUP. 
+We compare $G^*$ (blue line) wiht Focal $G^*$ (red line). The read line is not always above the blue line.
+Therefore Focal $G^*$ is not allways better than $G^*$ which would be a perfect result we hoped for. It seems 
+that $G^*$ has at 23 and 39 some small break downs. At first glance one would say that some parametrisation leads to that result
+but the standard deviation is decreasing which indicate the opposite.
 The standard deviation is in this area higher than in the other points.
-In figure ~\ref{fig:wUp} the break downs are also visible.
-The high standard deviation indicates that it is possible to use this parametrisation for better results
-The $SoH^{\uparrow}$ in ~\ref{fig:wUp} is mostly better than $G^*$ which was our conclusion in \ref{TODO last paper}.
+In figure ~\ref{fig:wDown} the break downs are also visible which uses the same images as before but calculate the \SOHDOWN.
+The high standard deviation in general indicates that it is possible to use better parametrisation for better results. Which would be the zoom size.
+The break downs at 23 and 39 are also visible but this time the standard deviation is increasing.
+The \SOHDOWN and \SOHUP is mostly better than $G^*$ with fixed x-axis for the weight. 
+Which was the conclusion in \ref{TODO last paper}. 
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
@@ -421,8 +444,11 @@ The $SoH^{\uparrow}$ in ~\ref{fig:wUp} is mostly better than $G^*$ which was our
 %
 %	Conclusion: G* is better than Focal G* in the zoom dimension, but the focal size is fixed. The zoom dimension has the least 
 %	influence on the value
-The last variation we examined was the zoom level. The results can seen in figure ~\ref{fig:SoHZoom}. One can see that $G^*$ is always better than Focal $G^*$.
-The target area of Focal $G^*$ increases with every zoom step. 
+
+The last variation we examined was the zoom level. There we fixed the x-axis as our zoom level. And the focal size and weight size variation lead to a sample set.
+The results can seen in figure ~\ref{fig:SoHZoom}. For the \SOHUP there is a huge increase between zoom level 3 and 4. This increase can't be seen for \SOHDOWN.
+One can see that $G^*$ is always better than Focal $G^*$. This could be beacause the target area of Focal $G^*$ increases with every zoom step. 
+
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
