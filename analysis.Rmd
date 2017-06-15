@@ -234,21 +234,50 @@ for (i in seq_along(wsizes)) {
 ```
 
 ### Focal G* (blur)
-```{r demo-blur-focalgstar, echo=FALSE, cache=TRUE, fig.width=7, fig.height=4.5}
+
+First, we pre-compute the rasters
+```{r, echo=FALSE, cache=TRUE}
+blur_focalgstar <- list()
+pb <- txtProgressBar(max = last(wsizes), style = 3)
 st <- GetisOrdLocalStats(r, weight_matrix_circular(FOCAL_MATRIX_SIZE))
 for (ws in wsizes) {
+  setTxtProgressBar(pb, ws)
   
   w <- weight_matrix_circular_fade(ws, 0)
   w[is.na(w)] <- 0 # removing any NAs from the weight matrix
   
-  g <- GetisOrd(r, w, st)
+  blur_focalgstar[[length(blur_focalgstar) + 1]] <- GetisOrd(r, w, st)
+}
+close(pb)
+```
+
+```{r, eval=FALSE, echo=FALSE}
+for (i in seq_along(wsizes)) {
+  ws <- wsizes[i]
+  g <- blur_focalgstar[[i]]
+  writeRaster(g,
+              sprintf("data/blur/focalgstar-%03dx%03d-z%02d-w%02d.tif",
+                      nrow(g), ncol(g), ZOOMLEVEL, ws),
+              overwrite = TRUE)
+}
+```
+
+```{r raw-blur-focalgstar, echo=FALSE, cache=TRUE, fig.width=4, fig.height=4}
+op <- par(mar = rep(0, 4))
+for (g in blur_focalgstar[RENDERED_IDX]) {
+  plot(g, xlab = NA, ylab = NA, legend = FALSE, axes = FALSE, box = FALSE,
+       col = COLORMAP, colNA = "black")
+}
+par(op)
+```
+
+```{r demo-blur-focalgstar, echo=FALSE, cache=TRUE, fig.width=6, fig.height=5.5}
+for (i in seq_along(wsizes)) {
+  ws <- wsizes[i]
+  g <- blur_focalgstar[[i]]
   plot_zscore(g,
               title = sprintf("Focal G*: wsize=%d", ws),
               sigma_thresh = 2)
-  writeRaster(g,
-              sprintf("data/blur/focalgstar-%dx%d-z%02d-w%02d.tif",
-                      nrow(r), ncol(r), ZOOMLEVEL, ws),
-              overwrite = TRUE)
 }
 ```
 
