@@ -201,6 +201,7 @@ number of children.
 The SoH is defined for a range between 0 and 1, where 1 represents a perfectly 
 stable transformation while 0 would be a transformation with no stability at 
 all.
+If $|Children|=0$ or $|Parents|=0$ SoH is 0.
 
 \section{Focal Getis-Ord} \label{sec:FocalGetisOrd}
 
@@ -210,17 +211,56 @@ Our results are based on the cab taxi dataset from New York, Manhattan \cite{TOD
 We used only the dataset of January 2016. From that
 dataset we used the $pickup\_longitude$ and $pickup\_latitude$ column. 
 The borders of the raster are between (40.699607, -74.020265) and (40.769239, -73.948286). 
-Zoom size 1 means we aggregate every point, which was in range of $100x100 \cdot 0.000001$ into one pixel. 
-In zoom size N we aggregated NxN pixel from zoom size 1 into a new pixel.
+Aggregation size 1 means we aggregate every point, which was in range of $100x100 \cdot 0.000001$ into one pixel. 
+For aggregation size Z we aggregated ZxZ pixel from aggregated size 1 into a new pixel.
 %
 For our measurements we specified the following data series:
 \begin{itemize}
- \item The weight matrix W is from 3 to 43 with a stepsize of 4.
- \item The focal matrix F is from  17 to 125 with a stepsize of 12.
- \item The zoom level is from 1 to 5 with a stepsize of 1.
+ \item $W_i$: The weight matrix W is from 3 to 47 with a stepsize of 4.
+ \item $F_j$: The focal matrix F is from  17 to 137 with a stepsize of 12. F is ignored for $G^*$ but not for Focal $G^*$
+ \item $R_z$: The aggregation level is from 1 to 6 with a stepsize of 1. R represents the raster
 \end{itemize}
-Therefore we calculate around $10 \cdot 10 \cdot 5=500$ results for each fixed x.
-The following conditions must hold F>W, F<Raster.cols und F<Raster.rows.
+\begin{definition}
+The SoH for a singled evalution run in the weight dimension is defined as:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i+2}, st, F_{j}) ) 
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i+2}, st, F_{j}) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
+\end{displaymath}
+The SoH for a singled evalution run in the focal dimension is defined as:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i}, st, F_{j+1}) )
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i}, st, F_{j+1}) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
+\end{displaymath}
+The SoH for a singled evalution run in the aggregation dimension is defined as:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_{z+1}, W_{i}, st, F_{j}) )
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_{z+1}, W_{i}, st, F_{j}) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
+\end{displaymath}
+
+\end{definition}
+
+Therefore we would calculate $10 \cdot 10 \cdot 5 + 10 \cdot 5=550$ results for each dimension.
+The following conditions must hold dim(F)>dim(W) and dim(F)<dim(R) which leads e.g. to 460 results in the z dimension.
+The weight size W, focal size F and the aggregation level are the 3 parameters we vary.
+Therefore we have a 3 dimensional space. 
+We choose to fix one dimension and used the other dimension as our sample group. 
+Out of the sample group we calculate the mean and the standard deviation. 
+In our graph we show the mean and the standard deviation from the mean. 
 
 
 \subsection{Method}
@@ -348,14 +388,7 @@ produce a 2D plot. We also generate just a single sample.
 %Example weight matrix $W$ and focal matrix $F$ are depicted in 
 %Fig.~\ref{fig:ExampleMatrices}.
 
-\section{Methode}
 
-The weight size W, focal size F and the zoom level are the 3 parameters we vary.
-Therefore we have a 3 dimensional space. The SoH is defined for every tuple of points.
-We choose to fix one dimension and used the other dimension as our sample group. 
-Out of the sample group we calculate the mean and the standard deviation. 
-In our graph we show the mean and the standard deviation from the mean. 
-We define as a child the previous image out of the fixed dimension.
 
 
 \section{Results and Discussion}
@@ -368,20 +401,24 @@ We define as a child the previous image out of the fixed dimension.
 %
 %	Conclusion: F should be around 65x65 or higher
 
-First we fixed the focal size F as our x-axis. Therefore we have no $G^*$ to compare against Focal $G^*$ because $G^*$ has a fixed study area.
-To evaluate this dimension is essential because if it is not known how big the study area needs to be. Based on these results we want to fix the focal size F
+First we fixed the focal size F as our x-axis. 
+Therefore we have no $G^*$ to compare against Focal $G^*$ because $G^*$ has a fixed study area.
+To evaluate this dimension is essential because if it is not 
+known how big the study area needs to be. Based on these results we want to fix the focal size F
 so that in most cases focal $G^*$ is better than $G^*$.
 In figure ~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shwon for $G^*$ and Focal $G^*$.
-Higher values mean that the found hot spots are more stable. The \SOHUP in figure ~\ref{fig:fUp} growth with an increase of the focal size.
+Higher values mean that the found hot spots are more stable. 
+The \SOHUP in figure ~\ref{fig:fUp} growth with an increase of the focal size.
 It can see that an increase of the focal size leads to better results for \SOHUP. 
 With a higher focal size you can see that the dotted line which represent the standard deviation is getting smaller.
 Therefore the standard deviation decreases with a higher focal size. Only 
 at focal size F of 17x17 there is no standard deviation. Which is presented with the absent of the dotted line.
 At focal size F 17x17 the standard deviation is missing, because the weight size W must be smaller than F. 
 And for focal size F the values for W which are caluclated are only 3,7,11.
-When F and W have similar size, there are no clusters. Because the values have no much variation. (TODO assumtion for SOH, if no clusters we asume Up/Down = 0)
+When F and W have similar size, there are no clusters. Because the values have no much variation. 
 \SOHDOWN can also be calculated with the same images. 
-\SOHDOWN in figure ~\ref{fig:fDown} reaches its maximum for focal size F 65x65 in the regarded area. The standard deviation is not decreasing with an increase of the 
+\SOHDOWN in figure ~\ref{fig:fDown} reaches its maximum for focal size F 65x65 in the regarded area. 
+The standard deviation is not decreasing with an increase of the 
 focal size. Also the standard deviation is missing for the first point. 
 
 \begin{figure}[htp]
@@ -410,13 +447,16 @@ focal size. Also the standard deviation is missing for the first point.
 Next we fixed the weight dimension as our x-axis. The values are increasing with an increase of the weight size W. 
 Higher values means the results are more stable.
 In figure ~\ref{fig:wUp} one can see that an increase of the weight size leads to better results forh the \SOHUP. 
-We compare $G^*$ (blue line) wiht Focal $G^*$ (red line). The read line is not always above the blue line.
+We compare $G^*$ wiht Focal $G^*$ . The Focal $G^*$ is not always above the $G^*$.
 Therefore Focal $G^*$ is not allways better than $G^*$ which would be a perfect result we hoped for. It seems 
-that $G^*$ has at 23 and 39 some small break downs. At first glance one would say that some parametrisation leads to that result
+that $G^*$ has at 23 and 39 some small break downs. 
+At first glance one would say that some parametrisation leads to that result
 but the standard deviation is decreasing which indicate the opposite.
 The standard deviation is in this area higher than in the other points.
-In figure ~\ref{fig:wDown} the break downs are also visible which uses the same images as before but calculate the \SOHDOWN.
-The high standard deviation in general indicates that it is possible to use better parametrisation for better results. Which would be the zoom size.
+In figure ~\ref{fig:wDown} the break downs are also visible 
+which uses the same images as before but calculate the \SOHDOWN.
+The high standard deviation in general indicates that it is possible 
+to use better parametrisation for better results. Which would be the zoom size.
 The break downs at 23 and 39 are also visible but this time the standard deviation is increasing.
 The \SOHDOWN and \SOHUP is mostly better than $G^*$ with fixed x-axis for the weight. 
 Which was the conclusion in \ref{TODO last paper}. 
@@ -445,9 +485,12 @@ Which was the conclusion in \ref{TODO last paper}.
 %	Conclusion: G* is better than Focal G* in the zoom dimension, but the focal size is fixed. The zoom dimension has the least 
 %	influence on the value
 
-The last variation we examined was the zoom level. There we fixed the x-axis as our zoom level. And the focal size and weight size variation lead to a sample set.
-The results can seen in figure ~\ref{fig:SoHZoom}. For the \SOHUP there is a huge increase between zoom level 3 and 4. This increase can't be seen for \SOHDOWN.
-One can see that $G^*$ is always better than Focal $G^*$. This could be beacause the target area of Focal $G^*$ increases with every zoom step. 
+The last variation we examined was the aggregation level. There we fixed the x-axis as our aggregation level. 
+And the focal size and weight size variation lead to a sample set.
+The results can seen in figure ~\ref{fig:SoHZoom}. 
+For the \SOHUP there is a huge increase between aggregation level 4 and 5. This increase can't be seen for \SOHDOWN.
+One can see that $G^*$ is always better than Focal $G^*$. 
+This could be beacause the target area of Focal $G^*$ increases with every aggregation step. 
 
 
 \begin{figure}[htp]
