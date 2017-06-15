@@ -422,11 +422,17 @@ focal size.
 %
 %	Conclusion: Higher weight size leads to better results. There are parametrisations of Focal G* which are better than G*
 \subsection{Impact of Neighbourhood size}
-Next, we want to isolate the effect of the neighbourhood size by fixing the weight matrix size W and using it as x-axis. With the impact of the weight matrix W we gain information on how far the interconnectness is between different points as indicated in \cite{Getis.1992}. 
+Next, we want to isolate the effect of the neighbourhood size by fixing the weight matrix size W 
+and using it as x-axis. With the impact of the weight matrix W we gain information on how far the 
+interconnectness is between different points as indicated in \cite{Getis.1992}. 
 The results for the weight matrix can be seen in figure ~\ref{fig:wUp} for \SOHUP and figure ~\ref{fig:wDown} for \SOHDOWN.
-Here it can be seen that in general for both evaluations metrics as well as the different hot spot methods an increase in the size of the weight matrix W leads to more stable results as well as that the Focal $G^*$ matrix is slightly more stable in most cases for the mean values. 
-An interesting phenomena is the dip in stability for the standard $G^*$ for the value of 39. Despite our effort we could not determine the reason behind this result, as no overall trend could be extracted.
-The standard deviation shows similar no particular trend, but for the values above 37 is increasing. We assume that the reason behind this effect is the inclusion of the water near Manhattan, which leads to a stronger differentiation between areas near water and areas more in the inner city. by increasing the weight matrix, the number of points which are influenced increase in number. The other parameter can regulate this impact and therefore the variance is stronger.  
+Here it can be seen that in general for both evaluations metrics as well as the different hot spot methods 
+an increase in the size of the weight matrix W leads to more stable results as well as that the Focal $G^*$ 
+matrix is slightly more stable in most cases for the mean values. 
+An interesting phenomena is the dip in stability for the standard $G^*$ for the value of 39. Despite our 
+effort we could not determine the reason behind this result, as no overall trend could be extracted.
+The standard deviation shows similar no particular trend, but for the values above 37 is increasing. 
+We assume that the reason behind this effect is the inclusion of the water near Manhattan, which leads to a stronger differentiation between areas near water and areas more in the inner city. by increasing the weight matrix, the number of points which are influenced increase in number. The other parameter can regulate this impact and therefore the variance is stronger.  
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
@@ -452,8 +458,11 @@ The standard deviation shows similar no particular trend, but for the values abo
 %	Conclusion: G* is better than Focal G* in the zoom dimension, but the focal size is fixed. The zoom dimension has the least 
 %	influence on the value
 \subsection{Impact of Aggregation level}
-Finally, we isolate the impact of the different aggregation levels on the stability of the hot spot analysis. We fix the aggregation and use it as x-axis. This allows us to examine the impact the resolution of a data set has on the results and allow us indirectly to reduce the computational effort on future computations by using the maximal aggregation as useful.
-The results can seen in figure ~\ref{fig:SoHZoom} and ~\ref{fig:DownwardZoom}.
+Finally, we isolate the impact of the different aggregation levels on the stability of the hot spot analysis. 
+We fix the aggregation and use it as x-axis. This allows us to examine the impact
+the resolution of a data set has on the results and allow us indirectly to reduce the 
+computational effort on future computations by using the maximal aggregation as useful.
+The results can seen in figure ~\ref{fig:SoHZoom}.
 First, we can see that for the zoom level, in contrast to previous results, the standard $G^*$ seems to be more stable.
 
 
@@ -556,6 +565,7 @@ For the downward property, Focal $G^*$ leads to better results at zoom level 5.
     This image shows all aggregation levels for G* and Focal G* together 
     with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
   }
+  \label{fig:Zoom}
 \end{figure*}
 
 \subsection{Blur}
@@ -629,6 +639,7 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
     This image shows different weight matrix sizes for G* and Focal G* together 
     with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
   }
+  \label{fig:Blur}
 \end{figure*}
 
 \begin{figure*}[htp]
@@ -654,7 +665,8 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
 
 
 \section{Conclusions and Future Work} \label{sec:Conclusion}
-In this work, we compared the Getis-Ord statistic with Focal Getis-Ord statisitic. We validate the result from \ref{TODO last paper} with a real world 
+In this work, we compared the Getis-Ord statistic with Focal Getis-Ord statisitic. 
+We validate the result from \ref{SoH-GI-Forum} with a real world 
 dataset an with a larger dataset. The dataset was only one month projected in one raster. 
 We examined further parameters and evaluated that $G^*$ and Focal $G^*$ performe better if the weight
 is higher.
