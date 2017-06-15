@@ -223,35 +223,36 @@ For our measurements we specified the following data series:
 \begin{definition}
 The SoH for a singled evalution run in the weight dimension is defined as:
 \begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i+2}, st, F_{j}) ) 
+\SOHUP( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_z, W_{3+(i+1) \cdot 4}, st, F_{17+j \cdot 12}) ) 
 \end{displaymath}
 \begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i+2}, st, F_{j}) )
+\SOHDOWN( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_z, W_{3+(i+1) \cdot 4}, st, F_{17+j \cdot 12}) )
 \end{displaymath}
 \begin{displaymath}
-z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
-\end{displaymath}
-The SoH for a singled evalution run in the focal dimension is defined as:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i}, st, F_{j+1}) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i}, st, F_{j+1}) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
-\end{displaymath}
-The SoH for a singled evalution run in the aggregation dimension is defined as:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_{z+1}, W_{i}, st, F_{j}) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_{z+1}, W_{i}, st, F_{j}) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
+z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
 \end{displaymath}
 
+The SoH for a singled evalution run in the focal dimension is defined as:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_z, W_{3+i \cdot 4}, st, F_{17+(j+1) \cdot 12}) )
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_z, W_{3+i \cdot 4}, st, F_{17+(j+1) \cdot 12}) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
+\end{displaymath}
+
+The SoH for a singled evalution run in the aggregation dimension is defined as:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_{z+1}, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) )
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_{z+1}, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
+\end{displaymath}
 \end{definition}
 
 Therefore we would calculate $10 \cdot 10 \cdot 5 + 10 \cdot 5=550$ results for each dimension.
@@ -527,10 +528,14 @@ z \in [1,6], dim(W)=11,dim(F)=41, G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 
-The results can be found in figure ~\ref{fig:Zoom}.
-For the upward property, $G^*$ is always better than Focal $G^*$, compared to the results from figure
-\ref{fig:SoHZoom}. Focal $G^*$ reaches the same result as $G^*$ at zoom level 5 .
-For the downward property, Focal $G^*$ leads to better results at zoom level 5.
+The results can be found in Fig.~\ref{fig:Zoom}.
+For the upward property, $G^*$ is better than Focal $G^*$ in most cases, compared to the results from figure
+\ref{fig:SoHZoom}. At aggregation level 5 $G^*$ is worse than Focal $G^*$, but at this point $G^*$ was extrem 
+good if you compare it to the whiskerplot in Fig.~\ref{fig:zUp}.
+For \SOHDOWN $G^*$ has its peak for aggregation level 5, which is consistent with Fig.~\ref{fig:zDown}.
+The result in Fig.~\ref{fig:Zoom} where consitent that $G^*$ is always better than Focal $G^*$ but suprisingly 
+we found an outlier.
+
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
@@ -555,20 +560,22 @@ Blur is a slice plane through our three dimensional space.
 W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
 \begin{definition} Blur run:
 \begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
+\SOHUP( G^*(R_z, W_{7+(i-1) \cdot 2}, st, F), G^*(R_{z}, W_{7+i \cdot 2}, st, F) )
 \end{displaymath}
 \begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
+\SOHDOWN( G^*(R_z, W_{7+(i-1) \cdot 2}, st, F), G^*(R_{z}, W_{7+i \cdot 2}, st, F) )
 \end{displaymath}
 \begin{displaymath}
 z =3, i \in [1,6],dim(F)=41, G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 The blur results are plotted in Fig.~\ref{fig:Blur}.
-The slice plane of the weight dimension is consistent with figure ~\ref{fig:SoHWeight}.
-Higher weight leads in general to better results for Focal $G^*$. 
-$G^*$ doesn't fit to the mean of our whiskerplot.
-
+In this slice one can see that $G^*$ leads to better results compared to Focal $G^*$ for \SOHDOWN. 
+This is because focal size F is set
+to 41x41. We saw that a higher focal size leads to better results. We saw in Fig.~\ref{images/whiskerPlot/wDown}
+that an increas of the weight leads to better results. This slice plane is not consistent. Focal $G^*$ is even decreasing.
+For the \SOHUP Focal $G^*$ compared to $G^*$ is equal good if the points are counted. But $G^*$ has a poor performance with the smallest 
+weights. Foal $G^*$ is mostly above 0.4.
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
