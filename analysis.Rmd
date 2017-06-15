@@ -282,7 +282,7 @@ for (i in seq_along(wsizes)) {
 ```
 
 ## Example of Parent-Child Clumping Difference
-```{r metric-example, message=FALSE, echo=FALSE, cache=TRUE, fig.width=7, fig.height=4.5}
+```{r metric-example, message=FALSE, echo=FALSE, cache=TRUE, fig.width=5, fig.height=4.1}
 r <- rast[[ZOOMLEVEL]]
 st1 <- GetisOrdStandardStats(r)
 st2 <- GetisOrdLocalStats(r, weight_matrix_circular(FOCAL_MATRIX_SIZE))
