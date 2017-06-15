@@ -452,9 +452,11 @@ The standard deviation shows similar no particular trend, but for the values abo
 %	Conclusion: G* is better than Focal G* in the zoom dimension, but the focal size is fixed. The zoom dimension has the least 
 %	influence on the value
 \subsection{Impact of Aggregation level}
-The last variation we examined was the aggregation level. There we fixed the x-axis as our aggregation level. 
-And the focal size and weight size variation lead to a sample set.
-The results can seen in figure ~\ref{fig:SoHZoom}. 
+Finally, we isolate the impact of the different aggregation levels on the stability of the hot spot analysis. We fix the aggregation and use it as x-axis. This allows us to examine the impact the resolution of a data set has on the results and allow us indirectly to reduce the computational effort on future computations by using the maximal aggregation as useful.
+The results can seen in figure ~\ref{fig:SoHZoom} and ~\ref{fig:DownwardZoom}.
+First, we can see that for the zoom level, in contrast to previous results, the standard $G^*$ seems to be more stable.
+
+
 For the \SOHUP there is a huge increase between aggregation level 4 and 5. This increase can't be seen for \SOHDOWN.
 One can see that $G^*$ is always better than Focal $G^*$. 
 This could be beacause the target area of Focal $G^*$ increases with every aggregation step. 
