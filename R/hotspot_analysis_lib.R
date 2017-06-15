@@ -274,26 +274,29 @@ eval_getisord <- function(
 
 # Weight matrix ----------------------------------------------------------------
 
-plot_weight_matrix <- function(w, show.legend = TRUE) {
+plot_weight_matrix <- function(w, show.dim = TRUE, show.minmax = TRUE) {
   # sanity check
   stopifnot(is.matrix(w))
-  stopifnot(is.logical(show.legend))
+  stopifnot(is.logical(show.dim))
+  stopifnot(is.logical(show.minmax))
 
   col <- gray.colors(100)
   image(w, col = col, axes = FALSE, asp = 1)
 
-  if (show.legend) {
-    # matrix dimensions
+  # matrix dimensions
+  if (show.dim) {
     legend(1,1,
            xjust = 1,
            yjust = 1,
-           bg = rgb(0,0,0,.3),
-           border = rgb(1,1,1,.5),
+           bg = rgb(0,0,0,.5),
+           border = rgb(1,1,1,.7),
            text.col = "white",
            legend = c( sprintf("%d x %d", nrow(w), ncol(w)) )
            )
+  }
 
-    # min/max values
+  # min/max values
+  if (show.minmax) {
     legend(1,0,
            xjust = 1,
            yjust = 0,
