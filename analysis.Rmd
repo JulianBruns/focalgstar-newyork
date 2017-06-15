@@ -33,6 +33,9 @@ ZOOM_WMATRIX_SIZE <- 11
 FOCAL_MATRIX_SIZE <- 41
 MAX_AGGREG_LEVEL <- 8
 ZOOMLEVEL <- 3
+COLORMAP <- interpolate_colortable(
+  howmany = 100, "black", "blue", "yellow", "red")
+
 ```
 
 ## Loading hi-res raster
@@ -52,8 +55,9 @@ Rendering the aggregated rasters:
 ```{r rawdata, cache=TRUE, fig.width=5, fig.height=5}
 op <- par(mar = rep(0, 4))
 for (i in seq_along(rast)) {
-  plot(rast[[i]], xlab = NA, ylab = NA,
-       legend = FALSE, axes = FALSE, box = FALSE)
+  plot(log(rast[[i]]), xlab = NA, ylab = NA,
+       legend = FALSE, axes = FALSE, box = FALSE,
+       col = COLORMAP, colNA = "black")
 }
 par(op)
 ```
@@ -97,7 +101,7 @@ Now, we want to generate plain images out of the G* rasters:
 op <- par(mar = rep(0, 4))
 for (g in zoom_gstar) {
   plot(g, xlab = NA, ylab = NA,
-       legend = FALSE, axes = FALSE, box = FALSE)
+       legend = FALSE, axes = FALSE, box = FALSE, col = COLORMAP, colNA = "black")
 }
 par(op)
 ```
@@ -145,7 +149,8 @@ Now, we want to generate plain images out of the Focal G* rasters:
 ```{r raw-zoom-focalgstar, echo=FALSE, cache=TRUE, fig.width=4, fig.height=4}
 op <- par(mar = rep(0, 4))
 for (g in zoom_focalgstar) {
-  plot(g, xlab = NA, ylab = NA, legend = FALSE, axes = FALSE, box = FALSE)
+  plot(g, xlab = NA, ylab = NA, legend = FALSE, axes = FALSE, box = FALSE,
+       col = COLORMAP, colNA = "black")
 }
 par(op)
 ```
