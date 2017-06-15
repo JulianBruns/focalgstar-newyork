@@ -173,7 +173,7 @@ wsizes
 for(ws in wsizes) {
   w <- weight_matrix_circular_fade(ws, 0)
   w[is.na(w)] <- 0 # removing any NAs from the weight matrix
-  plot_weight_matrix(w)
+  plot_weight_matrix(w, show.minmax = FALSE)
 }
 ```
 
