@@ -17,6 +17,7 @@ library(knitr)
 library(rgdal)
 library(readr)
 library(corrplot)
+library(plotrix)
 
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -168,6 +169,15 @@ wsizes <- (1:12)*2 + 5
 wsizes
 ```
 
+```{r blur-wmatrices, echo=FALSE, cache=TRUE, fig.width=4, fig.height=4}
+for(ws in wsizes) {
+  w <- weight_matrix_circular_fade(ws, 0)
+  w[is.na(w)] <- 0 # removing any NAs from the weight matrix
+  plot_weight_matrix(w)
+}
+```
+
+
 ### Standard G* (blur)
 ```{r demo-blur-gstar, echo=FALSE, cache=TRUE, fig.width=7, fig.height=4.5}
 for (ws in wsizes) {
@@ -204,7 +214,7 @@ for (ws in wsizes) {
               overwrite = TRUE)
 }
 ```
-## Parent-Child Clumping Difference
+## Example of Parent-Child Clumping Difference
 ```{r metric-example, message=FALSE, echo=FALSE, cache=TRUE, fig.width=7, fig.height=4.5}
 r <- rast[[ZOOMLEVEL]]
 st1 <- GetisOrdStandardStats(r)
@@ -213,69 +223,12 @@ plot_clumping_diff(r, st1, ZOOM_WMATRIX_SIZE, 29)
 plot_clumping_diff(r, st2, ZOOM_WMATRIX_SIZE, 29)
 ```
 
-## Eval SoH-up
-```{r, eval=FALSE}
-# expand.grid(
-#   zoom = seq_along(rast),
-#   wsize = wsizes,
-#   soh = NA
-# ) ->
-#   soh_up_gstar ->
-#   soh_up_focalgstar ->
-#   soh_down_gstar ->
-#   soh_down_focalgstar
-
-# zooms <- 5:length(rast)
-
-# pbmax <- length(wsizes) * length(zooms)
-# pbidx <- 0
-# pb <- txtProgressBar(max = pbmax, style = 3)
-
-# wgen <- function(ws) {
-#   w <- weight_matrix_circular_fade(ws, 0)
-#   w[is.na(w)] <- 0 # removing any NAs from the weight matrix
-#   w
-# }
-# 
-# results <- matrix(nrow = 0, ncol = 4)
-# colnames(results) <- c("zoom",
-#                        "wm size",
-#                        "soh_up(G*)",
-#                        "soh_up(Focal G*)")
-# 
-# for (zoom in zooms) {
-#   
-#   r <- rast[[zoom]]
-#   st_std <- GetisOrdStandardStats(r)
-#   st_foc <- GetisOrdLocalStats(r, weight_matrix_circular(51))
-#   
-#   std_up <- eval_getisord(r, st_std, wsizes, wgen = wgen)
-#   foc_up <- eval_getisord(r, st_foc, wsizes, wgen = wgen)
-#   
-#   results <- rbind(results, cbind(zoom, wsizes[-1], std_up[,2], foc_up[,2]))
-  
-  # plot(res_std, type = "n", ylim = c(0,1))
-  # lines(res_std, col = "red")
-  # lines(res_foc, col = "blue")
-  
-  # for (ws in wsizes) {
-  #   w <- weight_matrix_circular_fade(ws, 0)
-  #   w[is.na(w)] <- 0 # removing any NAs from the weight matrix
-  #   
-  #   
-  #   pbidx <- pbidx + 1
-  #   setTxtProgressBar(pb, pbidx)
-  # }
-# }
-# close(pb)
-```
-
 ```{r, echo=FALSE, message=FALSE}
 glob <- read_csv("data/heatmap/aggregatedGlobal.csv")
 foc <- read_csv("data/heatmap/aggregatedFocal.csv")
 ```
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 foc %>%
   cor(use = "pairwise.complete.obs") %>%
   corrplot.mixed(order = "FPC", diag = "n", outline = "gray")
@@ -291,8 +244,8 @@ glob %>%
 ```{r zoom-sohup, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 zoom_soh <- read_csv("data/zoom_soh.csv")
 
-zoom_soh %>% dplyr::select(Zoom, "G*" = UpZoomGstar) -> y1
-zoom_soh %>% dplyr::select(Zoom, "Focal G*" = UpFocalGstar) -> y2
+zoom_soh %>% dplyr::select(Zoom, "G*" = UpZoom) -> y1
+zoom_soh %>% dplyr::select(Zoom, "Focal G*" = UpFocalZoom) -> y2
 
 plot(y1, type = "n", ylim = c(0,1),
      ylab = expression(SoH[up]),
@@ -307,8 +260,8 @@ mtext("CI: FMsize and WMsize", line = -1, adj = .98)
 ```{r zoom-sohdown, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 zoom_soh <- read_csv("data/zoom_soh.csv")
 
-zoom_soh %>% dplyr::select(Zoom, "G*" = DownZoomGstar) -> y1
-zoom_soh %>% dplyr::select(Zoom, "Focal G*" = DownZoomFocalGstar) -> y2
+zoom_soh %>% dplyr::select(Zoom, "G*" = DownZoom) -> y1
+zoom_soh %>% dplyr::select(Zoom, "Focal G*" = DownFocalZoom) -> y2
 
 plot(y1, type = "n", ylim = c(0,1),
      ylab = expression(SoH[down]),
@@ -321,82 +274,117 @@ mtext("CI: FMsize and WMsize", line = -1, adj = .98)
 ```
 
 ```{r weight, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
-
 d3 <- read.csv("data/w_focal_trued3.csv")
 d3global <- read.csv("data/w_focal_falsed3.csv")
   
-mean <- aggregate(d3$Up, by = list(d3$W+4), mean)
-sd <- aggregate(d3$Up, by = list(d3$W+4), sd)
-meanG <- aggregate(d3global$Up, by = list(d3global$W+4), mean)
-sdG <- aggregate(d3global$Up, by = list(d3global$W+4), sd)
-plot(NA, ylab="Up", xlim=c(7,43), ylim=c(0,1), xlab=sprintf("Weight"))
-plotCI(x=mean$Group.1, y=mean$x, uiw=sd$x, err="y", pch=20, slty=3, scol = "red", add=TRUE)
-plotCI(x=meanG$Group.1, y=meanG$x, uiw=sdG$x, err="y", pch=20, slty=3, scol = "blue", add=TRUE)
-lines(mean$Group.1, mean$x, col="red", lw=4)
-lines(meanG$Group.1, meanG$x, col="blue", lw=4)
-legend("topleft", c("Focal","Global") , fill=c("red","blue"))
+mean <- aggregate(d3$Up, by = list(d3$W + 4), mean)
+sd <- aggregate(d3$Up, by = list(d3$W + 4), sd)
+meanG <- aggregate(d3global$Up, by = list(d3global$W + 4), mean)
+sdG <- aggregate(d3global$Up, by = list(d3global$W + 4), sd)
 
-mean <- aggregate(d3$Down, by = list(d3$W+4), mean)
-sd <- aggregate(d3$Down, by = list(d3$W+4), sd)
-meanG <- aggregate(d3global$Down, by = list(d3global$W+4), mean)
-sdG <- aggregate(d3global$Down, by = list(d3global$W+4), sd)
-plot(NA, ylab="Down", xlim=c(7,43), ylim=c(0,1), xlab=sprintf("Weight"))
-plotCI(x=mean$Group.1, y=mean$x, uiw=sd$x, err="y", pch=20, slty=3, scol = "red", add=TRUE)
-plotCI(x=meanG$Group.1, y=meanG$x, uiw=sdG$x, err="y", pch=20, slty=3, scol = "blue", add=TRUE)
-lines(mean$Group.1, mean$x, col="red", lw=4)
-lines(meanG$Group.1, meanG$x, col="blue", lw=4)
-legend("topleft", c("Focal G*","G*") , fill=c("red","blue"))
+plot(NA,
+     ylab = expression(SoH^Up),
+     xlab = sprintf("Weight matrix size"),
+     xlim = c(7,43), ylim = c(0,1))
+plotCI(x = mean$Group.1,
+       y = mean$x,
+       uiw = sd$x, err = "y", pch = 20, slty = 3, scol = "red", add = TRUE)
+plotCI(x = meanG$Group.1,
+       y = meanG$x,
+       uiw = sdG$x, err = "y", pch = 20, slty = 3, scol = "blue", add = TRUE)
+lines(mean$Group.1, mean$x, col = "red", lw = 4)
+lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
+legend("topleft", c("Focal G*", "G*") , fill = c("red", "blue"))
+
+mean <- aggregate(d3$Down, by = list(d3$W + 4), mean)
+sd <- aggregate(d3$Down, by = list(d3$W + 4), sd)
+meanG <- aggregate(d3global$Down, by = list(d3global$W + 4), mean)
+sdG <- aggregate(d3global$Down, by = list(d3global$W + 4), sd)
+
+plot(NA,
+     ylab = expression(SoH^Down),
+     xlab = sprintf("Weight matrix size"),
+     xlim = c(7,43), ylim = c(0,1))
+plotCI(x = mean$Group.1,
+       y = mean$x,
+       uiw = sd$x, err = "y", pch = 20, slty = 3, scol = "red", add = TRUE)
+plotCI(x = meanG$Group.1,
+       y = meanG$x,
+       uiw = sdG$x, err = "y", pch = 20, slty = 3, scol = "blue", add = TRUE)
+lines(mean$Group.1, mean$x, col = "red", lw = 4)
+lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
+legend("topleft", c("Focal G*", "G*") , fill = c("red", "blue"))
 
 
 ```
 
 ```{r aggregation, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
-
 d3 <- read.csv("data/a_focal_trued3.csv")
 d3global <- read.csv("data/a_focal_falsed3.csv")
 
-mean <- aggregate(d3$Up, by = list(d3$Z+1), mean)
-sd <- aggregate(d3$Up, by = list(d3$Z+1), sd)
-meanG <- aggregate(d3global$Up, by = list(d3global$Z+1), mean)
-sdG <- aggregate(d3global$Up, by = list(d3global$Z+1), sd)
-plot(NA, ylab="Up", xlim=c(2,6), ylim=c(0,1), xlab=sprintf("Aggregation"))
-plotCI(x=mean$Group.1, y=mean$x, uiw=sd$x, err="y", pch=20, slty=3, scol = "red", add=TRUE)
-plotCI(x=meanG$Group.1, y=meanG$x, uiw=sdG$x, err="y", pch=20, slty=3, scol = "blue", add=TRUE)
-lines(mean$Group.1, mean$x, col="red", lw=4)
-lines(meanG$Group.1, meanG$x, col="blue", lw=4)
-legend("topleft", c("Focal G*","G*") , fill=c("red","blue"))
+mean <- aggregate(d3$Up, by = list(d3$Z + 1), mean)
+sd <- aggregate(d3$Up, by = list(d3$Z + 1), sd)
+meanG <- aggregate(d3global$Up, by = list(d3global$Z + 1), mean)
+sdG <- aggregate(d3global$Up, by = list(d3global$Z + 1), sd)
+plot(NA,
+     ylab = expression(SoH^Up),
+     xlab = sprintf("Aggregation levels"),
+     xlim = c(2,6), ylim = c(0,1))
+plotCI(x = mean$Group.1,
+       y = mean$x,
+       uiw = sd$x, err = "y", pch = 20, slty = 3, scol = "red", add = TRUE)
+plotCI(x = meanG$Group.1,
+       y = meanG$x,
+       uiw = sdG$x, err = "y", pch = 20, slty = 3, scol = "blue", add = TRUE)
+lines(mean$Group.1, mean$x, col = "red", lw = 4)
+lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
+legend("topleft", c("Focal G*","G*") , fill = c("red","blue"))
 
-mean <- aggregate(d3$Down, by = list(d3$Z+1), mean)
-sd <- aggregate(d3$Down, by = list(d3$Z+1), sd)
-meanG <- aggregate(d3global$Down, by = list(d3global$Z+1), mean)
-sdG <- aggregate(d3global$Down, by = list(d3global$Z+1), sd)
-plot(NA, ylab="Down", xlim=c(2,6), ylim=c(0,1), xlab=sprintf("Aggregation"))
-plotCI(x=mean$Group.1, y=mean$x, uiw=sd$x, err="y", pch=20, slty=3, scol = "red", add=TRUE)
-plotCI(x=meanG$Group.1, y=meanG$x, uiw=sdG$x, err="y", pch=20, slty=3, scol = "blue", add=TRUE)
-lines(mean$Group.1, mean$x, col="red", lw=4)
-lines(meanG$Group.1, meanG$x, col="blue", lw=4)
-legend("topleft", c("Focal G*","G*") , fill=c("red","blue"))
-
-
+mean <- aggregate(d3$Down, by = list(d3$Z + 1), mean)
+sd <- aggregate(d3$Down, by = list(d3$Z + 1), sd)
+meanG <- aggregate(d3global$Down, by = list(d3global$Z + 1), mean)
+sdG <- aggregate(d3global$Down, by = list(d3global$Z + 1), sd)
+plot(NA, 
+     ylab = expression(SoH^Down),
+     xlab = sprintf("Aggregation levels"),
+     xlim = c(2,6), ylim = c(0,1))
+plotCI(x = mean$Group.1,
+       y = mean$x,
+       uiw = sd$x, err = "y", pch = 20, slty = 3, scol = "red", add = TRUE)
+plotCI(x = meanG$Group.1,
+       y = meanG$x,
+       uiw = sdG$x, err = "y", pch = 20, slty = 3, scol = "blue", add = TRUE)
+lines(mean$Group.1, mean$x, col = "red", lw = 4)
+lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
+legend("topleft", c("Focal G*","G*") , fill = c("red","blue"))
 ```
 
 ```{r focal, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 
 d3 <- read.csv("data/f_focal_trued3.csv")
 
-mean <- aggregate(d3$Up, by = list(d3$F+12), mean)
-sd <- aggregate(d3$Up, by = list(d3$F+12), sd)
-plot(NA, ylab="Up", xlim=c(29,137), ylim=c(0,1), xlab=sprintf("Focal"))
-plotCI(x=mean$Group.1, y=mean$x, uiw=sd$x, err="y", pch=20, slty=3, scol = "red", add=TRUE)
-lines(mean$Group.1, mean$x, col="red", lw=4)
-legend("topleft", c("Focal G*") , fill=c("red"))
+mean <- aggregate(d3$Up, by = list(d3$F + 12), mean)
+sd <- aggregate(d3$Up, by = list(d3$F + 12), sd)
+plot(NA,
+     ylab = expression(SoH^Up),
+     xlab = "Focal matrix size",
+     xlim = c(29, 137), ylim = c(0, 1))
+plotCI(x = mean$Group.1, y = mean$x, uiw = sd$x, err = "y", pch = 20, slty = 3,
+       scol = "red", add = TRUE)
+lines(mean$Group.1, mean$x, col = "red", lw = 4)
+legend("topleft", c("Focal G*") , fill = c("red"))
 
-mean <- aggregate(d3$Down, by = list(d3$F+12), mean)
-sd <- aggregate(d3$Down, by = list(d3$F+12), sd)
-plot(NA, ylab="Down", xlim=c(29,137), ylim=c(0,1), xlab=sprintf("Focal"))
-plotCI(x=mean$Group.1, y=mean$x, uiw=sd$x, err="y", pch=20, slty=3, scol = "red", add=TRUE)
-lines(mean$Group.1, mean$x, col="red", lw=4)
-legend("topleft", c("Focal G*") , fill=c("red"))
+mean <- aggregate(d3$Down, by = list(d3$F + 12), mean)
+sd <- aggregate(d3$Down, by = list(d3$F + 12), sd)
+plot(NA,
+     ylab = expression(SoH^Down),
+     xlab = "Focal matrix size",
+     xlim = c(29,137), ylim = c(0,1))
+plotCI(x = mean$Group.1,
+       y = mean$x,
+       uiw = sd$x, err = "y", pch = 20, slty = 3, scol = "red", add = TRUE)
+lines(mean$Group.1, mean$x, col = "red", lw = 4)
+legend("topleft", c("Focal G*") , fill = c("red"))
 
 
 ```
