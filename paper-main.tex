@@ -208,7 +208,7 @@ If $|Children|=0$ or $|Parents|=0$ SoH is 0.
 \subsection{Dataset}
 
 Our results are based on the cab taxi dataset from New York, Manhattan \cite{TODO}. 
-We used only the dataset of January 2016. From that
+We only used the dataset of January 2016. From that
 dataset we used the $pickup\_longitude$ and $pickup\_latitude$ column. 
 The borders of the raster are between (40.699607, -74.020265) and (40.769239, -73.948286). 
 Aggregation size 1 means we aggregate every point, which was in range of $100x100 \cdot 0.000001$ into one pixel. 
@@ -217,8 +217,8 @@ For aggregation size Z we aggregated ZxZ pixel from aggregated size 1 into a new
 For our measurements we specified the following data series:
 \begin{itemize}
  \item $W_i$: The weight matrix W is from 3 to 47 with a stepsize of 4.
- \item $F_j$: The focal matrix F is from  17 to 137 with a stepsize of 12. F is ignored for $G^*$ but not for Focal $G^*$
- \item $R_z$: The aggregation level is from 1 to 6 with a stepsize of 1. R represents the raster
+ \item $F_j$: The focal matrix F is from  17 to 137 with a stepsize of 12. F is ignored for $G^*$, but not for Focal $G^*$.
+ \item $R_z$: The aggregation level is from 1 to 6 with a stepsize of 1. R represents the raster.
 \end{itemize}
 \begin{definition}
 The SoH for a singled evalution run in the weight dimension is defined as:
@@ -255,10 +255,10 @@ z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 
-Therefore we would calculate $10 \cdot 10 \cdot 5 + 10 \cdot 5=550$ results for each dimension.
+Therefore, we would calculate $10 \cdot 10 \cdot 5 + 10 \cdot 5=550$ results for each dimension.
 The following conditions must hold dim(F)>dim(W) and dim(F)<dim(R) which leads e.g. to 460 results in the z dimension.
 The weight size W, focal size F and the aggregation level are the 3 parameters we vary.
-Therefore we have a 3 dimensional space. 
+Therefore, we have a 3 dimensional space. 
 We choose to fix one dimension and used the other dimension as our sample group. 
 Out of the sample group we calculate the mean and the standard deviation. 
 In our graph we show the mean and the standard deviation from the mean. 
@@ -403,20 +403,20 @@ produce a 2D plot. We also generate just a single sample.
 %	Conclusion: F should be around 65x65 or higher
 
 First we fixed the focal size F as our x-axis. 
-Therefore we have no $G^*$ to compare against Focal $G^*$ because $G^*$ has a fixed study area.
-To evaluate this dimension is essential because if it is not 
-known how big the study area needs to be. Based on these results we want to fix the focal size F
+Therefore, we have no $G^*$ to compare against Focal $G^*$ because $G^*$ has a fixed study area.
+To evaluate this dimension it is essential to 
+know how big the study area needs to be. Based on these results we want to fix the focal size F
 so that in most cases focal $G^*$ is better than $G^*$.
-In figure ~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shwon for $G^*$ and Focal $G^*$.
-Higher values mean that the found hot spots are more stable. 
+In figure ~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shown for $G^*$ and Focal $G^*$.
+Higher values means that the found hot spots are more stable. 
 The \SOHUP in figure ~\ref{fig:fUp} growth with an increase of the focal size.
-It can see that an increase of the focal size leads to better results for \SOHUP. 
-With a higher focal size you can see that the dotted line which represent the standard deviation is getting smaller.
-Therefore the standard deviation decreases with a higher focal size. Only 
-at focal size F of 17x17 there is no standard deviation. Which is presented with the absent of the dotted line.
+We can see that an increase of the focal size leads to better results for \SOHUP. 
+With a higher focal size you can see that the dotted line, which represent the standard deviation, is getting smaller.
+Therefore, the standard deviation decreases with a higher focal size. Only 
+at focal size F of 17x17 there is no standard deviation. This is presented with the absent of the dotted line.
 At focal size F 17x17 the standard deviation is missing, because the weight size W must be smaller than F. 
-And for focal size F the values for W which are caluclated are only 3,7,11.
-When F and W have similar size, there are no clusters. Because the values have no much variation. 
+And for focal size F the values for W, which are caluclated, are only 7,11,15.
+When F and W have similar size, there are no clusters because the values have no much variation. 
 \SOHDOWN can also be calculated with the same images. 
 \SOHDOWN in figure ~\ref{fig:fDown} reaches its maximum for focal size F 65x65 in the regarded area. 
 The standard deviation is not decreasing with an increase of the 
@@ -447,20 +447,20 @@ focal size. Also the standard deviation is missing for the first point.
 %	Conclusion: Higher weight size leads to better results. There are parametrisations of Focal G* which are better than G*
 Next we fixed the weight dimension as our x-axis. The values are increasing with an increase of the weight size W. 
 Higher values means the results are more stable.
-In figure ~\ref{fig:wUp} one can see that an increase of the weight size leads to better results forh the \SOHUP. 
+In figure ~\ref{fig:wUp} one can see that an increase of the weight size leads to better results for the \SOHUP. 
 We compare $G^*$ wiht Focal $G^*$ . The Focal $G^*$ is not always above the $G^*$.
-Therefore Focal $G^*$ is not allways better than $G^*$ which would be a perfect result we hoped for. It seems 
-that $G^*$ has at 23 and 39 some small break downs. 
-At first glance one would say that some parametrisation leads to that result
-but the standard deviation is decreasing which indicate the opposite.
+Therefore, Focal $G^*$ is not always better than $G^*$, which would be a perfect result we hoped for. It seems 
+that $G^*$ has at 27 and 43 some small break downs. 
+At first glance one would say that some parametrisation leads to that result,
+but the standard deviation is decreasing, which indicate the opposite.
 The standard deviation is in this area higher than in the other points.
 In figure ~\ref{fig:wDown} the break downs are also visible 
-which uses the same images as before but calculate the \SOHDOWN.
+The same images as before are used, but the \SOHDOWN is calculated.
 The high standard deviation in general indicates that it is possible 
-to use better parametrisation for better results. Which would be the zoom size.
-The break downs at 23 and 39 are also visible but this time the standard deviation is increasing.
+to use better parametrisation for better results, which would be the aggregation size.
+The break downs at 27 and 43 are also visible, but this time the standard deviation is increasing.
 The \SOHDOWN and \SOHUP is mostly better than $G^*$ with fixed x-axis for the weight. 
-Which was the conclusion in \ref{TODO last paper}. 
+That was the conclusion in \ref{TODO last paper}. 
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
@@ -488,7 +488,7 @@ Which was the conclusion in \ref{TODO last paper}.
 
 The last variation we examined was the aggregation level. There we fixed the x-axis as our aggregation level. 
 And the focal size and weight size variation lead to a sample set.
-The results can seen in figure ~\ref{fig:SoHZoom}. 
+The results can be seen in figure ~\ref{fig:SoHZoom}. 
 For the \SOHUP there is a huge increase between aggregation level 4 and 5. This increase can't be seen for \SOHDOWN.
 One can see that $G^*$ is always better than Focal $G^*$. 
 This could be beacause the target area of Focal $G^*$ increases with every aggregation step. 
@@ -529,11 +529,11 @@ z \in [1,6], dim(W)=11,dim(F)=41, G^* \in [Standard, Focal]
 \end{definition}
 
 The results can be found in Fig.~\ref{fig:Zoom}.
-For the upward property, $G^*$ is better than Focal $G^*$ in most cases, compared to the results from figure
-\ref{fig:SoHZoom}. At aggregation level 5 $G^*$ is worse than Focal $G^*$, but at this point $G^*$ was extrem 
+For the upward property $G^*$ is better than Focal $G^*$ in most cases, compared to the results from figure
+\ref{fig:SoHZoom}. At aggregation level 5 $G^*$ is worse than Focal $G^*$, but at this point $G^*$ is extreme 
 good if you compare it to the whiskerplot in Fig.~\ref{fig:zUp}.
 For \SOHDOWN $G^*$ has its peak for aggregation level 5, which is consistent with Fig.~\ref{fig:zDown}.
-The result in Fig.~\ref{fig:Zoom} where consitent that $G^*$ is always better than Focal $G^*$ but suprisingly 
+The result in Fig.~\ref{fig:Zoom} are consistent that $G^*$ is always better than Focal $G^*$, but suprisingly 
 we found an outlier.
 
 
@@ -557,7 +557,7 @@ we found an outlier.
 \subsection{Blur}
 
 Blur is a slice plane through our three dimensional space. 
-W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
+W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level are fixed.
 \begin{definition} Blur run:
 \begin{displaymath}
 \SOHUP( G^*(R_z, W_{7+(i-1) \cdot 2}, st, F), G^*(R_{z}, W_{7+i \cdot 2}, st, F) )
@@ -573,9 +573,9 @@ The blur results are plotted in Fig.~\ref{fig:Blur}.
 In this slice one can see that $G^*$ leads to better results compared to Focal $G^*$ for \SOHDOWN. 
 This is because focal size F is set
 to 41x41. We saw that a higher focal size leads to better results. We saw in Fig.~\ref{images/whiskerPlot/wDown}
-that an increas of the weight leads to better results. This slice plane is not consistent. Focal $G^*$ is even decreasing.
-For the \SOHUP Focal $G^*$ compared to $G^*$ is equal good if the points are counted. But $G^*$ has a poor performance with the smallest 
-weights. Foal $G^*$ is mostly above 0.4.
+that an increase of the weight leads to better results. This slice plane is not consistent. Focal $G^*$ is even decreasing.
+For the \SOHUP Focal $G^*$ compared to $G^*$ is equal good if the points are counted, but $G^*$ has a poor performance with the smallest 
+weights. Focal $G^*$ is mostly above 0.4.
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
@@ -630,27 +630,33 @@ weights. Foal $G^*$ is mostly above 0.4.
 
 
 \section{Conclusions and Future Work} \label{sec:Conclusion}
-In this work, we compared the Getis-Ord statistic with Focal Getis-Ord statisitic. We validate the result from \ref{TODO last paper} with a real world 
-dataset an with a larger dataset. The dataset was only one month projected in one raster. 
+In this work we compared the Getis-Ord statistic with Focal Getis-Ord statisitic. 
+We validated the results from \ref{TODO last paper} with a real world 
+dataset and with a larger dataset. The dataset was only one month projected in one raster. 
 We examined further parameters and evaluated that $G^*$ and Focal $G^*$ performe better if the weight
 is higher.
 Our results indicate a high Focal range for the upward property and a maximum of 65x65 for the downward property.
-Therefore F should be not less than 65x65. 
+Therefore, F should be not less than 65x65. 
 If we calculate the SoH for the aggregation level, Getis-Ord leads to better results. In general the aggregation level 
 has the least influence if $G^*$ or Focal $G^*$ performe better.
 We assume that if Focal $G^*$ has a different focal size for a different aggregation level, 
 it performes better, but this is beyond the scope of this work.
 
 With this work we made a step further to the optimal parametrisation for $G^*$ and Focal $G^*$.
-Our results indicate that the parametrisation for $G^*$ and Focal $G^*$ besides what is defined as parent and child has a huge impact on the
-stability of hotspots. Wrong parametrisation can lead to good results, the mean reaches for \SOHUP in the weight dimension around 0.6.
-It can also lead to bad result, \SOHUP in the aggregation dimension reaches nearly zero. Therefore we shown that it is important to have a metric
-for the stability of hotspots. Also we presented indication which parametrisation should be avoided and which parametrisations are promising.
+Our results indicate that the parametrisation for $G^*$ and Focal $G^*$ besides what is defined as parent and child,
+has a huge impact on the
+stability of hotspots. Wrong parametrisation can lead to good results, the mean reaches for \SOHUP in the weight dimension 
+around 0.6.
+It can also lead to bad results, \SOHUP in the aggregation dimension reaches nearly zero. Therefore, we shown that it is important 
+to have a metric
+for the stability of hotspots. We also presented indication which parametrisation should be avoided and which parametrisations 
+are promising.
 $G^*$ can also be applied to spatio-temporal data.
-Therefore Focal $G^*$ should be also applied to the spatio-temporal data. 
+Therefore, Focal $G^*$ should be also applied to the spatio-temporal data. 
 We now have a good indication which weight and focal size is usefull.
-We didn't evaluate the results on other month because we assume that they are similar But it is interesting to find clusters for different times in the day.
-One could asume that at lunchtime there will be hotspots at restaurants and they are not consistent with the hotspots over one month.
+We didn't evaluate the results on other months because we assume that they are similar, but it is interesting to find clusters 
+for the different times in the day.
+One could assume that at lunchtime there will be hotspots at restaurants and they are not consistent with the hotspots over one month.
 All our results are based on the SoH. Further work should validate or improve this metric also for the temporal dimension.
 
 
