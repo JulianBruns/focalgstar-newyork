@@ -513,9 +513,20 @@ This could be beacause the target area of Focal $G^*$ increases with every aggre
 
 \subsection{Aggregate}
 
-TODO settings and images
-The zoom level is a slice plane through our three dimensional space. 
-TODO define parent child
+The aggregation level is a slice plane through our three dimensional space. 
+We evalute only the aggregation with fixed W and fixed F.
+\begin{definition} Aggregation run:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W, st, F), G^*(R_{z+1}, W, st, F) )
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W, st, F), G^*(R_{z+1}, W, st, F) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], dim(W)=11,dim(F)=41, G^* \in [Standard, Focal]
+\end{displaymath}
+\end{definition}
+
 The results can be found in figure ~\ref{fig:Zoom}.
 For the upward property, $G^*$ is always better than Focal $G^*$, compared to the results from figure
 \ref{fig:SoHZoom}. Focal $G^*$ reaches the same result as $G^*$ at zoom level 5 .
@@ -540,18 +551,23 @@ For the downward property, Focal $G^*$ leads to better results at zoom level 5.
 
 \subsection{Blur}
 
-The evaluation results are plotted in Fig.~\ref{fig:Blur}, each point in
-the graph represents the \SOHUP metric (Eq.\ref{eq:SoH-up}) between two
-$G^*$ generated using weight matrices of size $i$ and $i+2$. The focal matrix F
-has a fixed size of $41{\times}41$
-
+Blur is a slice plane through our three dimensional space. 
+W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
+\begin{definition} Blur run:
 \begin{displaymath}
-\SOHUP( G^*(R, W_i, st), G^*(R, W_{i+2}, st) )
+\SOHUP( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
 \end{displaymath}
-
-
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
+\end{displaymath}
+\begin{displaymath}
+z =3, i \in [1,6],dim(F)=41, G^* \in [Standard, Focal]
+\end{displaymath}
+\end{definition}
+The blur results are plotted in Fig.~\ref{fig:Blur}.
 The slice plane of the weight dimension is consistent with figure ~\ref{fig:SoHWeight}.
-Higher weight leads in general to better results for Focal $G^*$. $G^*$ doesn't fit to the mean of our whiskerplot.
+Higher weight leads in general to better results for Focal $G^*$. 
+$G^*$ doesn't fit to the mean of our whiskerplot.
 
 
 \begin{figure}[htp]
