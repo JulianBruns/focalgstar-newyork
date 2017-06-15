@@ -287,7 +287,7 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
 
 \subsection{Dataset}
 
-We evaluate our data on the New York city yellow cab data set \footnote{http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml}. This data set includes all taxi drives from the yellow cabs in New York City, from location, to passengers and many more informations. In this study, we compare the total pickups over January from 2016 in the Manhattan area. The borders of the rasters are (40.699607, -74.020265) and (40.769239, -73.948286). By using this data set, we reduce the computational effort while still being able to show the applicability on real world data and problems.
+We evaluate our data on the New York city yellow cab data set \footnote{$http://www.nyc.gov/html/tlc/html/about/trip\_record\_data.shtml$}. This data set includes all taxi drives from the yellow cabs in New York City, from location, to passengers and many more informations. In this study, we compare the total pickups over January from 2016 in the Manhattan area. The borders of the rasters are (40.699607, -74.020265) and (40.769239, -73.948286). By using this data set, we reduce the computational effort while still being able to show the applicability on real world data and problems.
 \subsection{Treatments}
 
 \begin{definition}[Evaluation Run]
@@ -391,18 +391,12 @@ In figure ~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shown for $G^*$ and Foc
 Higher values indicate that the found hot spots are more stable. 
 The \SOHUP in figure ~\ref{fig:fUp} growth with an increase of the focal size.
 It can see that an increase of the focal size leads to better results for \SOHUP. 
-With a higher focal size you can see that the dotted line, which represent the standard deviation, is getting smaller. This indicates that 
-
-
-Therefore the standard deviation decreases with a higher focal size. Only 
-at focal size F of 17x17 there is no standard deviation. Which is presented with the absent of the dotted line.
-At focal size F 17x17 the standard deviation is missing, because the weight size W must be smaller than F. 
-And for focal size F the values for W which are caluclated are only 3,7,11.
+With a higher focal size you can see that the dotted line, which represent the standard deviation, is getting smaller. This indicates that an increase in the size of the study area does not only lead to an overall increase of stability but also that the it reduces the volatility of the variations in other parameters.
 When F and W have similar size, there are no clusters. Because the values have no much variation. 
-\SOHDOWN can also be calculated with the same images. 
-\SOHDOWN in figure ~\ref{fig:fDown} reaches its maximum for focal size F 65x65 in the regarded area. 
+\SOHDOWN (figure ~\ref{fig:fDown})shows a different picture then the \SOHUP.
+It reaches its maximum SoH for a focal size F of 65x65 in our evaluation set. 
 The standard deviation is not decreasing with an increase of the 
-focal size. Also the standard deviation is missing for the first point. 
+focal size. 
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
@@ -427,23 +421,12 @@ focal size. Also the standard deviation is missing for the first point.
 %	For the upward property Focal G* is better than G*
 %
 %	Conclusion: Higher weight size leads to better results. There are parametrisations of Focal G* which are better than G*
-\subsection{Impact of Weight matrix}
-Next we fixed the weight dimension as our x-axis. The values are increasing with an increase of the weight size W. 
-Higher values means the results are more stable.
-In figure ~\ref{fig:wUp} one can see that an increase of the weight size leads to better results forh the \SOHUP. 
-We compare $G^*$ wiht Focal $G^*$ . The Focal $G^*$ is not always above the $G^*$.
-Therefore Focal $G^*$ is not allways better than $G^*$ which would be a perfect result we hoped for. It seems 
-that $G^*$ has at 23 and 39 some small break downs. 
-At first glance one would say that some parametrisation leads to that result
-but the standard deviation is decreasing which indicate the opposite.
-The standard deviation is in this area higher than in the other points.
-In figure ~\ref{fig:wDown} the break downs are also visible 
-which uses the same images as before but calculate the \SOHDOWN.
-The high standard deviation in general indicates that it is possible 
-to use better parametrisation for better results. Which would be the zoom size.
-The break downs at 23 and 39 are also visible but this time the standard deviation is increasing.
-The \SOHDOWN and \SOHUP is mostly better than $G^*$ with fixed x-axis for the weight. 
-Which was the conclusion in \ref{TODO last paper}. 
+\subsection{Impact of Neighbourhood size}
+Next, we want to isolate the effect of the neighbourhood size by fixing the weight matrix size W and using it as x-axis. With the impact of the weight matrix W we gain information on how far the interconnectness is between different points as indicated in \cite{Getis.1992}. 
+The results for the weight matrix can be seen in figure ~\ref{fig:wUp} for \SOHUP and figure ~\ref{fig:wDown} for \SOHDOWN.
+Here it can be seen that in general for both evaluations metrics as well as the different hot spot methods an increase in the size of the weight matrix W leads to more stable results as well as that the Focal $G^*$ matrix is slightly more stable in most cases for the mean values. 
+An interesting phenomena is the dip in stability for the standard $G^*$ for the value of 39. Despite our effort we could not determine the reason behind this result, as no overall trend could be extracted.
+The standard deviation shows similar no particular trend, but for the values above 37 is increasing. We assume that the reason behind this effect is the inclusion of the water near Manhattan, which leads to a stronger differentiation between areas near water and areas more in the inner city. by increasing the weight matrix, the number of points which are influenced increase in number. The other parameter can regulate this impact and therefore the variance is stronger.  
 
 \begin{figure}[htp]
   \begin{subfigure}{\linewidth}
