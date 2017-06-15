@@ -501,60 +501,6 @@ For the upward property, $G^*$ is always better than Focal $G^*$, compared to th
 \ref{fig:SoHZoom}. Focal $G^*$ reaches the same result as $G^*$ at zoom level 5 .
 For the downward property, Focal $G^*$ leads to better results at zoom level 5.
 
-\begin{figure}[htp]
-  \begin{subfigure}{\linewidth}
-    \caption{Upward for zoom}
-    \includegraphics[width=\linewidth]{images/gen-zoom-sohup-1}
-    \label{fig:UpwardZoom}
-  \end{subfigure}
-  \hspace{1em}
-  \begin{subfigure}{\linewidth}
-    \caption{Downward for zoom}
-    \includegraphics[width=\linewidth]{images/gen-zoom-sohdown-1}
-    \label{fig:DownwardZoom}
-  \end{subfigure}
-  \caption{SoH zoom}
-  \label{fig:Zoom}
-\end{figure}
-
-
-\subsection{Blur}
-
-Blur is a slice plane through our three dimensional space. 
-W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
-\begin{definition} Blur run:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
-\end{displaymath}
-\begin{displaymath}
-z =3, i \in [1,6],dim(F)=41, G^* \in [Standard, Focal]
-\end{displaymath}
-\end{definition}
-The blur results are plotted in Fig.~\ref{fig:Blur}.
-The slice plane of the weight dimension is consistent with figure ~\ref{fig:SoHWeight}.
-Higher weight leads in general to better results for Focal $G^*$. 
-$G^*$ doesn't fit to the mean of our whiskerplot.
-
-
-\begin{figure}[htp]
-  \begin{subfigure}{\linewidth}
-    \caption{Upward for blur}
-    \includegraphics[width=\linewidth]{images/SoHUpBlur}
-    \label{fig:UpwardBlur}
-  \end{subfigure}
-  \hspace{1em}
-  \begin{subfigure}{\linewidth}
-    \caption{Downward for blur}
-    \includegraphics[width=\linewidth]{images/SoHDownBlur}
-    \label{fig:DownwardBlur}
-  \end{subfigure}
-  \caption{SoH blur}
-  \label{fig:Blur}
-\end{figure}
-
 \begin{figure*}[htp]
   \centering
   \begin{tabular}{cccccccc}
@@ -599,9 +545,9 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
     \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-8}
   \end{tabular}
   
-  \includegraphics[width=.45\linewidth]{images/gen-aggregation-1}
+  \includegraphics[width=.45\linewidth]{images/gen-zoom-sohup-1}
   \hspace{1em}
-  \includegraphics[width=.45\linewidth]{images/gen-aggregation-2}
+  \includegraphics[width=.45\linewidth]{images/gen-zoom-sohdown-1}
 %  \includegraphics[width=.45\linewidth]{images/gen-???}
 %  \hspace{1em}
 %  \includegraphics[width=.45\linewidth]{images/gen-???}
@@ -611,6 +557,28 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
     with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
   }
 \end{figure*}
+
+\subsection{Blur}
+
+Blur is a slice plane through our three dimensional space. 
+W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
+\begin{definition} Blur run:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
+\end{displaymath}
+\begin{displaymath}
+z =3, i \in [1,6],dim(F)=41, G^* \in [Standard, Focal]
+\end{displaymath}
+\end{definition}
+The blur results are plotted in Fig.~\ref{fig:Blur}.
+The slice plane of the weight dimension is consistent with figure ~\ref{fig:SoHWeight}.
+Higher weight leads in general to better results for Focal $G^*$. 
+$G^*$ doesn't fit to the mean of our whiskerplot.
+
+
 
 \begin{figure*}[htp]
   \centering
@@ -653,9 +621,9 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
     \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-8}
   \end{tabular}
   
-  \includegraphics[width=.45\linewidth]{images/gen-weight-1}
+  \includegraphics[width=.45\linewidth]{images/gen-blur-sohdown-1}
   \hspace{1em}
-  \includegraphics[width=.45\linewidth]{images/gen-weight-2}
+  \includegraphics[width=.45\linewidth]{images/gen-blur-sohup-1}
   
   \caption{
     This image shows different weight matrix sizes for G* and Focal G* together 

@@ -308,6 +308,8 @@ glob %>%
   corrplot.mixed(diag = "n", outline = "gray")
 ```
 
+# Slice plane for aggregation dimension SOH-UP
+
 ```{r zoom-sohup, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 zoom_soh <- read_csv("data/zoom_soh.csv")
 
@@ -316,12 +318,14 @@ zoom_soh %>% dplyr::select(Zoom, "Focal G*" = UpFocalZoom) -> y2
 
 plot(y1, type = "n", ylim = c(0,1),
      ylab = expression(SoH[up]),
-     xlab = "Zoom level")
+     xlab = "Aggregation level")
 
 lines(y1, col = "blue", lw = 2)
 lines(y2, col = "red", lw = 2)
 legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
 ```
+
+# Slice plane for aggregation dimension SOH-DOWN
 
 ```{r zoom-sohdown, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 zoom_soh <- read_csv("data/zoom_soh.csv")
@@ -331,12 +335,48 @@ zoom_soh %>% dplyr::select(Zoom, "Focal G*" = DownFocalZoom) -> y2
 
 plot(y1, type = "n", ylim = c(0,1),
      ylab = expression(SoH[down]),
-     xlab = "Zoom level")
+     xlab = "Aggregation level")
 
 lines(y1, col = "blue", lw = 2)
 lines(y2, col = "red", lw = 2)
 legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
 ```
+
+# Slice plane for blur dimension SOH-UP
+
+```{r blur-sohup, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
+blur_soh <- read_csv("data/blur_soh.csv")
+
+blur_soh %>% dplyr::select(Blur, "G*" = UpBlur) -> y1
+blur_soh %>% dplyr::select(Blur, "Focal G*" = UpFocalBlur) -> y2
+
+plot(y1, type = "n", ylim = c(0,1),
+     ylab = expression(SoH[up]),
+     xlab = "Weight matrix size")
+
+lines(y1, col = "blue", lw = 2)
+lines(y2, col = "red", lw = 2)
+legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
+```
+
+# Slice plane for blur dimension SOH-DOWN
+
+```{r blur-sohdown, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
+blur_soh <- read_csv("data/blur_soh.csv")
+
+blur_soh %>% dplyr::select(Blur, "G*" = DownBlur) -> y1
+blur_soh %>% dplyr::select(Blur, "Focal G*" = DownFocalBlur) -> y2
+
+plot(y1, type = "n", ylim = c(0,1),
+     ylab = expression(SoH[down]),
+     xlab = "Weight matrix size")
+
+lines(y1, col = "blue", lw = 2)
+lines(y2, col = "red", lw = 2)
+legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
+```
+
+# X-Axis = Weight for whiskerplot, SOH Up and Down
 
 ```{r weight, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 d3 <- read.csv("data/w_focal_trued3.csv")
@@ -383,6 +423,8 @@ legend("topleft", c("Focal G*", "G*") , fill = c("red", "blue"))
 mtext("CI: FMsize + Aggregation", line = -1, adj = .98)
 ```
 
+# X-Axis = Aggregation for whiskerplot
+
 ```{r aggregation, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 d3 <- read.csv("data/a_focal_trued3.csv")
 d3global <- read.csv("data/a_focal_falsed3.csv")
@@ -404,7 +446,7 @@ plotCI(x = meanG$Group.1,
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
 legend("topleft", c("Focal G*","G*") , fill = c("red","blue"))
-mtext("CI: ??? TODO ???", line = -1, adj = .98)
+mtext("CI: FMsize + WMsize", line = -1, adj = .98)
 
 mean <- aggregate(d3$Down, by = list(d3$Z + 1), mean)
 sd <- aggregate(d3$Down, by = list(d3$Z + 1), sd)
@@ -423,8 +465,10 @@ plotCI(x = meanG$Group.1,
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
 legend("topleft", c("Focal G*","G*") , fill = c("red","blue"))
-mtext("CI: ??? TODO ???", line = -1, adj = .98)
+mtext("CI: FMsize + WMsize", line = -1, adj = .98)
 ```
+
+# X-Axis = Focal for whiskerplot
 
 ```{r focal, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 
@@ -440,7 +484,7 @@ plotCI(x = mean$Group.1, y = mean$x, uiw = sd$x, err = "y", pch = 20, slty = 3,
        scol = "red", add = TRUE)
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 legend("topleft", c("Focal G*") , fill = c("red"))
-mtext("CI: ??? TODO ???", line = -1, adj = .98)
+mtext("CI: WMsize + Aggregation", line = -1, adj = .98)
 
 mean <- aggregate(d3$Down, by = list(d3$F + 12), mean)
 sd <- aggregate(d3$Down, by = list(d3$F + 12), sd)
@@ -453,5 +497,5 @@ plotCI(x = mean$Group.1,
        uiw = sd$x, err = "y", pch = 20, slty = 3, scol = "red", add = TRUE)
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 legend("topleft", c("Focal G*") , fill = c("red"))
-mtext("CI: ??? TODO ???", line = -1, adj = .98)
+mtext("CI: WMsize + Aggregation", line = -1, adj = .98)
 ```
