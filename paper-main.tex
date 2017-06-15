@@ -596,6 +596,9 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
     \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-8}
   \end{tabular}
   
+  \includegraphics[width=.45\linewidth]{images/gen-aggregation-1}
+  \hspace{1em}
+  \includegraphics[width=.45\linewidth]{images/gen-aggregation-2}
 %  \includegraphics[width=.45\linewidth]{images/gen-???}
 %  \hspace{1em}
 %  \includegraphics[width=.45\linewidth]{images/gen-???}
@@ -611,6 +614,8 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
   \begin{tabular}{cccccccc}
     \multicolumn{8}{l}{Multiple weight matrix sizes} \\
     \hline
+    $\rightarrow$&$\rightarrow$&$\rightarrow$&$\rightarrow$&
+    $\rightarrow$&$\rightarrow$&$\rightarrow$&$\rightarrow$\\
     \includegraphics[width=4.6em]{images/gen-blur-wmatrices-1}&
     \includegraphics[width=4.6em]{images/gen-blur-wmatrices-2}&
     \includegraphics[width=4.6em]{images/gen-blur-wmatrices-3}&
@@ -645,16 +650,35 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
     \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-8}
   \end{tabular}
   
-%  \includegraphics[width=.45\linewidth]{images/gen-???}
-%  \hspace{1em}
-%  \includegraphics[width=.45\linewidth]{images/gen-???}
+  \includegraphics[width=.45\linewidth]{images/gen-weight-1}
+  \hspace{1em}
+  \includegraphics[width=.45\linewidth]{images/gen-weight-2}
   
   \caption{
-    This image shows all aggregation levels for G* and Focal G* together 
+    This image shows different weight matrix sizes for G* and Focal G* together 
     with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
   }
 \end{figure*}
 
+\begin{figure*}[htp]
+  \centering
+  
+  \begin{subfigure}{.35\linewidth}
+    \caption{G* clustering difference}
+    \includegraphics[width=\linewidth]{images/gen-metric-example-1}
+    \label{fig:ClustDiffGstar}
+  \end{subfigure}
+  \hspace{3em}
+  \begin{subfigure}{.35\linewidth}
+    \caption{Focal G* clustering difference}
+    \includegraphics[width=\linewidth]{images/gen-metric-example-2}
+    \label{fig:ClustDiffFocalGstar}
+  \end{subfigure}
+  
+  \caption{
+    Example clustering for G* and Focal G* used as a input for SoH computation.
+  }
+\end{figure*}
 
 
 
