@@ -321,7 +321,6 @@ plot(y1, type = "n", ylim = c(0,1),
 lines(y1, col = "blue", lw = 2)
 lines(y2, col = "red", lw = 2)
 legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
-mtext("CI: FMsize and WMsize", line = -1, adj = .98)
 ```
 
 ```{r zoom-sohdown, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
@@ -337,7 +336,6 @@ plot(y1, type = "n", ylim = c(0,1),
 lines(y1, col = "blue", lw = 2)
 lines(y2, col = "red", lw = 2)
 legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
-mtext("CI: FMsize and WMsize", line = -1, adj = .98)
 ```
 
 ```{r weight, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
@@ -362,6 +360,7 @@ plotCI(x = meanG$Group.1,
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
 legend("topleft", c("Focal G*", "G*") , fill = c("red", "blue"))
+mtext("CI: FMsize + Aggregation", line = -1, adj = .98)
 
 mean <- aggregate(d3$Down, by = list(d3$W + 4), mean)
 sd <- aggregate(d3$Down, by = list(d3$W + 4), sd)
@@ -381,8 +380,7 @@ plotCI(x = meanG$Group.1,
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
 legend("topleft", c("Focal G*", "G*") , fill = c("red", "blue"))
-
-
+mtext("CI: FMsize + Aggregation", line = -1, adj = .98)
 ```
 
 ```{r aggregation, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
@@ -406,6 +404,7 @@ plotCI(x = meanG$Group.1,
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
 legend("topleft", c("Focal G*","G*") , fill = c("red","blue"))
+mtext("CI: ??? TODO ???", line = -1, adj = .98)
 
 mean <- aggregate(d3$Down, by = list(d3$Z + 1), mean)
 sd <- aggregate(d3$Down, by = list(d3$Z + 1), sd)
@@ -424,6 +423,7 @@ plotCI(x = meanG$Group.1,
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 lines(meanG$Group.1, meanG$x, col = "blue", lw = 4)
 legend("topleft", c("Focal G*","G*") , fill = c("red","blue"))
+mtext("CI: ??? TODO ???", line = -1, adj = .98)
 ```
 
 ```{r focal, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
@@ -440,6 +440,7 @@ plotCI(x = mean$Group.1, y = mean$x, uiw = sd$x, err = "y", pch = 20, slty = 3,
        scol = "red", add = TRUE)
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 legend("topleft", c("Focal G*") , fill = c("red"))
+mtext("CI: ??? TODO ???", line = -1, adj = .98)
 
 mean <- aggregate(d3$Down, by = list(d3$F + 12), mean)
 sd <- aggregate(d3$Down, by = list(d3$F + 12), sd)
@@ -452,6 +453,5 @@ plotCI(x = mean$Group.1,
        uiw = sd$x, err = "y", pch = 20, slty = 3, scol = "red", add = TRUE)
 lines(mean$Group.1, mean$x, col = "red", lw = 4)
 legend("topleft", c("Focal G*") , fill = c("red"))
-
-
+mtext("CI: ??? TODO ???", line = -1, adj = .98)
 ```
