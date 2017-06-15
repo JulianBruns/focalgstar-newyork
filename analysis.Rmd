@@ -171,11 +171,15 @@ for (g in zoom_focalgstar) {
 ```{r}
 r <- rast[[ZOOMLEVEL]]
 wsizes <- (1:12)*2 + 5
-wsizes
+wsizes # printed
+
+# selection to be rendered for latex inclusion
+RENDERED_IDX <- floor(seq(1, length(wsizes), length.out = 8))
 ```
 
+We render `r length(RENDERED_IDX)` weight matrices that will be included into a LaTeX document. In order to do this, we selected indices `r RENDERED_IDX`:
 ```{r blur-wmatrices, echo=FALSE, cache=TRUE, fig.width=4, fig.height=4}
-for(ws in wsizes) {
+for (ws in wsizes[RENDERED_IDX]) {
   w <- weight_matrix_circular_fade(ws, 0)
   w[is.na(w)] <- 0 # removing any NAs from the weight matrix
   plot_weight_matrix(w, show.minmax = FALSE)
@@ -219,6 +223,7 @@ for (ws in wsizes) {
               overwrite = TRUE)
 }
 ```
+
 ## Example of Parent-Child Clumping Difference
 ```{r metric-example, message=FALSE, echo=FALSE, cache=TRUE, fig.width=7, fig.height=4.5}
 r <- rast[[ZOOMLEVEL]]
