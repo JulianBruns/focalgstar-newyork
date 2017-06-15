@@ -205,67 +205,8 @@ If $|Children|=0$ or $|Parents|=0$ SoH is 0.
 
 \section{Focal Getis-Ord} \label{sec:FocalGetisOrd}
 
-\subsection{Dataset}
-
-Our results are based on the cab taxi dataset from New York, Manhattan \cite{TODO}. 
-We used only the dataset of January 2016. From that
-dataset we used the $pickup\_longitude$ and $pickup\_latitude$ column. 
-The borders of the raster are between (40.699607, -74.020265) and (40.769239, -73.948286). 
-Aggregation size 1 means we aggregate every point, which was in range of $100x100 \cdot 0.000001$ into one pixel. 
-For aggregation size Z we aggregated ZxZ pixel from aggregated size 1 into a new pixel.
-%
-For our measurements we specified the following data series:
-\begin{itemize}
- \item $W_i$: The weight matrix W is from 3 to 47 with a stepsize of 4.
- \item $F_j$: The focal matrix F is from  17 to 137 with a stepsize of 12. F is ignored for $G^*$ but not for Focal $G^*$
- \item $R_z$: The aggregation level is from 1 to 6 with a stepsize of 1. R represents the raster
-\end{itemize}
-\begin{definition}
-The SoH for a singled evalution run in the weight dimension is defined as:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i+2}, st, F_{j}) ) 
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i+2}, st, F_{j}) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
-\end{displaymath}
-The SoH for a singled evalution run in the focal dimension is defined as:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i}, st, F_{j+1}) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i}, st, F_{j+1}) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
-\end{displaymath}
-The SoH for a singled evalution run in the aggregation dimension is defined as:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_{z+1}, W_{i}, st, F_{j}) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_{z+1}, W_{i}, st, F_{j}) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
-\end{displaymath}
-
-\end{definition}
-
-Therefore we would calculate $10 \cdot 10 \cdot 5 + 10 \cdot 5=550$ results for each dimension.
-The following conditions must hold dim(F)>dim(W) and dim(F)<dim(R) which leads e.g. to 460 results in the z dimension.
-The weight size W, focal size F and the aggregation level are the 3 parameters we vary.
-Therefore we have a 3 dimensional space. 
-We choose to fix one dimension and used the other dimension as our sample group. 
-Out of the sample group we calculate the mean and the standard deviation. 
-In our graph we show the mean and the standard deviation from the mean. 
-
-
-\subsection{Method}
-
-In the following text, we use the notation \FOCAL{R}{M}{op} to denote a focal
+Section is analog to \cite{SoH-GI-Forum} and incorporates the most important definitions for the computation.
+We use the notation \FOCAL{R}{M}{op} to denote a focal
 operation $op$ applied on a raster $R$ with a focal window determined by a
 matrix $M$. This is rougly eqivalent to a command \verb|focal(x=R, w=M, fun=op)|
 from package \emph{raster} in the R programming language \cite{cran:raster}.
@@ -344,18 +285,10 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
 
 \section{Evaluation}
 
-- To evaluate, we compare G* with FocalG* on the same dataset.
-- We use NY taxi dropoffs
-- a single evaluation run is defined in Def.~\ref{def:EvalRun}.
-- In an ideal case, we could produce a 3D-plot:
-  - x-axis would be growing pixel sizes 100..1000 by 100 (aka zoom-out)
-  - y-axis would be growing weight matrix sizes (e.g. 5..41 by 2)
-  - z-axis would be performance of G* vs FocalG* x and y coordinates
-  - we could also repeat the computation for multiple datasets to obtain 
-  multiple samples and to compute error bars.
-- due to paper size limit, we choose projection in which matrix size is set to 
-constant 7x7 pixels and the only variable is the pixel size. This way, we 
-produce a 2D plot. We also generate just a single sample.
+\subsection{Dataset}
+
+We evaluate our data on the New York city yellow cab data set \footnote{http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml}. This data set includes all taxi drives from the yellow cabs in New York City, from location, to passengers and many more informations. In this study, we compare the total pickups over January from 2016 in the Manhattan area. The borders of the rasters are (40.699607, -74.020265) and (40.769239, -73.948286). By using this data set, we reduce the computational effort while still being able to show the applicability on real world data and problems.
+\subsection{Treatments}
 
 \begin{definition}[Evaluation Run]
   \label{def:EvalRun}
@@ -388,6 +321,56 @@ produce a 2D plot. We also generate just a single sample.
 %Example weight matrix $W$ and focal matrix $F$ are depicted in 
 %Fig.~\ref{fig:ExampleMatrices}.
 
+Aggregation size 1 means we aggregate every point, which was in range of $100x100 \cdot 0.000001$ into one pixel. 
+For aggregation size Z we aggregated ZxZ pixel from aggregated size 1 into a new pixel.
+%
+For our measurements we specified the following data series:
+\begin{itemize}
+ \item $W_i$: The weight matrix W is from 3 to 47 with a stepsize of 4.
+ \item $F_j$: The focal matrix F is from  17 to 137 with a stepsize of 12. F is ignored for $G^*$ but not for Focal $G^*$
+ \item $R_z$: The aggregation level is from 1 to 6 with a stepsize of 1. R represents the raster
+\end{itemize}
+\begin{definition}
+The SoH for a singled evalution run in the weight dimension is defined as:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i+2}, st, F_{j}) ) 
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i+2}, st, F_{j}) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
+\end{displaymath}
+The SoH for a singled evalution run in the focal dimension is defined as:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i}, st, F_{j+1}) )
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_z, W_{i}, st, F_{j+1}) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
+\end{displaymath}
+The SoH for a singled evalution run in the aggregation dimension is defined as:
+\begin{displaymath}
+\SOHUP( G^*(R_z, W_i, st, F_{j}), G^*(R_{z+1}, W_{i}, st, F_{j}) )
+\end{displaymath}
+\begin{displaymath}
+\SOHDOWN( G^*(R_z, W_i, st, F_{j}), G^*(R_{z+1}, W_{i}, st, F_{j}) )
+\end{displaymath}
+\begin{displaymath}
+z \in [1,6], i,j \in [1,11], G^* \in [Standard, Focal]
+\end{displaymath}
+
+\end{definition}
+
+Therefore we would calculate $10 \cdot 10 \cdot 5 + 10 \cdot 5=550$ results for each dimension.
+The following conditions must hold dim(F)>dim(W) and dim(F)<dim(R) which leads e.g. to 460 results in the z dimension.
+We vary over the weight matrix W, the focal matrix F and the aggregation level, as motivated in the introduction.
+To compare the impact each of these parameters has we compute all variations over two parameter and holding one parameter fix. We then calculate the mean as well as the standard deviation for the SoH for the fixed value based on the two other parameters. This allows us to isolate the impact of the variation in the single parameter. The results are then plotted in Fig. 1-6, one graphic for each fixed parameter and the direction of the SoH.
+The hotspots to use the SoH on are computed by the focal $G^*$ and standard $G^*$ method. The focal $G^*$ allows us, to isolate the impact that the size of the study area has on the stability of the results without recomputing the total dataset. 
+
+
 
 
 
@@ -400,17 +383,17 @@ produce a 2D plot. We also generate just a single sample.
 %	The downward property reaches its maximum at 65x65
 %
 %	Conclusion: F should be around 65x65 or higher
-
-First we fixed the focal size F as our x-axis. 
-Therefore we have no $G^*$ to compare against Focal $G^*$ because $G^*$ has a fixed study area.
-To evaluate this dimension is essential because if it is not 
-known how big the study area needs to be. Based on these results we want to fix the focal size F
-so that in most cases focal $G^*$ is better than $G^*$.
-In figure ~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shwon for $G^*$ and Focal $G^*$.
-Higher values mean that the found hot spots are more stable. 
+\subsection{Impact of study area}
+The first parameter we want to isolate is the size of the study area. This enables us to discuss the optimal size of the study area for the given research/decision question. 
+To do so, we have to fix the focal size F and use it as the x-axis and plot the mean value as well as the mean +- the standard deviations of the SoH for all other parameter combinations as the y-axis.
+In this scenario, only the Focal $G^*$ can produce varied results as the standard $G^*$ has by definition a fixed study area by always using the total size of the study area. 
+In figure ~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shown for $G^*$ and Focal $G^*$.
+Higher values indicate that the found hot spots are more stable. 
 The \SOHUP in figure ~\ref{fig:fUp} growth with an increase of the focal size.
 It can see that an increase of the focal size leads to better results for \SOHUP. 
-With a higher focal size you can see that the dotted line which represent the standard deviation is getting smaller.
+With a higher focal size you can see that the dotted line, which represent the standard deviation, is getting smaller. This indicates that 
+
+
 Therefore the standard deviation decreases with a higher focal size. Only 
 at focal size F of 17x17 there is no standard deviation. Which is presented with the absent of the dotted line.
 At focal size F 17x17 the standard deviation is missing, because the weight size W must be smaller than F. 
@@ -444,6 +427,7 @@ focal size. Also the standard deviation is missing for the first point.
 %	For the upward property Focal G* is better than G*
 %
 %	Conclusion: Higher weight size leads to better results. There are parametrisations of Focal G* which are better than G*
+\subsection{Impact of Weight matrix}
 Next we fixed the weight dimension as our x-axis. The values are increasing with an increase of the weight size W. 
 Higher values means the results are more stable.
 In figure ~\ref{fig:wUp} one can see that an increase of the weight size leads to better results forh the \SOHUP. 
@@ -484,7 +468,7 @@ Which was the conclusion in \ref{TODO last paper}.
 %
 %	Conclusion: G* is better than Focal G* in the zoom dimension, but the focal size is fixed. The zoom dimension has the least 
 %	influence on the value
-
+\subsection{Impact of Aggregation level}
 The last variation we examined was the aggregation level. There we fixed the x-axis as our aggregation level. 
 And the focal size and weight size variation lead to a sample set.
 The results can seen in figure ~\ref{fig:SoHZoom}. 
