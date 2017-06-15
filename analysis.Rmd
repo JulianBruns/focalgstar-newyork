@@ -156,7 +156,7 @@ par(op)
 ```
 
 
-```{r demo-zoom-focalgstar, echo=FALSE, cache=TRUE, fig.width=7, fig.height=4.5}
+```{r demo-zoom-focalgstar, echo=FALSE, cache=TRUE, fig.width=6, fig.height=5.5}
 z <- 0
 for (g in zoom_focalgstar) {
   z <- z + 1
@@ -188,20 +188,48 @@ for (ws in wsizes[RENDERED_IDX]) {
 
 
 ### Standard G* (blur)
-```{r demo-blur-gstar, echo=FALSE, cache=TRUE, fig.width=7, fig.height=4.5}
+First, we pre-compute the rasters
+```{r, echo=FALSE, cache=TRUE}
+blur_gstar <- list()
+pb <- txtProgressBar(max = last(wsizes), style = 3)
 for (ws in wsizes) {
+  setTxtProgressBar(pb, ws)
   
   w <- weight_matrix_circular_fade(ws, 0)
   w[is.na(w)] <- 0 # removing any NAs from the weight matrix
   
-  g <- GetisOrd(r, w)
+  blur_gstar[[length(blur_gstar) + 1]] <- GetisOrd(r, w)
+}
+close(pb)
+```
+
+```{r, eval=FALSE, echo=FALSE}
+for (i in seq_along(wsizes)) {
+  ws <- wsizes[i]
+  g <- blur_gstar[[i]]
+  writeRaster(g,
+              sprintf("data/blur/gstar-%03dx%03d-z%02d-w%02d.tif",
+                      nrow(g), ncol(g), ZOOMLEVEL, ws),
+              overwrite = TRUE)
+}
+```
+
+```{r raw-blur-gstar, echo=FALSE, cache=TRUE, fig.width=4, fig.height=4}
+op <- par(mar = rep(0, 4))
+for (g in blur_gstar[RENDERED_IDX]) {
+  plot(g, xlab = NA, ylab = NA, legend = FALSE, axes = FALSE, box = FALSE,
+       col = COLORMAP, colNA = "black")
+}
+par(op)
+```
+
+```{r demo-blur-gstar, echo=FALSE, cache=TRUE, fig.width=6, fig.height=5.5}
+for (i in seq_along(wsizes)) {
+  ws <- wsizes[i]
+  g <- blur_gstar[[i]]
   plot_zscore(g,
               title = sprintf("Standard G*: wsize=%d", ws),
               sigma_thresh = 2)
-  writeRaster(g,
-              sprintf("data/blur/gstar-%03dx%03d-z%02d-w%02d.tif",
-                      nrow(r), ncol(r), ZOOMLEVEL, ws),
-              overwrite = TRUE)
 }
 ```
 
