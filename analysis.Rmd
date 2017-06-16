@@ -364,8 +364,8 @@ legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
 ```{r blur-sohdown, echo=FALSE, eval=TRUE, cache=TRUE, message=FALSE}
 blur_soh <- read_csv("data/blur_soh.csv")
 
-blur_soh %>% dplyr::select(Blur, "G*" = DownBlur) -> y1
-blur_soh %>% dplyr::select(Blur, "Focal G*" = DownFocalBlur) -> y2
+blur_soh %>% dplyr::select(Weight, "G*" = DownBlur) -> y1
+blur_soh %>% dplyr::select(Weight, "Focal G*" = DownFocalBlur) -> y2
 
 plot(y1, type = "n", ylim = c(0,1),
      ylab = expression(SoH[down]),
