@@ -395,10 +395,191 @@ single parameter. The results are then plotted in
 Figures~\ref{fig:SoHFocal}--\ref{fig:SoHZoom}, one image for each fixed 
 parameter and the direction of the SoH.
 The hotspots to use the SoH on are computed by the focal $G^*$ and standard $G^*$ method. The focal $G^*$ allows us, to isolate the impact that the size of the study area has on the stability of the results without recomputing the total dataset. 
+\subsection{Clumping}
+
+The SoH needs a parent and a child. Clusters can be calculated different. For
+$G^*$ a sigmoid can be used. Values above 2.58 and under -2.58 means in less
+then 1\% of the cases you are wrong. The values of Focal $G^*$ depend on the
+focal size F. Therefore, we decide all values in the top quantile belong to a
+clusters. For clustering we grouped the neighbourhood with values in the top
+quantile to one cluster. Neigbours are are pixels with touching edges which
+leads for every pixel to 8 neigbours. Fig.~\ref{fig:Clumping} depicts the 
+clusters using different colours. In this figure, Focal~$G^*$ has smaller 
+clusters which are distributed over the complete raster.
+
+\begin{figure}[htp]
+  \centering
+  
+  \begin{subfigure}{.7\linewidth}
+    \caption{G* clustering difference}
+    \includegraphics[width=\linewidth]{images/gen-metric-example-1}
+    \label{fig:ClustDiffGstar}
+  \end{subfigure}
+  \hspace{3em}
+  \begin{subfigure}{.7\linewidth}
+    \caption{Focal G* clustering difference}
+    \includegraphics[width=\linewidth]{images/gen-metric-example-2}
+    \label{fig:ClustDiffFocalGstar}
+  \end{subfigure}
+  
+  \caption{
+    Example clustering for G* and Focal G* used as a input for SoH computation.
+  }
+  \label{fig:Clumping}
+\end{figure}
 
 
+\subsection{Aggregate}
+
+The aggregation level is a slice plane through our three dimensional space. 
+This is an example how the results can look with visualize representations of the calculated 
+rasters and the raw data.
+\begin{definition} Aggregation run:
+\begin{eqnarray*}
+    child & = & G^*(R_z, W_{11}, st, F_{41}) \\
+    parent & = & G^*(R_{z+1}, W_{11}, st, F_{41})
+  \end{eqnarray*}
+\begin{displaymath}
+z \in [1,6], G^* \in [Standard, Focal]
+\end{displaymath}
+\end{definition}
+
+The results can be found in Fig.~\ref{fig:Zoom}. It can be seen that with an
+increase of the aggregation level the values increase. TODO if clusters
+increase/decrease For the upward property, $G^*$ is always better than Focal
+$G^*$, compared to the results from figure \ref{fig:SoHZoom}. Focal $G^*$
+reaches the same result as $G^*$ at aggregation level~5 . For the downward
+property, Focal $G^*$ leads to better results at aggregation level~5.
+
+\begin{figure*}[htp]
+  \centering
+  \begin{tabular}{cccccccc}
+    \multicolumn{8}{l}{
+      Aggregation levels computed from original raster (log scale)
+    }\\
+    \hline
+    1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+    \includegraphics[width=4.6em]{images/gen-rawdata-1}&
+    \includegraphics[width=4.6em]{images/gen-rawdata-2}&
+    \includegraphics[width=4.6em]{images/gen-rawdata-3}&
+    \includegraphics[width=4.6em]{images/gen-rawdata-4}&
+    \includegraphics[width=4.6em]{images/gen-rawdata-5}&
+    \includegraphics[width=4.6em]{images/gen-rawdata-6}&
+    \includegraphics[width=4.6em]{images/gen-rawdata-7}&
+    \includegraphics[width=4.6em]{images/gen-rawdata-8}
+  \end{tabular}
+  \begin{tabular}{cccccccc}
+    \multicolumn{8}{l}{G* computed from multiple aggregation levels} \\
+    \hline
+    \vspace*{2mm}
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-1}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-2}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-3}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-4}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-5}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-6}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-7}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-8}
+  \end{tabular}
+  \begin{tabular}{cccccccc}
+    \multicolumn{8}{l}{Focal G* computed from multiple aggregation levels} \\
+    \hline
+    \vspace*{2mm}
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-1}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-2}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-3}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-4}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-5}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-6}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-7}&
+    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-8}
+  \end{tabular}
+  
+  \includegraphics[width=.45\linewidth]{images/gen-zoom-sohup-1}
+  \hspace{1em}
+  \includegraphics[width=.45\linewidth]{images/gen-zoom-sohdown-1}
+%  \includegraphics[width=.45\linewidth]{images/gen-???}
+%  \hspace{1em}
+%  \includegraphics[width=.45\linewidth]{images/gen-???}
+  
+  \caption{
+    This image shows all aggregation levels for G* and Focal G* together 
+    with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
+  }
+  \label{fig:Zoom}
+\end{figure*}
+
+\subsection{Blur}
+We also made an example for the variation of the weight size W.
+Blur is a slice plane through our three dimensional space. 
+W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
+\begin{definition} Blur run:
+\begin{eqnarray*}
+    child & = & G^*(R_3, W_{7+i \cdot 2}, st, F_{41}) \\
+    parent & = & G^*(R_3, W_{7+(i+1)\cdot 2}, st, F_{41})
+  \end{eqnarray*}
+\begin{displaymath}
+i \in [0,11], G^* \in [Standard, Focal]
+\end{displaymath}
+\end{definition}
+The blur results are plotted in Figure~\ref{fig:Blur}. The weight matrix is
+shown in the first row, with increasing size. The 2nd and 3th row show how
+$G^*$ and Focal $G^*$ changes based on W. This example is a slice plane of the
+weight dimension ploted in figure ~\ref{fig:SoHWeight}. It can be seen that an
+increase of the weight size leads in general to better results for Focal $G^*$.
 
 
+\begin{figure*}[htp]
+  \centering
+  \begin{tabular}{cccccccc}
+    \multicolumn{8}{l}{Multiple weight matrix sizes} \\
+    \hline
+    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-1}&
+    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-2}&
+    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-3}&
+    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-4}&
+    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-5}&
+    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-6}&
+    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-7}&
+    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-8}
+  \end{tabular}
+  \begin{tabular}{cccccccc}
+    \multicolumn{8}{l}{G* computed using different weight matrix sizes} \\
+    \hline
+    \vspace*{2mm}
+    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-1}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-2}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-3}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-4}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-5}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-6}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-7}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-8}
+  \end{tabular}
+  \begin{tabular}{cccccccc}
+    \multicolumn{8}{l}{Focal G* computed using different weight matrix sizes} \\
+    \hline
+    \vspace*{2mm}
+    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-1}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-2}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-3}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-4}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-5}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-6}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-7}&
+    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-8}
+  \end{tabular}
+  
+  \includegraphics[width=.45\linewidth]{images/gen-blur-sohup-1}
+  \hspace{1em}
+  \includegraphics[width=.45\linewidth]{images/gen-blur-sohdown-1}
+  
+  \caption{
+    This image shows different weight matrix sizes for G* and Focal G* together 
+    with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
+  }
+  \label{fig:Blur}
+\end{figure*}
 
 \section{Results and Discussion}
 
@@ -561,198 +742,10 @@ Research for Innovations".
 \noindent R-packages used: \verb|raster|~\cite{cran:raster}, 
 \verb|knitr|~\cite{cran:knitr}
 
-\section{Appendix}
-
-\subsection{Clumping}
-
-The SoH needs a parent and a child. Clusters can be calculated different. For
-$G^*$ a sigmoid can be used. Values above 2.58 and under -2.58 means in less
-then 1\% of the cases you are wrong. The values of Focal $G^*$ depend on the
-focal size F. Therefore, we decide all values in the top quantile belong to a
-clusters. For clustering we grouped the neighbourhood with values in the top
-quantile to one cluster. Neigbours are are pixels with touching edges which
-leads for every pixel to 8 neigbours. Fig.~\ref{fig:Clumping} depicts the 
-clusters using different colours. In this figure, Focal~$G^*$ has smaller 
-clusters which are distributed over the complete raster.
-
-\begin{figure}[htp]
-  \centering
-  
-  \begin{subfigure}{.7\linewidth}
-    \caption{G* clustering difference}
-    \includegraphics[width=\linewidth]{images/gen-metric-example-1}
-    \label{fig:ClustDiffGstar}
-  \end{subfigure}
-  \hspace{3em}
-  \begin{subfigure}{.7\linewidth}
-    \caption{Focal G* clustering difference}
-    \includegraphics[width=\linewidth]{images/gen-metric-example-2}
-    \label{fig:ClustDiffFocalGstar}
-  \end{subfigure}
-  
-  \caption{
-    Example clustering for G* and Focal G* used as a input for SoH computation.
-  }
-  \label{fig:Clumping}
-\end{figure}
-
-\subsection{Aggregate}
-
-The aggregation level is a slice plane through our three dimensional space. 
-This is an example how the results can look with visualize representations of the calculated 
-rasters and the raw data.
-We evalute only the aggregation with fixed W and fixed F. In contrast we included the negative clusters. They where exluded for our 3 dimensional space because
-the water had to much influence.
-\begin{definition} Aggregation run:
-\begin{eqnarray*}
-    child & = & G^*(R_z, W_{11}, st, F_{41}) \\
-    parent & = & G^*(R_{z+1}, W_{11}, st, F_{41})
-  \end{eqnarray*}
-\begin{displaymath}
-z \in [1,6], G^* \in [Standard, Focal]
-\end{displaymath}
-\end{definition}
-
-The results can be found in Fig.~\ref{fig:Zoom}. It can be seen that with an
-increase of the aggregation level the values increase. TODO if clusters
-increase/decrease For the upward property, $G^*$ is always better than Focal
-$G^*$, compared to the results from figure \ref{fig:SoHZoom}. Focal $G^*$
-reaches the same result as $G^*$ at aggregation level~5 . For the downward
-property, Focal $G^*$ leads to better results at aggregation level~5.
-
-\begin{figure*}[htp]
-  \centering
-  \begin{tabular}{cccccccc}
-    \multicolumn{8}{l}{
-      Aggregation levels computed from original raster (log scale)
-    }\\
-    \hline
-    1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
-    \includegraphics[width=4.6em]{images/gen-rawdata-1}&
-    \includegraphics[width=4.6em]{images/gen-rawdata-2}&
-    \includegraphics[width=4.6em]{images/gen-rawdata-3}&
-    \includegraphics[width=4.6em]{images/gen-rawdata-4}&
-    \includegraphics[width=4.6em]{images/gen-rawdata-5}&
-    \includegraphics[width=4.6em]{images/gen-rawdata-6}&
-    \includegraphics[width=4.6em]{images/gen-rawdata-7}&
-    \includegraphics[width=4.6em]{images/gen-rawdata-8}
-  \end{tabular}
-  \begin{tabular}{cccccccc}
-    \multicolumn{8}{l}{G* computed from multiple aggregation levels} \\
-    \hline
-    \vspace*{2mm}
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-1}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-2}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-3}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-4}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-5}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-6}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-7}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-gstar-8}
-  \end{tabular}
-  \begin{tabular}{cccccccc}
-    \multicolumn{8}{l}{Focal G* computed from multiple aggregation levels} \\
-    \hline
-    \vspace*{2mm}
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-1}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-2}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-3}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-4}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-5}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-6}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-7}&
-    \includegraphics[width=4.6em]{images/gen-raw-zoom-focalgstar-8}
-  \end{tabular}
-  
-  \includegraphics[width=.45\linewidth]{images/gen-zoom-sohup-1}
-  \hspace{1em}
-  \includegraphics[width=.45\linewidth]{images/gen-zoom-sohdown-1}
-%  \includegraphics[width=.45\linewidth]{images/gen-???}
-%  \hspace{1em}
-%  \includegraphics[width=.45\linewidth]{images/gen-???}
-  
-  \caption{
-    This image shows all aggregation levels for G* and Focal G* together 
-    with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
-  }
-  \label{fig:Zoom}
-\end{figure*}
-
-\subsection{Blur}
-We also made an example for the variation of the weight size W.
-Blur is a slice plane through our three dimensional space. 
-W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
-For blur we also included the negative clusters which resulted in a surprising result.
-\begin{definition} Blur run:
-\begin{eqnarray*}
-    child & = & G^*(R_3, W_{7+i \cdot 2}, st, F_{41}) \\
-    parent & = & G^*(R_3, W_{7+(i+1)\cdot 2}, st, F_{41})
-  \end{eqnarray*}
-\begin{displaymath}
-i \in [0,11], G^* \in [Standard, Focal]
-\end{displaymath}
-\end{definition}
-The blur results are plotted in Figure~\ref{fig:Blur}. The weight matrix is
-shown in the first row, with increasing size. The scond and thrid row sho how
-$G^*$ and Focal $G^*$ changes based on W. This example is a slice plane of the
-weight dimension ploted in figure ~\ref{fig:SoHWeight}. It can be seen that
-increase of the weight size leads in general to better results for Focal $G^*$.
-$G^*$ compared to the mean of our whiskerplot does not fit in the picture
-because it leads to better results than $G^*$.
 
 
 
-\begin{figure*}[htp]
-  \centering
-  \begin{tabular}{cccccccc}
-    \multicolumn{8}{l}{Multiple weight matrix sizes} \\
-    \hline
-    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-1}&
-    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-2}&
-    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-3}&
-    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-4}&
-    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-5}&
-    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-6}&
-    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-7}&
-    \includegraphics[width=4.6em]{images/gen-blur-wmatrices-8}
-  \end{tabular}
-  \begin{tabular}{cccccccc}
-    \multicolumn{8}{l}{G* computed using different weight matrix sizes} \\
-    \hline
-    \vspace*{2mm}
-    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-1}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-2}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-3}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-4}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-5}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-6}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-7}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-gstar-8}
-  \end{tabular}
-  \begin{tabular}{cccccccc}
-    \multicolumn{8}{l}{Focal G* computed using different weight matrix sizes} \\
-    \hline
-    \vspace*{2mm}
-    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-1}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-2}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-3}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-4}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-5}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-6}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-7}&
-    \includegraphics[width=4.6em]{images/gen-raw-blur-focalgstar-8}
-  \end{tabular}
-  
-  \includegraphics[width=.45\linewidth]{images/gen-blur-sohup-1}
-  \hspace{1em}
-  \includegraphics[width=.45\linewidth]{images/gen-blur-sohdown-1}
-  
-  \caption{
-    This image shows different weight matrix sizes for G* and Focal G* together 
-    with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
-  }
-  \label{fig:Blur}
-\end{figure*}
+
 
 
 
