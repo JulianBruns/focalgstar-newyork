@@ -104,7 +104,7 @@ In our initial work~\cite{SoH-GI-Forum}, we introduced a method to measure the s
 Here, we build upon that work and examine in more detail the impact of the 
 different instantiations of the most typical parameter. We use the well known 
 Getis-Ord statistic \cite{Ord.1995}, the standard $G^*$, and a modification of 
-this statistic, the focal $G^*$~\cite{SoH-GI-Forum}. Those parameter are the 
+this statistic, the Focal $G^*$~\cite{SoH-GI-Forum}. Those parameter are the 
 size of the study area (focal matrix), the detail of the resolution 
 (aggregation level) and the size of the neighbourhood (weight matrix). By 
 varying over these parameter, we can compare the stability for all possible 
@@ -134,8 +134,8 @@ of those local areas. A more in depth overview of methods to identify and visual
 Existing methods for determining hot spots are dependent on the parametrization
 of the weight matrix as well as on the size of the study area. Intuitively,
 increasing the size of a weight matrix has a "blurring" effect on the raster
-(Fig.~\ref{def:TODO}a) whereas decreasing the size can be seen as a form of
-"sharpening" (Fig.~\ref{def:TODO}b).
+(Figure~\ref{fig:BlurExample:a}) whereas decreasing the size can be 
+seen as a form of "sharpening" (Figure~\ref{fig:BlurExample:b}).
 
 %TODO: add image showing and blurring/sharpening effects
 
@@ -149,44 +149,43 @@ is important that the position and size of a hot spot changes in a predictable
 manner. We formalize the intuition in our stability metric.
 
 %
-%Consider the real-world example depicted in Fig.~\ref{fig:TempMaps}.
+%Consider the real-world example depicted in Figure~\ref{fig:TempMaps}.
 %%TODO: thermal flight -> NY taxi
 %The temperature map of a morning thermal flight dataset 
-%(Fig.~\ref{fig:TempMaps:a}) has been processed using $G^*$.
+%(Figure~\ref{fig:TempMaps:a}) has been processed using $G^*$.
 %
 %%TODO: thermal flight -> NY taxi
 %%TODO: need two images - G* and FocalG*
-%\begin{figure}[htp]
-%  \begin{subfigure}{1\linewidth}
-%    \caption{Morning temperatures}
-%    \includegraphics[width=\linewidth]{images/hotspot-rawtemp-1}
-%    \label{fig:TempMaps:a}
-%  \end{subfigure}
-%  
-%  \caption{
-%    Karlsruhe city center.
-%    Selected area of $2.4{\times}1.4\,km$.
-%    Pixel size $5{\times}5\,m$.
-%  }
-%  \label{fig:TempMaps}
-%\end{figure}
+\begin{figure}[htp]
+  \centering
+  \begin{subfigure}{.3\linewidth}
+    \caption{Small matrix}
+    \includegraphics[width=\linewidth]{images/gen-raw-blur-gstar-2}
+    \label{fig:BlurExample:a}
+  \end{subfigure}
+  \begin{subfigure}{.3\linewidth}
+    \caption{Large matrix}
+    \includegraphics[width=\linewidth]{images/gen-raw-blur-gstar-8}
+    \label{fig:BlurExample:b}
+  \end{subfigure}
+  \caption{
+    Example of G* statictics computed for the same raster with different weight 
+    matrix sizes.
+  }
+\end{figure}
 
 
 We define a hot spot found in comparably more coarse resolutions as
 \emph{parent} (larger weight matrix or larger pixel size) and in finer
 resolutions as \emph{child} (smaller weight matrix or smaller pixel size).
 
-That is 
-
-To be stable, one assumes that every parent has at
-least one child and that each child has one parent. For a perfectly stable
-interaction, it can be easily seen that the connection between parent and child
-is a injective function and between child and parent a surjective function. To
-measure the closeness of connection, we propose a metric called the
-\emph{Stability of Hot spot} (SoH). It measures the deviation from a perfectly
-stable transformation of resolutions.
-
-
+Stability assumes that every parent has at least one child and that each child
+has one parent. For a perfectly stable interaction, it can be easily seen that
+the connection between parent and child is a injective function and between
+child and parent a surjective function. To measure the stability,
+we propose a metric called the \emph{Stability of Hot spot} (SoH). It measures
+the deviation from a perfectly stable transformation between the parent and 
+chaild rasters (like frames of an animation).
 
 In its downward property (from parent to child, injective) it is defined as:
 \begin{equation}
@@ -211,83 +210,88 @@ stable transformation while 0 would be a transformation with no stability at
 all.
 If $|Children|=0$ or $|Parents|=0$ SoH is 0.
 
-\section{Focal Getis-Ord} \label{sec:FocalGetisOrd}
 
-Section is analog to \cite{SoH-GI-Forum} and incorporates the most important definitions for the computation.
-We use the notation \FOCAL{R}{M}{op} to denote a focal
-operation $op$ applied on a raster $R$ with a focal window determined by a
-matrix $M$. This is rougly eqivalent to a command \verb|focal(x=R, w=M, fun=op)|
-from package \emph{raster} in the R programming language \cite{cran:raster}.
+%\section{Focal Getis-Ord}
+%\label{sec:FocalGetisOrd}
+%
+%In paper~\cite{SoH-GI-Forum}, we have defined the measure Focal G*.
+%We use the notation \FOCAL{R}{M}{op} to denote a focal
+%operation $op$ applied on a raster $R$ with a focal window determined by a
+%matrix $M$. This is rougly eqivalent to a command \verb|focal(x=R, w=M, 
+%fun=op)|
+%from package \emph{raster} in the R programming language \cite{cran:raster}.
 
-\begin{definition}[$G^*$ function on rasters]
-  \label{def:GenericGetisOrdFunc}
-  
-  The function $G^*$ can be expressed as a raster operation:
-  
-  \begin{displaymath}
-    G^*(R, W, st) =
-    \frac{
-      \FOCAL{R}{W}{sum} - M*\sum_{w \in W}{w}
-    }{
-      S \sqrt{
-        \frac{
-          N*\sum_{w \in W}{w^2} - (\sum_{w \in W}{w})^2
-        }{
-          N - 1
-        }
-      }
-    }
-  \end{displaymath}
-  \noindent where:
-  \begin{itemize}
-    
-    \item $R$ is the input raster.
-    
-    \item $W$ is a weight matrix of values between 0 and 1.
-    
-    \item $st = (N, M, S)$ is a parametrization specific to a particular version
-    of the $G^*$ function. (Def.\vref{def:StdGetisOrdVersion} and
-    \vref{def:FocalGetisOrdVersion}).
-    
-  \end{itemize}
-\end{definition}
-
-\begin{definition}[Standard $G^*$ parametrization]
-  \label{def:StdGetisOrdVersion}
-  
-  Computes the parametrization $st$ as global statistics for all pixels in the
-  raster $R$:
-  
-  \begin{itemize}
-    \item $N$ represents the number of all pixels in $R$.
-    \item $M$ represents the global mean of $R$.
-    \item $S$ represents the global standard deviation of all pixels in $R$.
-  \end{itemize}
-\end{definition}
-
-\begin{definition}[Focal $G^*$ parametrization]
-  \label{def:FocalGetisOrdVersion}
-  
-  Let $F$ be a boolean matrix such that: $all(dim(F) \geq dim(W))$.
-  This version uses focal operations to compute per-pixel statistics given by 
-  the focal neighbourhood $F$ as follows:
-  
-  \begin{itemize}
-    
-    \item $N$ is a raster computed as a focal operation \FOCAL{R}{F}{sum}. Each
-    pixel represents the number of pixels from $R$ convoluted with the matrix
-    $F$. 
-    
-    \item $M$ is a raster computed as a focal mean \FOCAL{R}{F}{mean}, thus each
-    pixel represents a mean value of its $F$-neighbourhood.
-    
-    \item $S$ is a raster computed as a focal standard deviation
-    \FOCAL{R}{F}{sd}, thus each pixel represents a standard deviation of its
-    $F$-neighbourhood.
-    
-  \end{itemize}
-  
-\end{definition}
+%\begin{definition}[$G^*$ function on rasters]
+%  \label{def:GenericGetisOrdFunc}
+%  
+%  The function $G^*$ can be expressed as a raster operation:
+%  
+%  \begin{displaymath}
+%    G^*(R, W, st) =
+%    \frac{
+%      \FOCAL{R}{W}{sum} - M*\sum_{w \in W}{w}
+%    }{
+%      S \sqrt{
+%        \frac{
+%          N*\sum_{w \in W}{w^2} - (\sum_{w \in W}{w})^2
+%        }{
+%          N - 1
+%        }
+%      }
+%    }
+%  \end{displaymath}
+%  \noindent where:
+%  \begin{itemize}
+%    
+%    \item $R$ is the input raster.
+%    
+%    \item $W$ is a weight matrix of values between 0 and 1.
+%    
+%    \item $st = (N, M, S)$ is a parametrization specific to a particular 
+%version
+%    of the $G^*$ function. (Def.\vref{def:StdGetisOrdVersion} and
+%    \vref{def:FocalGetisOrdVersion}).
+%    
+%  \end{itemize}
+%\end{definition}
+%
+%\begin{definition}[Standard $G^*$ parametrization]
+%  \label{def:StdGetisOrdVersion}
+%  
+%  Computes the parametrization $st$ as global statistics for all pixels in the
+%  raster $R$:
+%  
+%  \begin{itemize}
+%    \item $N$ represents the number of all pixels in $R$.
+%    \item $M$ represents the global mean of $R$.
+%    \item $S$ represents the global standard deviation of all pixels in $R$.
+%  \end{itemize}
+%\end{definition}
+%
+%\begin{definition}[Focal $G^*$ parametrization]
+%  \label{def:FocalGetisOrdVersion}
+%  
+%  Let $F$ be a boolean matrix such that: $all(dim(F) \geq dim(W))$.
+%  This version uses focal operations to compute per-pixel statistics given by 
+%  the focal neighbourhood $F$ as follows:
+%  
+%  \begin{itemize}
+%    
+%    \item $N$ is a raster computed as a focal operation \FOCAL{R}{F}{sum}. Each
+%    pixel represents the number of pixels from $R$ convoluted with the matrix
+%    $F$. 
+%    
+%    \item $M$ is a raster computed as a focal mean \FOCAL{R}{F}{mean}, thus 
+%each
+%    pixel represents a mean value of its $F$-neighbourhood.
+%    
+%    \item $S$ is a raster computed as a focal standard deviation
+%    \FOCAL{R}{F}{sd}, thus each pixel represents a standard deviation of its
+%    $F$-neighbourhood.
+%    
+%  \end{itemize}
+%  
+%\end{definition}
 
 
 
@@ -298,36 +302,37 @@ from package \emph{raster} in the R programming language \cite{cran:raster}.
 We evaluate our data on the New York city yellow cab data set \footnote{$http://www.nyc.gov/html/tlc/html/about/trip\_record\_data.shtml$}. This data set includes all taxi drives from the yellow cabs in New York City, from location, to passengers and many more informations. In this study, we compare the total pickups over January from 2016 in the Manhattan area. The borders of the rasters are (40.699607, -74.020265) and (40.769239, -73.948286). By using this data set, we reduce the computational effort while still being able to show the applicability on real world data and problems.
 \subsection{Treatments}
 
-\begin{definition}[Evaluation Run]
-  \label{def:EvalRun}
-  We define a single evaluation run as a tuple:
-  \begin{displaymath}
-    E = (V, m, p, w)
-  \end{displaymath}
-  \noindent where:
-  \begin{itemize}
-  
-    \item $V$ is the input dataset of points, representing the taxi dropoffs in 
-    our case.
-    
-    \item $m$ is the metric used, in our case either \SOHUP or \SOHDOWN.
-    
-    \item $p$ represents the pixel size for aggregating points from $V$, 
-    e.g. $100 \times 100$ meters.
-    
-    \item $w$ represents the size of a weight matrix.
-    In our case, we chose a weight matrix depicted in 
-    Figure~\ref{fig:ExampleMatrices}(a) for both the G* and FocalG* cases.
-  \end{itemize}
-\end{definition}
+%\begin{definition}[Evaluation Run]
+%  \label{def:EvalRun}
+%  We define a single evaluation run as a tuple:
+%  \begin{displaymath}
+%    E = (V, m, p, w)
+%  \end{displaymath}
+%  \noindent where:
+%  \begin{itemize}
+%  
+%    \item $V$ is the input dataset of points, representing the taxi dropoffs 
+%in 
+%    our case.
+%    
+%    \item $m$ is the metric used, in our case either \SOHUP or \SOHDOWN.
+%    
+%    \item $p$ represents the pixel size for aggregating points from $V$, 
+%    e.g. $100 \times 100$ meters.
+%    
+%    \item $w$ represents the size of a weight matrix.
+%    In our case, we chose a weight matrix depicted in 
+%    Figure~\ref{fig:ExampleMatrices}(a) for both the G* and FocalG* cases.
+%  \end{itemize}
+%\end{definition}
 
-%Fig.~\ref{fig:ComparisonMorning} and Fig.~\ref{fig:ComparisonEvening} show
+%Figure~\ref{fig:ComparisonMorning} and Figure~\ref{fig:ComparisonEvening} show
 %Standard and Focal $G^*$ computations for both morning and eventing datasets
 %with weight matrix $W$ of size 3, 5, 7, 9, 15 and 31. In this figures, when 
 %computing Focal
 %$G^*$, the focal matrix $F$ has a constant size of $61{\times}61$ cells. 
 %Example weight matrix $W$ and focal matrix $F$ are depicted in 
-%Fig.~\ref{fig:ExampleMatrices}.
+%Figure~\ref{fig:ExampleMatrices}.
 
 Aggregation size 1 means we aggregate every point, which was in range of $100x100 \cdot 0.000001$ into one pixel. 
 For aggregation size Z we aggregated ZxZ pixel from aggregated size 1 into a new pixel.
@@ -376,9 +381,16 @@ For our measurements we specified the following data series:
 \end{definition}
 
 Therefore we would calculate $10 \cdot 10 \cdot 5 + 10 \cdot 5=550$ results for each dimension.
-The following conditions must hold dim(F)>dim(W) and dim(F)<dim(R) which leads e.g. to 460 results in the z dimension.
+The following conditions must hold $dim(F) > dim(W)$ and $dim(F) < dim(R)$ 
+which leads e.g. to 460 results in the z-dimension.
 We vary over the weight matrix W, the focal matrix F and the aggregation level, as motivated in the introduction.
-To compare the impact each of these parameters has we compute all variations over two parameter and holding one parameter fix. We then calculate the mean as well as the standard deviation for the SoH for the fixed value based on the two other parameters. This allows us to isolate the impact of the variation in the single parameter. The results are then plotted in Fig. 1-6, one graphic for each fixed parameter and the direction of the SoH.
+To compare the impact each of these parameters has we compute all variations 
+over two parameter and holding one parameter fix. We then calculate the mean as 
+well as the standard deviation for the SoH for the fixed value based on the two 
+other parameters. This allows us to isolate the impact of the variation in the 
+single parameter. The results are then plotted in 
+Figures~\ref{fig:SoHFocal}--\ref{fig:SoHZoom}, one image for each fixed 
+parameter and the direction of the SoH.
 The hotspots to use the SoH on are computed by the focal $G^*$ and standard $G^*$ method. The focal $G^*$ allows us, to isolate the impact that the size of the study area has on the stability of the results without recomputing the total dataset. 
 
 
@@ -549,27 +561,27 @@ Research for Innovations".
 \section{Appendix}
 
 \subsection{Clumping}
-The SoH needs a parent and a child. Clusters can be calculated different. For $G^*$ a sigmoid can be used. Values above 2.58 and under -2.58 means in less then 
-1\% of the cases you are wrong. The values of Focal $G^*$ depend on the focal size F. Therefore, we decide all values in the top quantile belong to a clusters.
-For clustering we grouped the neighbourhood with values in the top quantile to one cluster. 
-Neigbours are are pixels with touching edges which leads for every pixel to 8 neigbours.
-The clustering can be expressed in R with clumping, TODO which package and parametrisations.
-In Fig.~\ref{fig:Clumping} we visualized the clusters. The clusters are marked in different colours yellow (child) and violet (parent).
-It can seen that the results from $G^*$ and Focal $G^*$ differ. Focal $G^*$ has more smaller clusters which are distributed over the complete raster.
-Not overlapping clusters should be not stable because if we changed the parametrisation we want that the clusters do not disappear or appear. 
-The SoH defines in more detail, which changes for the clusters are stable and which changes indicate that the clusters are instable.
 
+The SoH needs a parent and a child. Clusters can be calculated different. For
+$G^*$ a sigmoid can be used. Values above 2.58 and under -2.58 means in less
+then 1\% of the cases you are wrong. The values of Focal $G^*$ depend on the
+focal size F. Therefore, we decide all values in the top quantile belong to a
+clusters. For clustering we grouped the neighbourhood with values in the top
+quantile to one cluster. Neigbours are are pixels with touching edges which
+leads for every pixel to 8 neigbours. Fig.~\ref{fig:Clumping} depicts the 
+clusters using different colours. In this figure, Focal~$G^*$ has smaller 
+clusters which are distributed over the complete raster.
 
-\begin{figure*}[htp]
+\begin{figure}[htp]
   \centering
   
-  \begin{subfigure}{.35\linewidth}
+  \begin{subfigure}{.7\linewidth}
     \caption{G* clustering difference}
     \includegraphics[width=\linewidth]{images/gen-metric-example-1}
     \label{fig:ClustDiffGstar}
   \end{subfigure}
   \hspace{3em}
-  \begin{subfigure}{.35\linewidth}
+  \begin{subfigure}{.7\linewidth}
     \caption{Focal G* clustering difference}
     \includegraphics[width=\linewidth]{images/gen-metric-example-2}
     \label{fig:ClustDiffFocalGstar}
@@ -579,7 +591,7 @@ The SoH defines in more detail, which changes for the clusters are stable and wh
     Example clustering for G* and Focal G* used as a input for SoH computation.
   }
   \label{fig:Clumping}
-\end{figure*}
+\end{figure}
 
 \subsection{Aggregate}
 
@@ -600,7 +612,7 @@ z \in [1,6], dim(W)=11,dim(F)=41, G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 
-The results can be found in figure ~\ref{fig:Zoom}. It can be seen that with an
+The results can be found in Fig.~\ref{fig:Zoom}. It can be seen that with an
 increase of the aggregation level the values increase. TODO if clusters
 increase/decrease For the upward property, $G^*$ is always better than Focal
 $G^*$, compared to the results from figure \ref{fig:SoHZoom}. Focal $G^*$
@@ -681,11 +693,13 @@ For blur we also included the negative clusters which resulted in a surprising r
 z =3, i \in [1,6],dim(F)=41, G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
-The blur results are plotted in Fig.~\ref{fig:Blur}. The weight matrix is shown in the first row, with increasing size.
-The scond and thrid row sho how $G^*$ and Focal $G^*$ changes based on W.
-This example is a slice plane of the weight dimension ploted in figure ~\ref{fig:SoHWeight}.
-It can be seen that increase of the weight size leads in general to better results for Focal $G^*$. 
-$G^*$ compared to the mean of our whiskerplot does not fit in the picture because it leads to better results than $G^*$.
+The blur results are plotted in Figure~\ref{fig:Blur}. The weight matrix is
+shown in the first row, with increasing size. The scond and thrid row sho how
+$G^*$ and Focal $G^*$ changes based on W. This example is a slice plane of the
+weight dimension ploted in figure ~\ref{fig:SoHWeight}. It can be seen that
+increase of the weight size leads in general to better results for Focal $G^*$.
+$G^*$ compared to the mean of our whiskerplot does not fit in the picture
+because it leads to better results than $G^*$.
 
 
 
