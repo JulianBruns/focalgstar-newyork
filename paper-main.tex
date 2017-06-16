@@ -304,7 +304,8 @@ We evaluate our data on the New York city yellow cab data set
 This data set includes all taxi drives from the yellow cabs in New York City, 
 from location, to passengers and many more informations. In this study, we compare the 
 total pickups over January from 2016 in the Manhattan area. 
-The borders of the rasters are (40.699607 \textdegree  (N), -74.020265 \textdegree  (E)) and (40.769239, -73.948286).
+The borders of the rasters are (40.699607 \textdegree  (N), -74.020265 \textdegree  (E)) 
+and (40.769239 \textdegree  (N), -73.948286 \textdegree  (E)) after WGS84.
 By using this data set, we reduce the computational effort while still 
 being able to show the applicability on real world data and problems.
 \subsection{Treatments}
@@ -364,24 +365,19 @@ For our measurements we specified the following data series:
     child & = & G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) \\
     parent & = & G^*(R_z, W_{3+(i+1) \cdot 4}, st, F_{17+j \cdot 12}) )
   \end{eqnarray*}
-  \begin{displaymath}
-    z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
-  \end{displaymath}
   The SoH for a singled evalution run in the focal dimension is defined as:
   \begin{eqnarray*}
     child & = & G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) \\
     parent & = & G^*(R_z, W_{3+i \cdot 4}, st, F_{17+(j+1) \cdot 12}) )
   \end{eqnarray*}
-  \begin{displaymath}
-    z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
-  \end{displaymath}
-  
   The SoH for a singled evalution run in the aggregation dimension is defined 
   as:
   \begin{eqnarray*}
     child & = & G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) \\
     parent & = & G^*(R_{z+1}, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) )
   \end{eqnarray*}
+  
+  
   \begin{displaymath}
   z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
   \end{displaymath}
@@ -608,14 +604,12 @@ rasters and the raw data.
 We evalute only the aggregation with fixed W and fixed F. In contrast we included the negative clusters. They where exluded for our 3 dimensional space because
 the water had to much influence.
 \begin{definition} Aggregation run:
+\begin{eqnarray*}
+    child & = & G^*(R_z, W_11, st, F_41) \\
+    parent & = & G^*(R_{z+1}, W_11, st, F_41)
+  \end{eqnarray*}
 \begin{displaymath}
-\SOHUP( G^*(R_z, W, st, F), G^*(R_{z+1}, W, st, F) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W, st, F), G^*(R_{z+1}, W, st, F) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], dim(W)=11,dim(F)=41, G^* \in [Standard, Focal]
+z \in [1,6], G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 
@@ -690,14 +684,12 @@ Blur is a slice plane through our three dimensional space.
 W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
 For blur we also included the negative clusters which resulted in a surprising result.
 \begin{definition} Blur run:
+\begin{eqnarray*}
+    child & = & G^*(R_3, W_{7+i \cdot 2}, st, F_41) \\
+    parent & = & G^*(R_3, W_{7+(i+1)\cdot 2}, st, F_41)
+  \end{eqnarray*}
 \begin{displaymath}
-\SOHUP( G^*(R_z, W_{7+i}, st, F), G^*(R_{z}, W_{7+i+2}, st, F) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_{7+i}, st, F), G^*(R_{z}, W_{7+i+2}, st, F) )
-\end{displaymath}
-\begin{displaymath}
-z =3, i \in [1,6],dim(F)=41, G^* \in [Standard, Focal]
+i \in [0,11], G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 The blur results are plotted in Figure~\ref{fig:Blur}. The weight matrix is
