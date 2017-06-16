@@ -491,30 +491,22 @@ This could be beacause the target area of Focal $G^*$ increases with every aggre
 
 
 
+
 \section{Conclusions and Future Work} \label{sec:Conclusion}
-In this work, we compared the Getis-Ord statistic with Focal Getis-Ord statisitic. 
-We validate the result from \ref{SoH-GI-Forum} with a real world 
-dataset an with a larger dataset. The dataset was only one month projected in one raster. 
-We examined further parameters and evaluated that $G^*$ and Focal $G^*$ performe better if the weight
-is higher.
-Our results indicate a high Focal range for the upward property and a maximum of 65x65 for the downward property.
-Therefore F should be not less than 65x65. 
-If we calculate the SoH for the zoom level, Getis-Ord leads to better results. In general the zoom level 
-has the least influence if $G^*$ or Focal $G^*$ performe better.
-We assume that if Focal $G^*$ has a different focal size for a different zoom level, 
-it performes better, but this is beyond the scope of this work.
+In this work we examined the influence of different parameter on the stability of hot spot analysis on the basis of the Getis-Ord and Focal Getis-Ord statistic. We validated our results with the use of the SoH metric on a well known real world data set to ensure external validity and easy replication. 
+Based on the result we can show several insights, given the restrictions of this work, for future use of hot spot analysis. 
+First, the greater the area size, the more stable the results seem to be. The same relation seem to be given for the size of the weight matrix. The greater the comparable area, the more stable are the results. 
+Given the study are, the focal range should be at least be a size of 65x65 tiles, to have a good trade-off between \SOHUP and \SOHDOWN.  
+In the case of the aggregation level, the stability does not seem to be impacted in the case of the Focal $G^*$, but for the standard $G^*$ statistic we see an increase in stability for higher aggregation levels.
+We assume that the high aggregation of data and the inherent increase of examined area reduce the impact of outliers, but reduce the potential to differentiate. The worse results for the Focal $G^*$ statistic compared to the $G^*$ statistic are most likely a result of the increased focus on a smaller region. A more in depth look at the interaction between focal size and zoom level would be an interesting question for the future, but this is beyond the scope of this work.
 
 With this work we made a step further to the optimal parametrisation for $G^*$ and Focal $G^*$.
 Our results indicate that the parametrisation for $G^*$ and Focal $G^*$ besides what is defined as parent and child has a huge impact on the
-stability of hotspots. Wrong parametrisation can lead to good results, the mean reaches for \SOHUP in the weight dimension around 0.6.
-It can also lead to bad result, \SOHUP in the zoom dimension reaches nearly zero. Therefore we shown that it is important to have a metric
-for the stability of hotspots. Also we presented indication which parametrisation should be avoided and which parametrisations are promising.
-$G^*$ can also be applied to spatio-temporal data.
-Therefore Focal $G^*$ should be also applied to the spatio-temporal data. 
-We now have a good indication which weight and focal size is usefull.
-We didn't evaluate the results on other month because we assume that they are similar But it is interesting to find clusters for different times in the day.
-One could asume that at lunchtime there will be hotspots at restaurants and they are not consistent with the hotspots over one month.
-All our results are based on the SoH. Further work should validate or improve this metric also for the temporal dimension.
+stability of hotspots. We can see the increase of up to 0.6 \SOHUP for e.g. the focal matrix size.
+This emphasizes the importance of a metric for the stability of hotspots. But this work also shows the shortcomings of the existing metric, as the trade-off between \SOHUP and \SOHDOWN is not yet fully explored and should be the focus of future work. 
+Another interesting field for future research is the stability of spatio-temporal hot spots and their different parametrizations. As $G^*$ is often applied with regard to temporal impacts, the efficient computation of the focal $G^*$ for spatio-temporal and the impact on stability is the second main path for future research. 
+We evaluated our data on the aggregate of a singular month, but one could assume that at lunchtime there will be hotspots at restaurants and they are not consistent with the hotspots over one month. Therefore the impact of time on the results is important and could also influence the metric for stability in profound ways. As in the example the question is, how fine grained should the temporal clustering be and when is the result unstable for useful reasons? 
+This leads to the final future work: To which hot spots should the comparison be made for the metric? In the current state only the next parametrization is compared for computational time reasons. How the comparison hot spots should be chosen and how many different comparisons have to be used is another quite interesting question for future work.
 
 
 
@@ -525,8 +517,7 @@ This work is part of the research project BigGIS (reference number: 01IS14012)
 funded by the Federal Ministry of Education and Research (BMBF) within the
 frame of the programme "Management and Analysis of Big Data" in "ICT 2020 --
 Research for Innovations".
-We thank the Nachbarschaftsverband Karlsruhe for the data of the thermal flight
-over Karlsruhe. %
+%
 \noindent R-packages used: \verb|raster|~\cite{cran:raster}, 
 \verb|knitr|~\cite{cran:knitr}
 
@@ -720,6 +711,26 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
     with two metrics -- $SoH^\uparrow$ and $SoH^\downarrow$.
   }
   \label{fig:Blur}
+\end{figure*}
+
+\begin{figure*}[htp]
+  \centering
+  
+  \begin{subfigure}{.35\linewidth}
+    \caption{G* clustering difference}
+    \includegraphics[width=\linewidth]{images/gen-metric-example-1}
+    \label{fig:ClustDiffGstar}
+  \end{subfigure}
+  \hspace{3em}
+  \begin{subfigure}{.35\linewidth}
+    \caption{Focal G* clustering difference}
+    \includegraphics[width=\linewidth]{images/gen-metric-example-2}
+    \label{fig:ClustDiffFocalGstar}
+  \end{subfigure}
+  
+  \caption{
+    Example clustering for G* and Focal G* used as a input for SoH computation.
+  }
 \end{figure*}
 
 
