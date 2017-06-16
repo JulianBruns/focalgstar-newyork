@@ -487,11 +487,89 @@ This could be beacause the target area of Focal $G^*$ increases with every aggre
   \label{fig:SoHZoom}
 \end{figure}
 
+
+
+
+
+\section{Conclusions and Future Work} \label{sec:Conclusion}
+In this work, we compared the Getis-Ord statistic with Focal Getis-Ord statisitic. 
+We validate the result from \ref{SoH-GI-Forum} with a real world 
+dataset an with a larger dataset. The dataset was only one month projected in one raster. 
+We examined further parameters and evaluated that $G^*$ and Focal $G^*$ performe better if the weight
+is higher.
+Our results indicate a high Focal range for the upward property and a maximum of 65x65 for the downward property.
+Therefore F should be not less than 65x65. 
+If we calculate the SoH for the zoom level, Getis-Ord leads to better results. In general the zoom level 
+has the least influence if $G^*$ or Focal $G^*$ performe better.
+We assume that if Focal $G^*$ has a different focal size for a different zoom level, 
+it performes better, but this is beyond the scope of this work.
+
+With this work we made a step further to the optimal parametrisation for $G^*$ and Focal $G^*$.
+Our results indicate that the parametrisation for $G^*$ and Focal $G^*$ besides what is defined as parent and child has a huge impact on the
+stability of hotspots. Wrong parametrisation can lead to good results, the mean reaches for \SOHUP in the weight dimension around 0.6.
+It can also lead to bad result, \SOHUP in the zoom dimension reaches nearly zero. Therefore we shown that it is important to have a metric
+for the stability of hotspots. Also we presented indication which parametrisation should be avoided and which parametrisations are promising.
+$G^*$ can also be applied to spatio-temporal data.
+Therefore Focal $G^*$ should be also applied to the spatio-temporal data. 
+We now have a good indication which weight and focal size is usefull.
+We didn't evaluate the results on other month because we assume that they are similar But it is interesting to find clusters for different times in the day.
+One could asume that at lunchtime there will be hotspots at restaurants and they are not consistent with the hotspots over one month.
+All our results are based on the SoH. Further work should validate or improve this metric also for the temporal dimension.
+
+
+
+
+
+\section{Acknowledgements}
+This work is part of the research project BigGIS (reference number: 01IS14012)
+funded by the Federal Ministry of Education and Research (BMBF) within the
+frame of the programme "Management and Analysis of Big Data" in "ICT 2020 --
+Research for Innovations".
+We thank the Nachbarschaftsverband Karlsruhe for the data of the thermal flight
+over Karlsruhe. %
+\noindent R-packages used: \verb|raster|~\cite{cran:raster}, 
+\verb|knitr|~\cite{cran:knitr}
+
+\section{Appendix}
+
 \subsection{Clumping}
+The SoH needs a parent and a child. Clusters can be calculated different. For $G^*$ a sigmoid can be used. Values above 2.58 and under -2.58 means in less then 
+1\% of the cases you are wrong. The values of Focal $G^*$ depend on the focal size F. Therefore, we decide all values in the top quantile belong to a clusters.
+For clustering we grouped the neighbourhood with values in the top quantile to one cluster. 
+Neigbours are defined if they can be reached with a stepsize of 1 in x and y direction, independent of each other.
+Which can be expressed in R with clumping, TODO which package and parametrisations.
+In Fig.~\ref{fig:Clumping} we visualized the clusters. The clusters are marked in different colours yellow (child) and violet (parent).
+It can seen that the results from $G^*$ and Focal $G^*$ differ. Focal $G^*$ has more smaller clusters which are distributed over the complete raster.
+Not overlapping clusters should be not stable because if we changed the parametrisation we want that the clusters do not disappear or appear. 
+The SoH defines in more detail, which changes for the clusters are stable and which changes indicate that the clusters are instable.
+
+
+\begin{figure*}[htp]
+  \centering
+  
+  \begin{subfigure}{.35\linewidth}
+    \caption{G* clustering difference}
+    \includegraphics[width=\linewidth]{images/gen-metric-example-1}
+    \label{fig:ClustDiffGstar}
+  \end{subfigure}
+  \hspace{3em}
+  \begin{subfigure}{.35\linewidth}
+    \caption{Focal G* clustering difference}
+    \includegraphics[width=\linewidth]{images/gen-metric-example-2}
+    \label{fig:ClustDiffFocalGstar}
+  \end{subfigure}
+  
+  \caption{
+    Example clustering for G* and Focal G* used as a input for SoH computation.
+  }
+  \label{fig:Clumping}
+\end{figure*}
 
 \subsection{Aggregate}
 
 The aggregation level is a slice plane through our three dimensional space. 
+This is an example how the results can look with visualize representations of the calculated 
+rasters and the raw data.
 We evalute only the aggregation with fixed W and fixed F.
 \begin{definition} Aggregation run:
 \begin{displaymath}
@@ -505,7 +583,8 @@ z \in [1,6], dim(W)=11,dim(F)=41, G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 
-The results can be found in figure ~\ref{fig:Zoom}.
+The results can be found in figure ~\ref{fig:Zoom}. It can be seen that with an increase of the aggregation level the values 
+increase. TODO if clusters increase/decrease
 For the upward property, $G^*$ is always better than Focal $G^*$, compared to the results from figure
 \ref{fig:SoHZoom}. Focal $G^*$ reaches the same result as $G^*$ at zoom level 5 .
 For the downward property, Focal $G^*$ leads to better results at zoom level 5.
@@ -569,21 +648,22 @@ For the downward property, Focal $G^*$ leads to better results at zoom level 5.
 \end{figure*}
 
 \subsection{Blur}
-
+We also made an example for the variation of the weight size.
 Blur is a slice plane through our three dimensional space. 
 W is changed from 7 to 29 with a stepsize of 2, F and the aggregation level is fixed.
 \begin{definition} Blur run:
 \begin{displaymath}
-\SOHUP( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
+\SOHUP( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+2}, st, F) )
 \end{displaymath}
 \begin{displaymath}
-\SOHDOWN( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+1}, st, F) )
+\SOHDOWN( G^*(R_z, W_i, st, F), G^*(R_{z}, W_{i+2}, st, F) )
 \end{displaymath}
 \begin{displaymath}
 z =3, i \in [1,6],dim(F)=41, G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
-The blur results are plotted in Fig.~\ref{fig:Blur}.
+The blur results are plotted in Fig.~\ref{fig:Blur}. We show how the weight matrix is increasing
+and how $G^*$ and Focal $G^*$ changes bases on W.
 The slice plane of the weight dimension is consistent with figure ~\ref{fig:SoHWeight}.
 Higher weight leads in general to better results for Focal $G^*$. 
 $G^*$ doesn't fit to the mean of our whiskerplot.
@@ -642,66 +722,7 @@ $G^*$ doesn't fit to the mean of our whiskerplot.
   \label{fig:Blur}
 \end{figure*}
 
-\begin{figure*}[htp]
-  \centering
-  
-  \begin{subfigure}{.35\linewidth}
-    \caption{G* clustering difference}
-    \includegraphics[width=\linewidth]{images/gen-metric-example-1}
-    \label{fig:ClustDiffGstar}
-  \end{subfigure}
-  \hspace{3em}
-  \begin{subfigure}{.35\linewidth}
-    \caption{Focal G* clustering difference}
-    \includegraphics[width=\linewidth]{images/gen-metric-example-2}
-    \label{fig:ClustDiffFocalGstar}
-  \end{subfigure}
-  
-  \caption{
-    Example clustering for G* and Focal G* used as a input for SoH computation.
-  }
-\end{figure*}
 
-
-
-\section{Conclusions and Future Work} \label{sec:Conclusion}
-In this work, we compared the Getis-Ord statistic with Focal Getis-Ord statisitic. 
-We validate the result from \ref{SoH-GI-Forum} with a real world 
-dataset an with a larger dataset. The dataset was only one month projected in one raster. 
-We examined further parameters and evaluated that $G^*$ and Focal $G^*$ performe better if the weight
-is higher.
-Our results indicate a high Focal range for the upward property and a maximum of 65x65 for the downward property.
-Therefore F should be not less than 65x65. 
-If we calculate the SoH for the zoom level, Getis-Ord leads to better results. In general the zoom level 
-has the least influence if $G^*$ or Focal $G^*$ performe better.
-We assume that if Focal $G^*$ has a different focal size for a different zoom level, 
-it performes better, but this is beyond the scope of this work.
-
-With this work we made a step further to the optimal parametrisation for $G^*$ and Focal $G^*$.
-Our results indicate that the parametrisation for $G^*$ and Focal $G^*$ besides what is defined as parent and child has a huge impact on the
-stability of hotspots. Wrong parametrisation can lead to good results, the mean reaches for \SOHUP in the weight dimension around 0.6.
-It can also lead to bad result, \SOHUP in the zoom dimension reaches nearly zero. Therefore we shown that it is important to have a metric
-for the stability of hotspots. Also we presented indication which parametrisation should be avoided and which parametrisations are promising.
-$G^*$ can also be applied to spatio-temporal data.
-Therefore Focal $G^*$ should be also applied to the spatio-temporal data. 
-We now have a good indication which weight and focal size is usefull.
-We didn't evaluate the results on other month because we assume that they are similar But it is interesting to find clusters for different times in the day.
-One could asume that at lunchtime there will be hotspots at restaurants and they are not consistent with the hotspots over one month.
-All our results are based on the SoH. Further work should validate or improve this metric also for the temporal dimension.
-
-
-
-
-
-\section{Acknowledgements}
-This work is part of the research project BigGIS (reference number: 01IS14012)
-funded by the Federal Ministry of Education and Research (BMBF) within the
-frame of the programme "Management and Analysis of Big Data" in "ICT 2020 --
-Research for Innovations".
-We thank the Nachbarschaftsverband Karlsruhe for the data of the thermal flight
-over Karlsruhe. %
-\noindent R-packages used: \verb|raster|~\cite{cran:raster}, 
-\verb|knitr|~\cite{cran:knitr}
 
 \bibliographystyle{plain}
 \bibliography{bibfile}  % sigproc.bib is the name of the
