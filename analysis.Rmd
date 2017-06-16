@@ -323,7 +323,7 @@ plot(y1, type = "n", ylim = c(0,1),
 
 lines(y1, col = "blue", lw = 2)
 lines(y2, col = "red", lw = 2)
-legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
+legend("topleft", c("G*", "Focal G*"), fill = c("blue", "red"))
 ```
 
 # Slice plane for aggregation dimension SOH-DOWN
@@ -340,7 +340,7 @@ plot(y1, type = "n", ylim = c(0,1),
 
 lines(y1, col = "blue", lw = 2)
 lines(y2, col = "red", lw = 2)
-legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
+legend("topleft", c("G*", "Focal G*"), fill = c("blue", "red"))
 ```
 
 # Slice plane for blur dimension SOH-UP
@@ -357,7 +357,7 @@ plot(y1, type = "n", ylim = c(0,1),
 
 lines(y1, col = "blue", lw = 2)
 lines(y2, col = "red", lw = 2)
-legend(7,1, c("G*", "Focal G*"), fill = c("blue", "red"))
+legend("topleft", c("G*", "Focal G*"), fill = c("blue", "red"))
 ```
 
 # Slice plane for blur dimension SOH-DOWN
@@ -374,7 +374,7 @@ plot(y1, type = "n", ylim = c(0,1),
 
 lines(y1, col = "blue", lw = 2)
 lines(y2, col = "red", lw = 2)
-legend(1,1, c("G*", "Focal G*"), fill = c("blue", "red"))
+legend("topleft", c("G*", "Focal G*"), fill = c("blue", "red"))
 ```
 
 # X-Axis = Weight for whiskerplot, SOH Up and Down
