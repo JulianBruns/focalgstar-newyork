@@ -101,7 +101,15 @@ The goal of hotspot analysis is the detection and identification of interesting 
 
 But, similar to a cluster analysis, there does exist a high dependency of the identified hotspots on the detection method and in particular the parametrization of this method. The identified areas as well as their shape can vary highly. This volatility can lead to a decrease in trust in the result or in suboptimal allocations of scarce resources. Therefore it is necessary to measure and evaluate the stability of a hotspot analysis as well as the different parametrizations. 
 In our initial work~\cite{SoH-GI-Forum}, we introduced a method to measure the stability of hotspots, the \emph{stability of hotspots} metric (SoH) and showed its use on the basis of temperature data .   
-Here, we build upon that work and examine in more detail the impact of the different instantiations of the most typical parameter. We use the well known Getis-Ord statistic \cite{Ord.1995}, the standard $G^*$, and a modification of this statistic, the focal $G^*$~\cite{SoH-GI-Forum}. Those parameter are the size of the study area (focal matrix), the detail of the resolution (zoom) and the size of the neighbourhood (weight matrix). By varying over these parameter, we can compare the stability for all possible combinations and isolate the effect of single parameter by aggregation over the other parameter. 
+Here, we build upon that work and examine in more detail the impact of the 
+different instantiations of the most typical parameter. We use the well known 
+Getis-Ord statistic \cite{Ord.1995}, the standard $G^*$, and a modification of 
+this statistic, the focal $G^*$~\cite{SoH-GI-Forum}. Those parameter are the 
+size of the study area (focal matrix), the detail of the resolution 
+(aggregation level) and the size of the neighbourhood (weight matrix). By 
+varying over these parameter, we can compare the stability for all possible 
+combinations and isolate the effect of single parameter by aggregation over the 
+other parameter. 
 We evaluate on the well-known taxi data set to show the applicability on real world use cases as well as to enable a simple replication. 
 
 
@@ -331,36 +339,40 @@ For our measurements we specified the following data series:
  \item $R_z$: The aggregation level is from 1 to 6 with a stepsize of 1. R represents the raster
 \end{itemize}
 \begin{definition}
-The SoH for a singled evalution run in the weight dimension is defined as:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_z, W_{3+(i+1) \cdot 4}, st, F_{17+j \cdot 12}) ) 
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_z, W_{3+(i+1) \cdot 4}, st, F_{17+j \cdot 12}) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
-\end{displaymath}
-The SoH for a singled evalution run in the focal dimension is defined as:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_z, W_{3+i \cdot 4}, st, F_{17+(j+1) \cdot 12}) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_z, W_{3+i \cdot 4}, st, F_{17+(j+1) \cdot 12}) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
-\end{displaymath}
-The SoH for a singled evalution run in the aggregation dimension is defined as:
-\begin{displaymath}
-\SOHUP( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_{z+1}, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) )
-\end{displaymath}
-\begin{displaymath}
-\SOHDOWN( G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}), G^*(R_{z+1}, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) )
-\end{displaymath}
-\begin{displaymath}
-z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
-\end{displaymath}
+
+  \begin{displaymath}
+    \SOHUP(child, parent)
+  \end{displaymath}
+  \begin{displaymath}
+    \SOHDOWN(child, parent)
+  \end{displaymath}
+  
+  The SoH for a singled evalution run in the weight dimension is defined as:
+  \begin{eqnarray*}
+    child & = & G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) \\
+    parent & = & G^*(R_z, W_{3+(i+1) \cdot 4}, st, F_{17+j \cdot 12}) )
+  \end{eqnarray*}
+  \begin{displaymath}
+    z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
+  \end{displaymath}
+  The SoH for a singled evalution run in the focal dimension is defined as:
+  \begin{eqnarray*}
+    child & = & G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) \\
+    parent & = & G^*(R_z, W_{3+i \cdot 4}, st, F_{17+(j+1) \cdot 12}) )
+  \end{eqnarray*}
+  \begin{displaymath}
+    z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
+  \end{displaymath}
+  
+  The SoH for a singled evalution run in the aggregation dimension is defined 
+  as:
+  \begin{eqnarray*}
+    child & = & G^*(R_z, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) \\
+    parent & = & G^*(R_{z+1}, W_{3+i \cdot 4}, st, F_{17+j \cdot 12}) )
+  \end{eqnarray*}
+  \begin{displaymath}
+  z \in [1,6], i,j \in [0,10], G^* \in [Standard, Focal]
+  \end{displaymath}
 \end{definition}
 
 Therefore we would calculate $10 \cdot 10 \cdot 5 + 10 \cdot 5=550$ results for each dimension.
@@ -462,7 +474,8 @@ We fix the aggregation and use it as x-axis. This allows us to examine the impac
 the resolution of a data set has on the results and allow us indirectly to reduce the 
 computational effort on future computations by using the maximal aggregation as useful.
 The results can seen in figure ~\ref{fig:SoHZoom}.
-First, we can see that for the zoom level, in contrast to previous results, the standard $G^*$ seems to be more stable.
+First, we can see that for the aggregation level, in contrast to previous 
+results, the standard $G^*$ seems to be more stable.
 
 
 For the \SOHUP there is a huge increase between aggregation level 4 and 5. This increase can't be seen for \SOHDOWN.
@@ -492,12 +505,25 @@ This could be beacause the target area of Focal $G^*$ increases with every aggre
 
 
 \section{Conclusions and Future Work} \label{sec:Conclusion}
-In this work we examined the influence of different parameter on the stability of hot spot analysis on the basis of the Getis-Ord and Focal Getis-Ord statistic. We validated our results with the use of the SoH metric on a well known real world data set to ensure external validity and easy replication. 
-Based on the result we can show several insights, given the restrictions of this work, for future use of hot spot analysis. 
-First, the greater the area size, the more stable the results seem to be. The same relation seem to be given for the size of the weight matrix. The greater the comparable area, the more stable are the results. 
-Given the study are, the focal range should be at least be a size of 65x65 tiles, to have a good trade-off between \SOHUP and \SOHDOWN.  
-In the case of the aggregation level, the stability does not seem to be impacted in the case of the Focal $G^*$, but for the standard $G^*$ statistic we see an increase in stability for higher aggregation levels.
-We assume that the high aggregation of data and the inherent increase of examined area reduce the impact of outliers, but reduce the potential to differentiate. The worse results for the Focal $G^*$ statistic compared to the $G^*$ statistic are most likely a result of the increased focus on a smaller region. A more in depth look at the interaction between focal size and zoom level would be an interesting question for the future, but this is beyond the scope of this work.
+In this work we examined the influence of different parameter on the stability
+of hot spot analysis on the basis of the Getis-Ord and Focal Getis-Ord
+statistic. We validated our results with the use of the SoH metric on a well
+known real world data set to ensure external validity and easy replication.
+Based on the result we can show several insights, given the restrictions of this
+work, for future use of hot spot analysis. First, the greater the area size, the
+more stable the results seem to be. The same relation seem to be given for the
+size of the weight matrix. The greater the comparable area, the more stable are
+the results. Given the study are, the focal range should be at least be a size
+of 65x65 tiles, to have a good trade-off between \SOHUP and \SOHDOWN. In the
+case of the aggregation level, the stability does not seem to be impacted in the
+case of the Focal $G^*$, but for the standard $G^*$ statistic we see an increase
+in stability for higher aggregation levels. We assume that the high aggregation
+of data and the inherent increase of examined area reduce the impact of
+outliers, but reduce the potential to differentiate. The worse results for the
+Focal $G^*$ statistic compared to the $G^*$ statistic are most likely a result
+of the increased focus on a smaller region. A more in depth look at the
+interaction between focal size and aggregation level would be an interesting
+question for the future, but this is beyond the scope of this work.
 
 With this work we made a step further to the optimal parametrisation for $G^*$ and Focal $G^*$.
 Our results indicate that the parametrisation for $G^*$ and Focal $G^*$ besides what is defined as parent and child has a huge impact on the
@@ -574,11 +600,12 @@ z \in [1,6], dim(W)=11,dim(F)=41, G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 
-The results can be found in figure ~\ref{fig:Zoom}. It can be seen that with an increase of the aggregation level the values 
-increase. TODO if clusters increase/decrease
-For the upward property, $G^*$ is always better than Focal $G^*$, compared to the results from figure
-\ref{fig:SoHZoom}. Focal $G^*$ reaches the same result as $G^*$ at zoom level 5 .
-For the downward property, Focal $G^*$ leads to better results at zoom level 5.
+The results can be found in figure ~\ref{fig:Zoom}. It can be seen that with an
+increase of the aggregation level the values increase. TODO if clusters
+increase/decrease For the upward property, $G^*$ is always better than Focal
+$G^*$, compared to the results from figure \ref{fig:SoHZoom}. Focal $G^*$
+reaches the same result as $G^*$ at aggregation level~5 . For the downward
+property, Focal $G^*$ leads to better results at aggregation level~5.
 
 \begin{figure*}[htp]
   \centering
