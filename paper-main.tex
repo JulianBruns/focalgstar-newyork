@@ -645,15 +645,18 @@ increase of the weight size leads in general to better results for Focal $G^*$.
 %	Conclusion: F should be around 65x65 or higher
 \subsection{Impact of study area}
 The first parameter we want to isolate is the size of the study area. This enables us to discuss the optimal size of the study area for the given research/decision question. 
-To do so, we have to fix the focal size F and use it as the x-axis and plot the mean value as well as the mean +- the standard deviations of the SoH for all other parameter combinations as the y-axis.
+To do so, we have to fix the focal size F and use it as the x-axis and plot the 
+mean value as well as the mean +/- the standard deviations of the SoH for all 
+other parameter combinations as the y-axis.
 In this scenario, only the Focal $G^*$ can produce varied results as the standard $G^*$ has by definition a fixed study area by always using the total size of the study area. 
-In figure ~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shown for $G^*$ and Focal $G^*$.
-Higher values indicate that the found hot spots are more stable. 
-The \SOHUP in figure ~\ref{fig:fUp} growth with an increase of the focal size.
+In Figure~\ref{fig:SoHFocal} the \SOHUP and \SOHDOWN is shown for $G^*$ and 
+Focal $G^*$.
+Higher values indicate that the hot spots found are more stable. 
+The \SOHUP in Figure~\ref{fig:fUp} growth with an increase of the focal size.
 It can see that an increase of the focal size leads to better results for \SOHUP. 
 With a higher focal size you can see that the dotted line, which represent the standard deviation, is getting smaller. This indicates that an increase in the size of the study area does not only lead to an overall increase of stability but also that the it reduces the volatility of the variations in other parameters.
 When F and W have similar size, there are no clusters. Because the values have no much variation. 
-\SOHDOWN (figure ~\ref{fig:fDown})shows a different picture then the \SOHUP.
+\SOHDOWN (Figure ~\ref{fig:fDown}) shows a different picture then the \SOHUP.
 It reaches its maximum SoH for a focal size F of 65x65 in our evaluation set. 
 The standard deviation is not decreasing with an increase of the 
 focal size. 
@@ -722,7 +725,7 @@ Finally, we isolate the impact of the different aggregation levels on the stabil
 We fix the aggregation and use it as x-axis. This allows us to examine the impact
 the resolution of a data set has on the results and allow us indirectly to reduce the 
 computational effort on future computations by using the maximal aggregation as useful.
-The results can seen in figure ~\ref{fig:SoHZoom}.
+The results can seen in Figure~\ref{fig:SoHZoom}.
 First, we can see that for the aggregation level, in contrast to previous 
 results, the standard $G^*$ seems to be more stable.
 
@@ -774,17 +777,25 @@ of the increased focus on a smaller region. A more in depth look at the
 interaction between focal size and aggregation level would be an interesting
 question for the future, but this is beyond the scope of this work.
 
-With this work we made a step further to the optimal parametrisation for $G^*$ and Focal $G^*$.
-Our results indicate that the parametrisation for $G^*$ and Focal $G^*$ besides what is defined as parent and child has a huge impact on the
+With this work, we made a step further to the optimal parametrisation for $G^*$ 
+and Focal $G^*$.
+Our results indicate that the parametrization for $G^*$ and Focal $G^*$ besides 
+what is defined as parent and child has a huge impact on the
 stability of hotspots. We can see the increase of up to 0.6 \SOHUP for e.g. the focal matrix size.
 This emphasizes the importance of a metric for the stability of hotspots. But this work also shows the shortcomings of the existing metric, as the trade-off between \SOHUP and \SOHDOWN is not yet fully explored and should be the focus of future work. 
 Another interesting field for future research is the stability of spatio-temporal hot spots and their different parametrizations. As $G^*$ is often applied with regard to temporal impacts, the efficient computation of the focal $G^*$ for spatio-temporal and the impact on stability is the second main path for future research. 
-We evaluated our data on the aggregate of a singular month, but one could assume that at lunchtime there will be hotspots at restaurants and they are not consistent with the hotspots over one month. Therefore the impact of time on the results is important and could also influence the metric for stability in profound ways. As in the example the question is, how fine grained should the temporal clustering be and when is the result unstable for useful reasons? 
-This leads to the final future work: To which hot spots should the comparison be made for the metric? In the current state only the next parametrization is compared for computational time reasons. How the comparison hot spots should be chosen and how many different comparisons have to be used is another quite interesting question for future work.
-
-
-
-
+We evaluated our data on the aggregate of a single month, but one could assume 
+that during the lunchtime there will be hotspots at restaurants and they are 
+not 
+consistent with the hotspots over one month. Therefore the impact of time on 
+the results is important and could also influence the metric for stability in 
+profound ways. As in the example, the question is, how fine grained should the 
+temporal clustering be and when is the result unstable? 
+This leads to the final future work: To which hot spots should the comparison 
+be made for the metric? In the current state, only the next parametrization is 
+compared due to the high computational complexity. How the comparison of hot 
+spots should be carried out and how many different comparisons have to be used 
+is another quite interesting research question.
 
 \section{Acknowledgements}
 This work is part of the research project BigGIS (reference number: 01IS14012)
@@ -793,7 +804,7 @@ frame of the programme "Management and Analysis of Big Data" in "ICT 2020 --
 Research for Innovations".
 %
 \noindent R-packages used: \verb|raster|~\cite{cran:raster}, 
-\verb|knitr|~\cite{cran:knitr}
+\verb|knitr|~\cite{cran:knitr}, 
 
 
 
