@@ -459,12 +459,14 @@ z \in [1,6], G^* \in [Standard, Focal]
 
 The results can be found in Figure~\ref{fig:Zoom}. It can be seen that with an
 increase of the aggregation level the values increase. 
-%TODO: there was some todo in the text for the following sentence
-If clusters
-increase/decrease For the upward property, $G^*$ is always better than Focal
+If the aggregation level increases the number of cluster decreases. It can seen that
+small clusters are disappearing and some clusters are growing to big ones. From aggreagtion level~2 to
+aggreagtion level~3 there is no big change in the images of Focal $G^*$ which is consitent with our results.
+For the upward property, $G^*$ is always better than Focal
 $G^*$, compared to the results from figure \ref{fig:SoHZoom}. Focal $G^*$
-reaches the same result as $G^*$ at aggregation level~5 . For the downward
-property, Focal $G^*$ leads to better results at aggregation level~5.
+reaches the same result as $G^*$ at aggregation level~6 . For the downward
+property, Focal $G^*$ leads to better results at aggregation level~6. 
+
 
 \begin{figure*}[htp]
   \centering
@@ -557,10 +559,11 @@ i \in [0,11], G^* \in [Standard, Focal]
 \end{displaymath}
 \end{definition}
 The blur results are plotted in Figure~\ref{fig:Blur}. The weight matrix is
-shown in the first row, with increasing size. The 2nd and 3th row show how
+shown in the first row, with increasing size. The 2nd and 4th row show how
 $G^*$ and Focal $G^*$ changes based on W. This example is a slice plane of the
 weight dimension ploted in figure ~\ref{fig:SoHWeight}. It can be seen that an
-increase of the weight size leads in general to better results for Focal $G^*$.
+increase of the weight size leads in general to better results for $G^*$.
+Also it can bee seen that for focal $G^*$ the clusters are more distributed over the raster.
 
 
 \begin{figure*}[htp]
