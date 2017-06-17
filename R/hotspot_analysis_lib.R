@@ -94,18 +94,29 @@ plot_temp_map <- function(
 plot_zscore <- function(
   r, sigma_thresh = 5,
   hotspot_quantile_thresh = .01,
-  title = NULL)
+  title = NULL,
+  show.legend = TRUE)
 {
 
   hotspots <- quantile(r, na.rm = TRUE,
                        probs = c(hotspot_quantile_thresh,
                                 1 - hotspot_quantile_thresh))
 
-  par(mar = c(4,5,4,2) + .1)
+  if (show.legend) {
+    par(mar = c(4,5,4,2) + .1)
+  } else {
+    par(mar = rep(0, 4))
+  }
+
   plot(r, axes = FALSE, alpha = .7,
        col = gray.colors(100),
-       legend.args = list(text = "z-score",
-                          side = 3, font = 2, line = 0, cex = 0.8))
+       legend = show.legend, box = show.legend,
+       colNA = "black",
+       legend.args = if (show.legend) {
+         list(text = "z-score", side = 3, font = 2, line = 0, cex = 0.8)
+       } else {
+         NULL
+       })
 
   rth <- r
   rth[abs(r) < sigma_thresh] <- NA
@@ -116,18 +127,20 @@ plot_zscore <- function(
   # contours + legend
   contour(rth, lwd = 4, add = TRUE, levels = hotspots, col = c("blue", "red"))
 
-  e <- extent(r)
-  legend(e@xmax, e@ymin,
-         xjust = 1,
-         yjust = 0,
-         bg = rgb(1, 1, 1, 0.85),
-         legend = c(sprintf("top %g%% quantile hotspots (%g)",
-                            round( hotspot_quantile_thresh * 100, 2),
-                            round( hotspots[2], 2)),
-                    sprintf("bottom %g%% quantile hotspots (%g)",
-                            round( hotspot_quantile_thresh * 100, 2),
-                            round( hotspots[1], 2)) ),
-         fill = c("red", "blue"))
+  if (show.legend) {
+    e <- extent(r)
+    legend(e@xmax, e@ymin,
+           xjust = 1,
+           yjust = 0,
+           bg = rgb(1, 1, 1, 0.85),
+           legend = c(sprintf("top %g%% quantile hotspots (%g)",
+                              round( hotspot_quantile_thresh * 100, 2),
+                              round( hotspots[2], 2)),
+                      sprintf("bottom %g%% quantile hotspots (%g)",
+                              round( hotspot_quantile_thresh * 100, 2),
+                              round( hotspots[1], 2)) ),
+           fill = c("red", "blue"))
+  }
 
   if (!is.null(title)) {
     mtext(title, cex = .8)
