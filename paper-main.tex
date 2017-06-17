@@ -99,19 +99,32 @@ the resolution.
 \section{Introduction}
 The goal of hotspot analysis is the detection and identification of interesting areas. It achieves this goal by computing statistically significant deviations from the mean value of a given study area. This allows a decision maker to easily identify those areas of interest and allows further focus in sub-sequential data analysis or the decision focus. Typical applications range from crime detection over identification of disease outbreaks to urban heat islands. In such applications, scarce resources are then often applied in only those identified hotspots or used as the basis for the allocation. The general approach is an unsupervised learning method similar to a cluster analysis. 
 
-But, similar to a cluster analysis, there does exist a high dependency of the identified hotspots on the detection method and in particular the parametrization of this method. The identified areas as well as their shape can vary highly. This volatility can lead to a decrease in trust in the result or in suboptimal allocations of scarce resources. Therefore it is necessary to measure and evaluate the stability of a hotspot analysis as well as the different parametrizations. 
-In our initial work~\cite{SoH-GI-Forum}, we introduced a method to measure the stability of hotspots, the \emph{stability of hotspots} metric (SoH) and showed its use on the basis of temperature data .   
-Here, we build upon that work and examine in more detail the impact of the 
-different instantiations of the most typical parameter. We use the well known 
-Getis-Ord statistic \cite{Ord.1995}, the standard $G^*$, and a modification of 
-this statistic, the Focal $G^*$~\cite{SoH-GI-Forum}. Those parameter are the 
-size of the study area (focal matrix), the detail of the resolution 
-(aggregation level) and the size of the neighbourhood (weight matrix). By 
-varying over these parameter, we can compare the stability for all possible 
-combinations and isolate the effect of single parameter by aggregation over the 
-other parameter. 
-We evaluate on the well-known taxi data set to show the applicability on real world use cases as well as to enable a simple replication. 
+But, similar to a cluster analysis, the identified hotspots highly depend on 
+the parametrization of the detection method. The identified areas as well as 
+their shape can vary highly. This volatility can lead to a decrease in trust in 
+the result or in suboptimal allocations of scarce resources. Therefore, it is 
+necessary to measure and evaluate the stability of a hotspot analysis as well 
+as the different parametrizations. 
 
+In our initial work~\cite{SoH-GI-Forum}, we introduced a method to measure the 
+stability of hotspots, the \emph{stability of hotspots} metric (SoH) and showed 
+its use on the basis of temperature data.
+Here, we build upon that work and examine the impact of the 
+different instantiations of the most typical parameters in more detail. We use 
+the well known 
+Getis-Ord statistic \cite{Ord.1995}, the standard $G^*$, and a modification of 
+this statistic, the Focal~$G^*$~\cite{SoH-GI-Forum}.
+Those parameters examined are
+\begin{inparaenum}[(1)]
+   \item size of the study area given as a focal matrix,
+   \item pixel resolution i.e. aggregation level and 
+   \item the size of the neighbourhood given as a weight matrix.
+\end{inparaenum}
+By varying over these parameter, we can compare the stability for all possible 
+combinations and isolate the effect of a single parameter.
+We evaluate the metrics on the well-known dataset of New York Taxi drives to 
+show the applicability to real world use cases as well as to foster 
+reproducibility.
 
 \section{Related Work}
 
