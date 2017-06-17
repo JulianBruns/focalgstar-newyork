@@ -107,13 +107,9 @@ par(op)
 ```
 
 
-```{r demo-zoom-gstar, echo=FALSE, cache=TRUE, fig.width=7, fig.height=4.5}
-z <- 0
+```{r demo-zoom-gstar, echo=FALSE, cache=TRUE, fig.width=4, fig.height=4}
 for (g in zoom_gstar) {
-  z <- z + 1
-  plot_zscore(g,
-              title = sprintf("Standard G*: zoom=%d", z),
-              sigma_thresh = 2)
+  plot_zscore(g, sigma_thresh = 2, show.legend = FALSE)
 }
 ```
 
@@ -156,13 +152,9 @@ par(op)
 ```
 
 
-```{r demo-zoom-focalgstar, echo=FALSE, cache=TRUE, fig.width=6, fig.height=5.5}
-z <- 0
+```{r demo-zoom-focalgstar, echo=FALSE, cache=TRUE, fig.width=4, fig.height=4}
 for (g in zoom_focalgstar) {
-  z <- z + 1
-  plot_zscore(g,
-              title = sprintf("Focal G*: zoom=%d", z),
-              sigma_thresh = 2)
+  plot_zscore(g, sigma_thresh = 2, show.legend = FALSE)
 }
 ```
 
@@ -224,13 +216,9 @@ for (g in blur_gstar[RENDERED_IDX]) {
 par(op)
 ```
 
-```{r demo-blur-gstar, echo=FALSE, cache=TRUE, fig.width=6, fig.height=5.5}
-for (i in seq_along(wsizes)) {
-  ws <- wsizes[i]
-  g <- blur_gstar[[i]]
-  plot_zscore(g,
-              title = sprintf("Standard G*: wsize=%d", ws),
-              sigma_thresh = 2)
+```{r demo-blur-gstar, echo=FALSE, cache=TRUE, fig.width=4, fig.height=4}
+for (g in blur_gstar[RENDERED_IDX]) {
+  plot_zscore(g, sigma_thresh = 2, show.legend = FALSE)
 }
 ```
 
@@ -273,12 +261,8 @@ par(op)
 ```
 
 ```{r demo-blur-focalgstar, echo=FALSE, cache=TRUE, fig.width=6, fig.height=5.5}
-for (i in seq_along(wsizes)) {
-  ws <- wsizes[i]
-  g <- blur_focalgstar[[i]]
-  plot_zscore(g,
-              title = sprintf("Focal G*: wsize=%d", ws),
-              sigma_thresh = 2)
+for (g in blur_focalgstar[RENDERED_IDX]) {
+  plot_zscore(g, sigma_thresh = 2, show.legend = FALSE)
 }
 ```
 
