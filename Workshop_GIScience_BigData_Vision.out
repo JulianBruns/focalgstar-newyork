@@ -1,17 +1,12 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Related Work}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Quality of Clustering}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Hot Spot Analysis}{section.2}% 4
-\BOOKMARK [1][-]{section.3}{Stability of Hot Spot Analysis}{}% 5
-\BOOKMARK [1][-]{section.4}{Evaluation}{}% 6
-\BOOKMARK [2][-]{subsection.4.1}{Dataset}{section.4}% 7
-\BOOKMARK [2][-]{subsection.4.2}{Treatments}{section.4}% 8
-\BOOKMARK [2][-]{subsection.4.3}{Clumping}{section.4}% 9
-\BOOKMARK [2][-]{subsection.4.4}{Aggregate}{section.4}% 10
-\BOOKMARK [2][-]{subsection.4.5}{Blur}{section.4}% 11
-\BOOKMARK [1][-]{section.5}{Results and Discussion}{}% 12
-\BOOKMARK [2][-]{subsection.5.1}{Impact of study area}{section.5}% 13
-\BOOKMARK [2][-]{subsection.5.2}{Impact of Neighbourhood size}{section.5}% 14
-\BOOKMARK [2][-]{subsection.5.3}{Impact of Aggregation level}{section.5}% 15
-\BOOKMARK [1][-]{section.6}{Conclusions and Future Work}{}% 16
-\BOOKMARK [1][-]{section.7}{Acknowledgements}{}% 17
+\BOOKMARK [1][-]{section.1}{Introduction and Related Work}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Examples}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{State of the Art}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Geostatistic}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{Frameworks and Methods}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Vision}{}% 6
+\BOOKMARK [1][-]{section.4}{Challenges}{}% 7
+\BOOKMARK [1][-]{section.5}{Conclusion}{}% 8
+\BOOKMARK [2][-]{subsection.5.1}{Hot Spot Analysis}{section.5}% 9
+\BOOKMARK [1][-]{section.6}{Evaluation}{}% 10
+\BOOKMARK [2][-]{subsection.6.1}{Dataset}{section.6}% 11
+\BOOKMARK [2][-]{subsection.6.2}{Treatments}{section.6}% 12

@@ -1,7 +1,7 @@
 This is BibTeX, Version 0.99dThe top-level auxiliary file: Workshop_GIScience_BigData_Vision.aux
 The style file: plainurl.bst
 Database file #1: references.bib
-Warning--I didn't find a database entry for "Ester96adensity-based"
-Warning--I didn't find a database entry for "Ankerst:1999:OOP:304181.304187"
-Warning--there's a number but no volume in SoH-GI-Forum
+Warning--can't use both volume and number fields in ankerst1999optics
+Warning--can't use both volume and number fields in ester1996density
+Warning--can't use both volume and number fields in macqueen1967some
 (There were 3 warnings)
